@@ -21,7 +21,7 @@ export default {
   css: ['ant-design-vue/dist/antd.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/antd-ui'],
+  plugins: ['@/plugins/antd-ui', '@/plugins/mock', '@/plugins/guard'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -45,7 +45,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: process.env.VUE_APP_API_BASE_URL,
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -57,4 +57,18 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  // 局域网访问
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
+
+  // 路由重定向规则附加
+  router: {
+    middleware: ['redirect'],
+  },
+
+  // 全局样式
+  less: ['~/assets/style/global.less'],
 }
