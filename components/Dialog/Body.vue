@@ -81,12 +81,10 @@ export default Vue.extend({
       } else {
         // 获得viewport高度
         const height = document.documentElement.clientHeight - 100
-        console.log(height)
         this.extraStyle =
           '{ margin:0; top:50px; left:0; width:100vw; height:' +
           height.toString() +
           'px; }'
-        console.log(this.extraStyle)
         this.isFullscreen = true
       }
     },
