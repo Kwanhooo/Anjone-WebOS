@@ -67,6 +67,28 @@ export const getQueryParameters = (options: any) => {
 
 /**
  * ! 测试用
+ * 获取FormData格式的请求参数
+ * @author Kwanhooo
+ * @param options
+ * @returns {{}|any}
+ */
+export const getFormDataParameters = (options: any) => {
+  const search = options.body
+  if (!search) {
+    return {}
+  }
+  return JSON.parse(
+    '{"' +
+      decodeURIComponent(search)
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"') +
+      '"}'
+  )
+}
+
+/**
+ * ! 测试用
  * 获取axios发出的请求体
  * @author Kwanhooo
  * @param options

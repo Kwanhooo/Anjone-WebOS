@@ -1,15 +1,19 @@
 import { mock } from 'mockjs'
-import { builder, getBody } from '@/plugins/mock/util'
+import {
+  builder,
+  getBody,
+  getFormDataParameters,
+  getQueryParameters,
+} from '@/plugins/mock/util'
 import { Status } from '@/utils/magic-numbers'
 
 const login = (options: any) => {
-  const body = getBody(options)
-  if (body.username === 'insider' && body.password === '000000') {
+  const body = getFormDataParameters(options)
+  if (body.phone === '18888888888' && body.password === '000000') {
     return builder(
       {
-        token: mock('@guid'),
         username: mock('@cname'),
-        SNs: [],
+        SNs: ['0000-sfd0-sfd-0-sdf0-qws0-0a0da0'],
         info: {
           role: 'admin',
           avatar: mock('@url'),
@@ -24,10 +28,9 @@ const login = (options: any) => {
 }
 
 const reg = (options: any) => {
-  const body = getBody(options)
+  const body = getFormDataParameters(options)
   return builder(
     {
-      token: mock('@guid'),
       username: 'Anjone用户',
       SNs: [],
       info: {
@@ -41,17 +44,36 @@ const reg = (options: any) => {
   )
 }
 
+const setPwd = (options: any) => {
+  const body = getFormDataParameters(options)
+  return builder(
+    {
+      username: 'Anjone用户',
+      SNs: [],
+      info: {
+        role: 'admin',
+        avatar: mock('@url'),
+        phone: body.phone,
+      },
+    },
+    '设置新密码成功！',
+    Status.OK
+  )
+}
+
 const bind = (options: any) => {
-  const body = getBody(options)
-  const SNToBind = body.SN
+  const body = getFormDataParameters(options)
+  const SNToBind = body.serialNo
   const res = []
   res.push(SNToBind)
-  if (mock('@boolean')) return builder({ SNs: res }, '绑定成功！', Status.OK)
-  return builder(
-    { SNs: res },
-    '绑定失败，无法验证此设备序列号！',
-    Status.BusinessFailed
-  )
+  if (mock('@boolean')) {
+    return builder({ SNs: res }, '绑定成功！', Status.OK)
+  } else
+    return builder(
+      { SNs: res },
+      '绑定失败，无法验证此设备序列号！',
+      Status.BusinessFailed
+    )
 }
 
 const captcha = (options: any) => {
@@ -59,6 +81,7 @@ const captcha = (options: any) => {
 }
 
 mock(/\/user\/login/, 'post', login)
-mock(/\/user\/reg/, 'post', reg)
-mock(/\/user\/captcha/, 'get', captcha)
-mock(/\/user\/bind/, 'post', bind)
+mock(/\/user\/check_code/, 'post', reg)
+mock(/\/user\/register/, 'post', captcha)
+mock(/\/user\/set_password/, 'post', setPwd)
+mock(/\/check_serialNo/, 'post', bind)

@@ -1,23 +1,14 @@
 <template>
-  <div class="login-wrapper">
-    <input
-      v-model="phone"
-      type="text"
-      class="input-username"
-      placeholder="请输入用户名"
-    />
+  <div class="pwd-wrapper">
     <input
       v-model="password"
-      type="password"
-      class="input-password"
-      placeholder="清输入密码"
+      type="text"
+      class="input-sn"
+      placeholder="请输入您的新密码"
     />
-    <button class="login-btn-submit" @click.prevent="handleLogin()">
-      登录
-    </button>
+    <button class="button-bind" @click.prevent="handleSet()">确认</button>
     <div class="more-op-wrapper">
-      <span>忘记密码</span>
-      <span @click="goToReg()">注册</span>
+      <span @click="backToLogin()">返回登录</span>
     </div>
   </div>
 </template>
@@ -27,41 +18,30 @@ import Vue from 'vue'
 import { Status } from '@/utils/magic-numbers'
 
 export default Vue.extend({
-  name: 'Login',
+  name: 'Pwd',
   data() {
     return {
-      phone: '',
       password: '',
     }
   },
   mounted() {
-    this.$message.info('手机号：18888888888    密码：000000', 10)
-    window.addEventListener('keydown', (e) => {
-      if (e.keyCode === 13) {
-        this.handleLogin()
-      }
-    })
+    const vm = this
   },
   methods: {
-    goToReg() {
-      this.$router.push('/auth/reg')
+    backToLogin() {
+      this.$router.back()
     },
-    handleLogin() {
+    handleSet() {
       const vm = this
       this.$store
-        .dispatch('user/Login', {
-          phone: this.phone,
+        .dispatch('user/SetPwd', {
+          phone: this.$store.state.user.phone,
           password: this.password,
         })
         .then((data) => {
           if (data.code === Status.OK) {
-            vm.$message.success('欢迎回来，' + vm.$store.state.user.username, 5)
-            if (vm.$store.state.user.SNs.length === 0) {
-              vm.$message.warn('您还没有绑定设备，请在此绑定！', 5)
-              vm.$router.push('/auth/bind')
-            } else {
-              vm.$router.push('/desktop')
-            }
+            vm.$message.success(data.message, 5)
+            vm.$router.push('/auth/bind')
           } else {
             vm.$message.error(data.message, 5)
           }
@@ -77,10 +57,10 @@ export default Vue.extend({
 @INPUT_WIDTH: 14rem;
 @INPUT_HEIGHT: 2rem;
 @INPUT_BORDER_RADIUS: 15px;
-@LOGIN_FONT_SIZE: 0.8rem;
+@BIND_FONT_SIZE: 0.8rem;
 @INPUT_FONT_FAMILY: 'Microsoft Yahei', system-ui;
 
-.login-wrapper {
+.pwd-wrapper {
   display: flex;
   flex-direction: column;
 
@@ -101,23 +81,19 @@ export default Vue.extend({
     border: 1px solid @STRONG_THEME_COLOR_LIGHT;
   }
 
-  .input-username {
+  .input-sn {
     background: rgba(@CONTENT_COLOR_C, 40%);
     color: @CONTENT_COLOR_B;
-    font-size: @LOGIN_FONT_SIZE;
+    font-size: @BIND_FONT_SIZE;
     text-align: center;
     border: 1px solid @CONTENT_COLOR_A;
   }
 
-  .input-password {
-    .input-username;
-  }
-
-  .login-btn-submit {
+  .button-bind {
     border: 1px solid @STRONG_THEME_COLOR_LIGHT;
     background-color: @STRONG_THEME_COLOR_LIGHT;
     color: white;
-    font-size: calc(@LOGIN_FONT_SIZE + 2px);
+    font-size: calc(@BIND_FONT_SIZE + 2px);
     text-align: center;
     cursor: pointer;
     pointer-events: auto;
@@ -133,7 +109,7 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
 
-    justify-content: space-between;
+    justify-content: center;
 
     span {
       border-bottom: 1px solid @LINK_COLOR;
@@ -143,7 +119,7 @@ export default Vue.extend({
       cursor: pointer;
       pointer-events: auto;
       transition: border-bottom-color ease-in-out 0.3s;
-      font-size: @LOGIN_FONT_SIZE;
+      font-size: @BIND_FONT_SIZE;
     }
 
     span:hover {

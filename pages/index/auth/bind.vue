@@ -24,13 +24,15 @@ export default Vue.extend({
       SN: '',
     }
   },
+  mounted() {},
   methods: {
     backToLogin() {
+      sessionStorage.clear()
       this.$router.back()
     },
     handleBind() {
       const vm = this
-      this.$store.dispatch('user/Bind', { SN: this.SN }).then((data) => {
+      this.$store.dispatch('user/Bind', { serialNo: this.SN }).then((data) => {
         if (data.code === Status.OK) {
           vm.$message.success(data.message, 5)
           vm.$router.push('/desktop')

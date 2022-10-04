@@ -1,12 +1,19 @@
 import axios from 'axios'
+import { fmtToForm } from '@/utils/api'
+
+const axiosInstance = axios.create({
+  // baseURL: "http://192.168.2.64:5000",
+})
 
 const authAPI = {
   // 身份认证相关
   Login: '/user/login',
-  Reg: '/user/reg',
-  Captcha: '/user/captcha',
+  Reg: '/user/check_code',
+  Captcha: '/user/register',
   // 设备相关
-  Bind: '/user/bind',
+  Bind: '/check_serialNo',
+  // 账户相关
+  SetPassword: '/user/set_password',
 }
 
 /**
@@ -20,13 +27,13 @@ const authAPI = {
  * @return {*}
  */
 export function login(parameter: any) {
-  return axios({
+  return axiosInstance({
     url: authAPI.Login,
     method: 'post',
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: parameter,
+    data: fmtToForm(parameter),
   })
 }
 
@@ -36,13 +43,13 @@ export function login(parameter: any) {
  * @constructor
  */
 export function reg(parameter: any) {
-  return axios({
+  return axiosInstance({
     url: authAPI.Reg,
     method: 'post',
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: parameter,
+    data: fmtToForm(parameter),
   })
 }
 
@@ -51,13 +58,13 @@ export function reg(parameter: any) {
  * @param parameter
  */
 export function bind(parameter: any) {
-  return axios({
+  return axiosInstance({
     url: authAPI.Bind,
     method: 'post',
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: parameter,
+    data: fmtToForm(parameter),
   })
 }
 
@@ -66,12 +73,27 @@ export function bind(parameter: any) {
  * @param parameter
  */
 export function captcha(parameter: any) {
-  return axios({
+  return axiosInstance({
     url: authAPI.Captcha,
-    method: 'get',
+    method: 'post',
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: parameter,
+    data: fmtToForm(parameter),
+  })
+}
+
+/**
+ * 获取验证码
+ * @param parameter
+ */
+export function setPassword(parameter: any) {
+  return axiosInstance({
+    url: authAPI.SetPassword,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: fmtToForm(parameter),
   })
 }

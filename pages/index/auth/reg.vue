@@ -39,6 +39,7 @@ export default Vue.extend({
       countDown: 10,
     }
   },
+  mounted() {},
   methods: {
     backToLogin() {
       this.$router.back()
@@ -68,11 +69,11 @@ export default Vue.extend({
     handleReg() {
       const vm = this
       this.$store
-        .dispatch('user/Reg', { phone: this.phone, captcha: this.captcha })
+        .dispatch('user/Reg', { phone: this.phone, code: this.captcha })
         .then((res) => {
           if (res.code === Status.OK) {
             this.$message.success(res.message, 5)
-            this.$router.push('/auth/bind')
+            this.$router.push('/auth/pwd')
           } else {
             vm.$message.error(res.message, 5)
           }
