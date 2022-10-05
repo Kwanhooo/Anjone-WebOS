@@ -31,7 +31,7 @@
 
 <script>
 import Vue from 'vue'
-import Settings from '@/components/Settings'
+import SystemSettings from '@/components/System/Settings'
 
 export default Vue.extend({
   name: 'Desktop',
@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   methods: {
     loadSettings() {
-      const SettingsVueComponent = Vue.extend(Settings)
+      const SettingsVueComponent = Vue.extend(SystemSettings)
       const settingsWrapper = document.createElement('div')
       document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
       this.dialog = new SettingsVueComponent().$mount(settingsWrapper)

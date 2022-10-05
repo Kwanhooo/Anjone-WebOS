@@ -15,7 +15,9 @@
         </div>
       </div>
     </div>
-    <div class="main"></div>
+    <div class="main">
+      <div id="cpu-usage-wrapper"></div>
+    </div>
   </div>
 </template>
 
@@ -31,6 +33,7 @@ export default {
     setTimeout(() => {
       document.getElementById('monitor-widget-wrapper').style.opacity = 1
     }, 150)
+    this.echartsInit()
   },
   methods: {
     onCloseClicked() {
@@ -40,6 +43,26 @@ export default {
         vm.opacityGoing = false
         document.getElementById('monitor-widget-wrapper').remove()
       }, 150)
+    },
+    echartsInit() {
+      const cpuUsage = this.$echarts.init(
+        document.getElementById('cpu-usage-wrapper')
+      )
+      const cpuUsageOptions = {
+        xAxis: {
+          data: ['A', 'B', 'C', 'D', 'E'],
+        },
+        yAxis: {},
+        series: [
+          {
+            data: [10, 22, 28, 43, 49],
+            type: 'line',
+            stack: 'x',
+            areaStyle: {},
+          },
+        ],
+      }
+      cpuUsage.setOption(cpuUsageOptions)
     },
   },
 }
@@ -108,6 +131,20 @@ export default {
           background: @HOVER_COLOR;
         }
       }
+    }
+  }
+
+  .main {
+    height: calc(100% - 2.5em);
+    width: 100%;
+
+    #cpu-usage-wrapper {
+      width: 100%;
+      height: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      float: left;
+      background-color: white;
     }
   }
 }
