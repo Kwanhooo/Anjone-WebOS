@@ -57,7 +57,6 @@ export default Vue.extend({
 @HOVER_COLOR: #a4a4a4;
 
 .header-wrapper {
-  //position: relative;
   top: 0;
   left: 0;
   width: 100%;

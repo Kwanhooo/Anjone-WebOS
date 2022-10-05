@@ -58,6 +58,7 @@
           alt="monitor"
           src="@/assets/svg/computer.svg"
           style="margin-right: 2em"
+          @click="openMonitorWidget()"
         />
       </div>
     </div>
@@ -65,9 +66,21 @@
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+import MonitorWidget from '@/components/Monitor/Widget'
+
+export default Vue.extend({
   name: 'TopBar',
-}
+  methods: {
+    openMonitorWidget() {
+      if (document.getElementById('monitor-widget-wrapper') !== null) return
+      const MonitorWidgetVueComponent = Vue.extend(MonitorWidget)
+      const settingsWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
+      this.dialog = new MonitorWidgetVueComponent().$mount(settingsWrapper)
+    },
+  },
+})
 </script>
 
 <style lang="less" scoped>
