@@ -40,6 +40,22 @@ export default Vue.extend({
       dialog: {},
     }
   },
+  mounted() {
+    // 如果窗口宽度小于1200px，那么将#env-monitor-wrapper隐藏
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 1200) {
+        document.getElementById('env-monitor-wrapper').style.display = 'none'
+        // 如果窗口宽度小于650px，那么将#inet-monitor-wrapper显示
+        if (window.innerWidth < 650) {
+          document.getElementById('inet-monitor-wrapper').style.display = 'none'
+        } else {
+          document.getElementById('inet-monitor-wrapper').style.display = ''
+        }
+      } else {
+        document.getElementById('env-monitor-wrapper').style.display = ''
+      }
+    })
+  },
   methods: {
     loadSettings() {
       const SettingsVueComponent = Vue.extend(SystemSettings)
