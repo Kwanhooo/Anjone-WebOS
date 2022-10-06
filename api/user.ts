@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { fmtToForm } from '@/utils/api'
+import { xhrHost } from '~/config/api-host.config'
 
 const axiosInstance = axios.create({
-  // baseURL: "http://192.168.2.64:5000",
+  baseURL: xhrHost,
 })
 
 const authAPI = {

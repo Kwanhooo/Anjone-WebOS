@@ -35,7 +35,7 @@
           src="@/assets/svg/user.svg"
           style="margin-right: 0.5em"
         />
-        <span>{{ $store.state.user.username }}</span>
+        <span>{{ getUsername() }}</span>
         <img alt="list" src="@/assets/svg/list.svg" class="list-logo" />
         <img
           alt="separator"
@@ -45,16 +45,19 @@
       </div>
       <div id="sys-op-wrapper">
         <img
+          :class="{ active: isTodoListActive }"
           alt="todo-list"
           src="@/assets/svg/todo.svg"
           style="margin-right: 2em"
         />
         <img
+          :class="{ active: isMessageCenterActive }"
           alt="message"
           src="@/assets/svg/message.svg"
           style="margin-right: 2em"
         />
         <img
+          :class="{ active: isMonitorActive }"
           alt="monitor"
           src="@/assets/svg/computer.svg"
           style="margin-right: 2em"
@@ -71,9 +74,23 @@ import MonitorWidget from '@/components/Monitor/Widget'
 
 export default Vue.extend({
   name: 'TopBar',
+  data() {
+    return {
+      isTodoListActive: false,
+      isMessageCenterActive: false,
+      isMonitorActive: false,
+    }
+  },
   methods: {
+    getUsername() {
+      return this.$store.getters['user/username']
+    },
     openMonitorWidget() {
-      if (document.getElementById('monitor-widget-wrapper') !== null) return
+      if (document.getElementById('monitor-widget-wrapper') !== null) {
+        this.isTodoListActive = false
+        return
+      }
+      this.isTodoListActive = true
       const MonitorWidgetVueComponent = Vue.extend(MonitorWidget)
       const settingsWrapper = document.createElement('div')
       document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
@@ -184,6 +201,10 @@ export default Vue.extend({
       .header-top-bar-item;
       margin-left: 0.5em;
       width: 130px;
+
+      svg {
+        stroke: @STRONG_THEME_COLOR_LIGHT;
+      }
     }
   }
 }

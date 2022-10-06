@@ -15,7 +15,11 @@ export default {
     }
   },
   mounted() {
-    this.connectWebsocket()
+    const test = new WebSocket('ws://192.168.2.93:5001')
+    test.onopen = function () {
+      console.log('open')
+      test.send('hello world bro!')
+    }
   },
   beforeDestroy() {
     console.log('beforeDestroy')
@@ -28,7 +32,7 @@ export default {
         console.log('您的浏览器不支持WebSocket')
       } else {
         const protocol = 'ws'
-        const url = `${protocol}://localhost:5000/ws`
+        const url = `${protocol}://192.168.2.93:5001`
         // 打开websocket
         this.ws = new WebSocket(url)
         // 建立连接
@@ -41,7 +45,7 @@ export default {
         // 客户端接收服务端返回的数据
         this.ws.onmessage = (evt) => {
           console.log('返回数据：', evt)
-          vm.message = evt
+          vm.message = vm.message.concat('\n').concat(evt)
         }
         // 发生错误时
         this.ws.onerror = (evt) => {
