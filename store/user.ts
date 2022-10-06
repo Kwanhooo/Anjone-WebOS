@@ -11,26 +11,60 @@ export const state = () => ({
 
 export const getters = {
   username: () => {
-    return state().username
+    if (state().username !== '') {
+      return state().username
+    } else {
+      const sessionState = sessionStorage.getItem('USER_STATE')
+      if (sessionState !== null) {
+        const sessionStateObj = JSON.parse(sessionState)
+        return sessionStateObj.username
+      } else {
+        return ''
+      }
+    }
   },
 }
 
 export const mutations = {
-  SET_TOKEN(state: any, token: string) {
-    state.token = token
-    sessionStorage.setItem('ACCESS_TOKEN', token)
-  },
   SET_USERNAME(state: any, username: string) {
     state.username = username
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    sessionStateObj.username = username
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
   SET_SNs(state: any, SN: Array<string>) {
     state.SNs = SN
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    sessionStateObj.SNs = SN
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
   SET_INFO(state: any, info: object) {
     state.info = info
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    sessionStateObj.info = info
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
   SET_PHONE(state: any, phone: string) {
     state.phone = phone
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    sessionStateObj.phone = phone
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
 }
 
@@ -52,9 +86,9 @@ export const actions = {
     commit('SET_PHONE', regInfo.phone)
     commit('SET_USERNAME', 'Anjone用户')
     commit('SET_INFO', data.data.info)
-    sessionStorage.setItem('USER_STATE', JSON.stringify(data.data))
     sessionStorage.setItem('BIND_NEEDED', 'true')
     sessionStorage.setItem('SET_PWD_NEEDED', 'true')
+    sessionStorage.setItem('USER_STATE', JSON.stringify(data.data))
     return data
   },
   async Bind({ commit }: { commit: any }, SN: object) {
