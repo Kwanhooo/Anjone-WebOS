@@ -1,7 +1,7 @@
 <template>
   <div id="top-bar-wrapper">
     <div id="center-switch-wrapper">
-      <div class="center-switch">
+      <div class="center-switch" @click="onDeviceSelectorClicked()">
         <img alt="nas" src="@/assets/svg/nas.svg" class="switch-logo" />
         <span>创业团队数据中心</span>
         <img alt="list" src="@/assets/svg/list.svg" class="list-logo" />
@@ -29,7 +29,7 @@
       <span>互联网访问</span>
     </div>
     <div id="header-right-wrapper">
-      <div id="user-op-wrapper">
+      <div id="user-op-wrapper" @click="onUserOptionsClicked()">
         <img
           alt="user"
           src="@/assets/svg/user.svg"
@@ -40,7 +40,7 @@
         <img
           alt="separator"
           src="@/assets/svg/separator.svg"
-          style="height: 30px; width: auto"
+          style="height: 30px; width: auto; cursor: auto"
         />
       </div>
       <div id="sys-op-wrapper">
@@ -71,6 +71,8 @@
 <script>
 import Vue from 'vue'
 import MonitorWidget from '@/components/Monitor/Widget'
+import UserOptions from '@/components/Desktop/UserOptions'
+import DeviceSelector from '@/components/Desktop/DeviceSelector'
 
 export default Vue.extend({
   name: 'TopBar',
@@ -95,6 +97,40 @@ export default Vue.extend({
       const settingsWrapper = document.createElement('div')
       document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
       this.dialog = new MonitorWidgetVueComponent().$mount(settingsWrapper)
+    },
+    onUserOptionsClicked() {
+      if (document.getElementById('user-option-wrapper') !== null) {
+        document.getElementById('user-option-wrapper').remove()
+        return
+      }
+      const UserOptionsVueComponent = Vue.extend(UserOptions)
+      const userOptionsWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(userOptionsWrapper)
+      new UserOptionsVueComponent().$mount(userOptionsWrapper)
+      const userOptions = document.getElementById('user-option-wrapper')
+      userOptions.style.position = 'absolute'
+      userOptions.style.top = '45px'
+      userOptions.style.left =
+        document.getElementById('user-op-wrapper').getBoundingClientRect()
+          .left + 'px'
+    },
+    onDeviceSelectorClicked() {
+      if (document.getElementById('device-selector-wrapper') !== null) {
+        document.getElementById('device-selector-wrapper').remove()
+        return
+      }
+      const DeviceSelectorVueComponent = Vue.extend(DeviceSelector)
+      const deviceSelectorWrapper = document.createElement('div')
+      document
+        .getElementById('desktop-wrapper')
+        .appendChild(deviceSelectorWrapper)
+      new DeviceSelectorVueComponent().$mount(deviceSelectorWrapper)
+      const deviceSelector = document.getElementById('device-selector-wrapper')
+      deviceSelector.style.position = 'absolute'
+      deviceSelector.style.top = '45px'
+      deviceSelector.style.left =
+        document.getElementById('center-switch-wrapper').getBoundingClientRect()
+          .left + 'px'
     },
   },
 })
@@ -149,6 +185,8 @@ export default Vue.extend({
       border-radius: 16px;
       background: transparent;
       border: 1px solid rgba(@CONTENT_COLOR_A, 0.5);
+      cursor: pointer;
+      pointer-events: auto;
 
       .switch-logo {
         margin-right: 1em;
@@ -185,6 +223,8 @@ export default Vue.extend({
     padding-right: 1em;
 
     #user-op-wrapper {
+      cursor: pointer;
+      pointer-events: auto;
       .header-top-bar-item;
 
       width: 10em;
@@ -202,8 +242,9 @@ export default Vue.extend({
       margin-left: 0.5em;
       width: 130px;
 
-      svg {
-        stroke: @STRONG_THEME_COLOR_LIGHT;
+      img {
+        cursor: pointer;
+        pointer-events: auto;
       }
     }
   }

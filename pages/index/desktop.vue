@@ -41,6 +41,7 @@ export default Vue.extend({
     }
   },
   mounted() {
+    document.title = '桌面 - 安居佑'
     // 如果窗口宽度小于1200px，那么将#env-monitor-wrapper隐藏
     window.addEventListener('resize', () => {
       if (window.innerWidth < 1200) {

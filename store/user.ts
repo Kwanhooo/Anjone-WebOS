@@ -71,24 +71,24 @@ export const mutations = {
 export const actions = {
   async Login({ commit }: { commit: any }, identity: object) {
     const { data } = await login(identity)
-    commit('SET_USERNAME', data.data.username)
-    commit('SET_SNs', data.data.SNs)
     if (data.data.SNs.length <= 0) {
       sessionStorage.setItem('BIND_NEEDED', 'true')
     }
-    commit('SET_INFO', data.data.info)
     sessionStorage.setItem('USER_STATE', JSON.stringify(data.data))
+    commit('SET_INFO', data.data.info)
+    commit('SET_USERNAME', data.data.username)
+    commit('SET_SNs', data.data.SNs)
     return data
   },
   async Reg({ commit }: { commit: any }, regInfo: object) {
     const { data } = await reg(regInfo)
+    sessionStorage.setItem('BIND_NEEDED', 'true')
+    sessionStorage.setItem('SET_PWD_NEEDED', 'true')
+    sessionStorage.setItem('USER_STATE', JSON.stringify(data.data))
     // @ts-ignore
     commit('SET_PHONE', regInfo.phone)
     commit('SET_USERNAME', 'Anjone用户')
     commit('SET_INFO', data.data.info)
-    sessionStorage.setItem('BIND_NEEDED', 'true')
-    sessionStorage.setItem('SET_PWD_NEEDED', 'true')
-    sessionStorage.setItem('USER_STATE', JSON.stringify(data.data))
     return data
   },
   async Bind({ commit }: { commit: any }, SN: object) {
