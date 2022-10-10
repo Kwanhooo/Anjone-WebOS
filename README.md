@@ -1,68 +1,133 @@
-# anjone-webos
+# 安居佑 ![visitors](https://visitor-badge.glitch.me/badge?page_id=Kwanhooo.Anjone-WebOS)
 
-## Build Setup
+### —— Anjone
 
-```bash
-# install dependencies
-$ npm install
+_本项目的开发工作起始于：2022 年 9 月 28 日 星期五_
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+## 📔 自述
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+> 2022 © [安居佑 - 家庭数据中心](https://anjone.0xCAFEBABE.cn)
+>
+> Powered by [©Anjone Co.Ltd](https://gitee.com/hixs/kunpeng_front)
 
-# generate static project
-$ npm run generate
+## 💻 开发技术
+
+### 基本
+
+- Nuxt.js @2
+  - Vue.js @2
+  - Webpack
+  - Vuex
+  - Axios
+- Less
+- Ant Design Vue
+- ECharts
+
+### 代码规范化工具
+
+- ESLint
+- Prettier
+- Stylelint
+- Commitlint
+- Husky Git Hooks
+- Lint-staged
+- editorconfig
+
+### 其它开发依赖
+
+- lodash.clonedeep (深拷贝)
+- spacejs (测量工具)
+- mockjs (模拟数据)
+
+## 🦾 源码构建
+
+### 1. 安装依赖
+
+```npm
+npm install
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+### 2. 启动服务
 
-## Special Directories
+```npm
+npm run dev
+```
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+### 3. 开发
 
-### `assets`
+```npm
+# 注册 Husky Git 钩子
+npm run prepare
+```
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+```npm
+# 格式化代码
+npm run lint
+npm run lintfix
+```
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+```shell
+# 提交代码
 
-### `components`
+# 1.添加到暂存区
+git add .
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
+# 2.提交代码
+  # `type`的允许值详见 commitlint.config.js
+  # 示例：git commit -m "feat: 新增动态路由功能"
+  # 此时会触发先前注册的钩子，执行代码格式化、代码检查、代码提交等操作
+git commit -m <type>[optional scope]: <description>
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
+# 3.推送至远端
+git push
+```
 
-### `layouts`
+## 🔨 部署
 
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
+1. ### 开发环境 (env.development)
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
+- 主机：_vercel.com_
+- 访问方式：*https://anjone.0xCAFEBABE.cn*
+- 方案：透过**Github Action**进行检查；透过**Vercel**部署；通过 Nginx 反向代理到**Vercel**主机
 
-### `pages`
+2. ### 生产环境 (env.prod)
 
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
+- 主机：Anjone 硬件 以及 云端
+- 访问方式：本地局域网内访问 或 云端访问
+- 方案：未知
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
+## 🏃 状态
 
-### `plugins`
+### 基本状态
 
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
+![GitHub](https://img.shields.io/github/license/Kwanhooo/Anjone-WebOS?style=for-the-badge)
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/Kwanhooo/Anjone-WebOS/vue?style=for-the-badge)
 
-### `static`
+![Website](https://img.shields.io/website?label=prod-services&style=for-the-badge&url=http%3A%2F%2Fkp.0xcafebabe.cn%2F)
 
-This directory contains your static files. Each file inside this directory is mapped to `/`.
+---
 
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
+### 开发状态
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/Kwanhooo/Anjone-WebOS/master?style=for-the-badge)
 
-### `store`
+![GitHub deployments](https://img.shields.io/github/deployments/Kwanhooo/Anjone-WebOS/Production?label=Dev-Env%20deploy&style=for-the-badge)
 
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
+![GitHub branch checks state](https://img.shields.io/github/checks-status/Kwanhooo/Anjone-WebOS/master?label=master%20%E5%88%86%E6%94%AF%E6%A3%80%E6%9F%A5&style=for-the-badge)
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/Kwanhooo/Anjone-WebOS/master?style=for-the-badge)
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Kwanhooo/Anjone-WebOS?style=for-the-badge)
+
+![GitHub contributors](https://img.shields.io/github/contributors/Kwanhooo/Anjone-WebOS?style=for-the-badge)
+
+---
+
+### 仓库统计
+
+![GitHub language count](https://img.shields.io/github/languages/count/Kwanhooo/Anjone-WebOS?style=for-the-badge)
+
+![GitHub repo size](https://img.shields.io/github/repo-size/Kwanhooo/Anjone-WebOS?style=for-the-badge)
+
+![Lines of code](https://img.shields.io/tokei/lines/github/Kwanhooo/Anjone-WebOS?style=for-the-badge)
