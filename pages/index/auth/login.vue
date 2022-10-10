@@ -35,7 +35,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$message.info('手机号：18888888888    密码：000000', 10)
+    this.$message.info('Mock用户：手机号：18888888888    密码：000000', 10)
     window.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
         this.handleLogin()
@@ -56,7 +56,7 @@ export default Vue.extend({
         .then((data) => {
           if (data.code === Status.OK) {
             vm.$message.success('欢迎回来，' + vm.$store.state.user.username, 5)
-            if (vm.$store.state.user.SNs.length === 0) {
+            if (vm.$store.state.user.devs.length === 0) {
               vm.$message.warn('您还没有绑定设备，请在此绑定！', 5)
               vm.$router.push('/auth/bind')
             } else {

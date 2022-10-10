@@ -11,16 +11,9 @@ const sysAPI = {
 }
 
 /**
- * 登录
- * @author Kwanhooo
- * parameter: {
- *     username: '',
- *     password: '',
- * }
- * @param parameter
- * @return {*}
+ * 获取磁盘使用情况
  */
-export function storage(parameter: any) {
+export function storage() {
   return axiosInstance({
     url: sysAPI.Storage,
     method: 'get',

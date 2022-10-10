@@ -2,36 +2,12 @@
   <div id="desktop-wrapper">
     <DesktopTopBar />
     <DesktopBottomBar />
-    <button
-      style="
-        position: absolute;
-        top: 100px;
-        left: 50px;
-        height: 100px;
-        width: 100px;
-      "
-      @click="loadSettings"
-    >
-      DIALOG
-    </button>
-    <button
-      style="
-        position: absolute;
-        top: 250px;
-        left: 50px;
-        height: 100px;
-        width: 100px;
-      "
-      @click="killSettings"
-    >
-      KILL
-    </button>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import SystemSettings from '@/components/System/Settings'
+import SettingsDialog from '@/components/Settings/Dialog'
 
 export default Vue.extend({
   name: 'Desktop',
@@ -56,18 +32,21 @@ export default Vue.extend({
         document.getElementById('env-monitor-wrapper').style.display = ''
       }
     })
-  },
-  methods: {
-    loadSettings() {
-      const SettingsVueComponent = Vue.extend(SystemSettings)
-      const settingsWrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
-      this.dialog = new SettingsVueComponent().$mount(settingsWrapper)
-    },
-    killSettings() {
-      const settingsWrapper = document.querySelector('.dialog-settings')
-      document.getElementById('desktop-wrapper').removeChild(settingsWrapper)
-    },
+    window.addEventListener('click', (evt) => {
+      if (document.querySelector('.__closable__') === null) return
+      const path = evt.path.slice(0, -4)
+      let isClosableClicked = false
+      path.forEach((item) => {
+        if (
+          (item.id && item.id === 'top-bar-wrapper') ||
+          (item.classList && item.classList.contains('__closable__'))
+        ) {
+          isClosableClicked = true
+        }
+      })
+      if (isClosableClicked) return
+      document.querySelector('.__closable__').remove()
+    })
   },
 })
 </script>

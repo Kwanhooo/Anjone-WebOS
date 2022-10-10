@@ -7,9 +7,6 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'Root',
-  mounted() {
-    document.title = '安居佑'
-  },
 })
 </script>
 
