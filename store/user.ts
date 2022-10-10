@@ -3,10 +3,12 @@ import { getNewExpireTime } from '~/utils/expire'
 import { Status } from '~/utils/magic-numbers'
 
 export const state = () => ({
-  phone: '',
   username: '',
-  SNs: [],
-  info: {},
+  phone: '',
+  avatar: '',
+  role: '',
+  create_time: '',
+  devs: [],
 })
 
 export const getters = {
@@ -23,6 +25,71 @@ export const getters = {
       }
     }
   },
+  avatar: () => {
+    if (state().avatar !== '') {
+      return state().avatar
+    } else {
+      const sessionState = sessionStorage.getItem('USER_STATE')
+      if (sessionState !== null) {
+        const sessionStateObj = JSON.parse(sessionState)
+        return sessionStateObj.avatar
+      } else {
+        return ''
+      }
+    }
+  },
+  phone: () => {
+    if (state().phone !== '') {
+      return state().phone
+    } else {
+      const sessionState = sessionStorage.getItem('USER_STATE')
+      if (sessionState !== null) {
+        const sessionStateObj = JSON.parse(sessionState)
+        return sessionStateObj.phone
+      } else {
+        return ''
+      }
+    }
+  },
+  role: () => {
+    if (state().role !== '') {
+      return state().role
+    } else {
+      const sessionState = sessionStorage.getItem('USER_STATE')
+      if (sessionState !== null) {
+        const sessionStateObj = JSON.parse(sessionState)
+        return sessionStateObj.role
+      } else {
+        return ''
+      }
+    }
+  },
+  create_time: () => {
+    if (state().create_time !== '') {
+      return state().create_time
+    } else {
+      const sessionState = sessionStorage.getItem('USER_STATE')
+      if (sessionState !== null) {
+        const sessionStateObj = JSON.parse(sessionState)
+        return sessionStateObj.create_time
+      } else {
+        return ''
+      }
+    }
+  },
+  devs: () => {
+    if (state().devs.length !== 0) {
+      return state().devs
+    } else {
+      const sessionState = sessionStorage.getItem('USER_STATE')
+      if (sessionState !== null) {
+        const sessionStateObj = JSON.parse(sessionState)
+        return sessionStateObj.devs
+      } else {
+        return []
+      }
+    }
+  },
 }
 
 export const mutations = {
@@ -36,24 +103,14 @@ export const mutations = {
     sessionStateObj.username = username
     sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
-  SET_SNs(state: any, SN: Array<string>) {
-    state.SNs = SN
+  SET_DEVS(state: any, devs: Array<object>) {
+    state.devs = devs
     const sessionState = sessionStorage.getItem('USER_STATE')
     let sessionStateObj
     if (sessionState) {
       sessionStateObj = JSON.parse(sessionState)
     }
-    sessionStateObj.SNs = SN
-    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
-  },
-  SET_INFO(state: any, info: object) {
-    state.info = info
-    const sessionState = sessionStorage.getItem('USER_STATE')
-    let sessionStateObj
-    if (sessionState) {
-      sessionStateObj = JSON.parse(sessionState)
-    }
-    sessionStateObj.info = info
+    sessionStateObj.devs = devs
     sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
   SET_PHONE(state: any, phone: string) {
@@ -66,18 +123,54 @@ export const mutations = {
     sessionStateObj.phone = phone
     sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
   },
+  SET_AVATAR(state: any, avatar: string) {
+    state.avatar = avatar
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    sessionStateObj.avatar = avatar
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
+  },
+  SET_ROLE(state: any, role: string) {
+    state.role = role
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    sessionStateObj.role = role
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
+  },
+  // eslint-disable-next-line camelcase
+  SET_CREATE_TIME(state: any, create_time: string) {
+    // eslint-disable-next-line camelcase
+    state.create_time = create_time
+    const sessionState = sessionStorage.getItem('USER_STATE')
+    let sessionStateObj
+    if (sessionState) {
+      sessionStateObj = JSON.parse(sessionState)
+    }
+    // eslint-disable-next-line camelcase
+    sessionStateObj.create_time = create_time
+    sessionStorage.setItem('USER_STATE', JSON.stringify(sessionStateObj))
+  },
 }
 
 export const actions = {
   async Login({ commit }: { commit: any }, identity: object) {
     const { data } = await login(identity)
-    if (data.data.SNs.length <= 0) {
+    if (data.data.devs.length <= 0) {
       sessionStorage.setItem('BIND_NEEDED', 'true')
     }
     sessionStorage.setItem('USER_STATE', JSON.stringify(data.data))
-    commit('SET_INFO', data.data.info)
     commit('SET_USERNAME', data.data.username)
-    commit('SET_SNs', data.data.SNs)
+    commit('SET_PHONE', data.data.phone)
+    commit('SET_AVATAR', data.data.avatar)
+    commit('SET_ROLE', data.data.role)
+    commit('SET_CREATE_TIME', data.data.create_time)
+    commit('SET_DEVS', data.data.devs)
     return data
   },
   async Reg({ commit }: { commit: any }, regInfo: object) {

@@ -13,12 +13,11 @@ const login = (options: any) => {
     return builder(
       {
         username: mock('@cname'),
-        SNs: ['0000-sfd0-sfd-0-sdf0-qws0-0a0da0'],
-        info: {
-          role: 'admin',
-          avatar: mock('@url'),
-          phone: '18888888888',
-        },
+        phone: '18888888888',
+        devs: [{ dev: 'HDC-101-1001', time: '2022-01-01' }],
+        role: 'admin',
+        avatar: mock('@url'),
+        create_time: mock('@datetime'),
       },
       '登录成功',
       Status.OK
