@@ -1,10 +1,13 @@
 <template>
-  <div id="monitor-widget-wrapper">
+  <div
+    id="monitor-widget-wrapper"
+    :class="{ 'desktop-widget': true, __closable__: !isPined }"
+  >
     <div class="op-bar">
       <div class="title-wrapper">设备监控信息</div>
       <div class="op-wrapper">
-        <div class="op-item">
-          <img alt="minimize" src="@/assets/svg/pin.svg" />
+        <div class="op-item" @click="onPinClicked()">
+          <img alt="minimize" :src="pinSvg" />
         </div>
         <div
           class="op-item"
@@ -45,8 +48,31 @@
       </div>
       <hr style="width: 90%" />
       <div id="monitor-charts-wrapper">
+        <div style="margin-top: 1em">
+          <span style="padding-left: 1em">CPU使用率</span>
+          <span style="float: right; padding-right: 2em; color: #019e48"
+            >{{ cpu_q[0] }} %</span
+          >
+        </div>
         <div id="cpu-usage-wrapper"></div>
+        <div>
+          <span style="padding-left: 1em">内存使用率</span>
+          <span style="float: right; padding-right: 2em; color: #019e48"
+            >{{ men_q[0] }} %</span
+          >
+        </div>
         <div id="mem-usage-wrapper"></div>
+        <div>
+          <span style="padding-left: 1em">网络数据</span>
+          <span style="float: right; padding-right: 2em">
+            <img src="@/assets/svg/circle-dark.svg" />
+            接收
+            <span style="color: #019e48">{{ recv_q[0] }} KB/s</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="@/assets/svg/circle-light.svg" />发送
+            <span style="color: #019e48">{{ send_q[0] }}KB/s</span></span
+          >
+        </div>
         <div id="net-usage-wrapper"></div>
       </div>
     </div>
@@ -55,25 +81,30 @@
 
 <script>
 import { storage } from '@/api/sys'
-import { wsHost } from '@/config/api-host.config'
+import { monitorWSHost } from '@/config/api-host.config'
 
 export default {
   name: 'Widget',
   data() {
     return {
+      isPined: false,
+      pinSvg: require('@/assets/svg/pin.svg'),
       opacityGoing: true,
-      deviceName: 'HDC - 202',
-      regTime: '2022-9-16',
-      ws: null,
-      cpu_q: null,
-      men_q: null,
-      recv_q: null,
-      send_q: null,
-      total: 11451.4,
-      free: 795.67,
+      regTime: '',
+      deviceName: '',
+      cpu_q: [],
+      men_q: [],
+      recv_q: [],
+      send_q: [],
+      total: null,
+      free: null,
     }
   },
   mounted() {
+    this.deviceName = JSON.parse(
+      sessionStorage.getItem('USER_STATE')
+    ).devs[0].dev
+    this.regTime = JSON.parse(sessionStorage.getItem('USER_STATE')).devs[0].time
     this.connectWebsocket()
     setTimeout(() => {
       document.getElementById('monitor-widget-wrapper').style.opacity = '1'
@@ -86,7 +117,16 @@ export default {
     this.storageInit()
   },
   methods: {
+    onPinClicked() {
+      this.isPined = !this.isPined
+      if (this.isPined) {
+        this.pinSvg = require('@/assets/svg/pin-active.svg')
+      } else {
+        this.pinSvg = require('@/assets/svg/pin.svg')
+      }
+    },
     onCloseClicked() {
+      $nuxt.$store.commit('sys/SET_IS_MONITOR_ACTIVE', false)
       const vm = this
       document.getElementById('monitor-widget-wrapper').style.opacity = '0'
       setTimeout(() => {
@@ -189,13 +229,19 @@ export default {
             '14',
           ],
         },
-        yAxis: {},
+        yAxis: {
+          type: 'value',
+          max: 100,
+          min: 0,
+          interval: 20,
+        },
         series: [
           {
             data: this.cpu_q,
             type: 'line',
             stack: 'x',
             areaStyle: {},
+            color: '#6c6c6c',
           },
         ],
       }
@@ -224,13 +270,39 @@ export default {
             '14',
           ],
         },
-        yAxis: {},
+        yAxis: {
+          type: 'value',
+          max: 100,
+          min: 0,
+          interval: 20,
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: '#d9e1e4',
+            },
+          },
+          axisLabel: {
+            color: '#4e5b5f',
+            formatter(val) {
+              return val
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+          splitLine: {
+            lineStyle: {
+              type: 'dashed',
+            },
+          },
+        },
         series: [
           {
             data: this.men_q,
             type: 'line',
             stack: 'x',
             areaStyle: {},
+            color: '#6c6c6c',
           },
         ],
       }
@@ -264,14 +336,14 @@ export default {
           {
             data: this.send_q,
             type: 'line',
-            stack: 'x',
-            areaStyle: {},
+            smooth: true,
+            color: '#a8aeb6',
           },
           {
             data: this.recv_q,
             type: 'line',
-            stack: 'x',
-            areaStyle: {},
+            smooth: true,
+            color: '#6c6c6c',
           },
         ],
       }
@@ -288,28 +360,40 @@ export default {
         this.$message.error('您的浏览器不支持WebSocket，监控数据无法获取！')
       } else {
         // 打开WebSocket
-        this.ws = new WebSocket(wsHost)
+        let newWS = $nuxt.$store.getters['sys/monitorWS']
+        if (newWS === null) {
+          newWS = new WebSocket(monitorWSHost)
+        }
         // 建立连接时
-        this.ws.onopen = () => {
+        newWS.onopen = () => {
           // 向服务端发送测试数据
           const data = 'Hello Anjone'
-          vm.ws.send(data)
+          newWS.send(data)
         }
         // 接收服务端返回的数据时
-        this.ws.onmessage = (evt) => {
+        newWS.onmessage = (evt) => {
           const data = JSON.parse(evt.data)
           vm.cpu_q = data.cpu_q
           vm.men_q = data.men_q
           vm.recv_q = data.recv_q
-          vm.send_q = data.send_q
+
+          data.recv_q.forEach((item, index) => {
+            vm.recv_q[index] = (item / 1024).toFixed(0)
+          })
+
+          data.send_q.forEach((item, index) => {
+            vm.send_q[index] = (item / 1024).toFixed(0)
+          })
+
           vm.echartsInit()
         }
         // 发生错误时
-        this.ws.onerror = (evt) => {
+        newWS.onerror = (evt) => {
           this.$message.error('连接监控服务时发生错误，请稍候再试！')
         }
         // 关闭连接时
-        this.ws.onclose = (evt) => {}
+        newWS.onclose = (evt) => {}
+        $nuxt.$store.commit('sys/SET_MONITOR_WS', newWS)
       }
     },
   },
@@ -332,7 +416,7 @@ export default {
   position: absolute;
   right: 0;
   top: 50px;
-  width: 25em;
+  width: 29em;
   height: calc(100vh - 100px);
   background: rgba(@CONTENT_COLOR_C, 80%);
   transition: all ease-in-out 0.15s;
@@ -430,12 +514,18 @@ export default {
     }
 
     #monitor-charts-wrapper {
+      font-size: 14px;
+      font-weight: bold;
+      color: #6c6c6c;
+      font-family: sans-serif;
+
       #cpu-usage-wrapper {
-        width: 100%;
-        height: 230px;
+        width: 28em;
+        height: 200px;
         margin-left: auto;
         margin-right: auto;
-        float: left;
+        position: relative;
+        left: 0.5em;
       }
 
       #mem-usage-wrapper {
