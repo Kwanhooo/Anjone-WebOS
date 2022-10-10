@@ -45,21 +45,31 @@
       </div>
       <div id="sys-op-wrapper">
         <img
-          :class="{ active: isTodoListActive }"
           alt="todo-list"
-          src="@/assets/svg/todo.svg"
+          :src="
+            isTodoListActive
+              ? require('@/assets/svg/todo-active.svg')
+              : require('@/assets/svg/todo.svg')
+          "
           style="margin-right: 2em"
         />
         <img
-          :class="{ active: isMessageCenterActive }"
           alt="message"
-          src="@/assets/svg/message.svg"
+          :src="
+            isMessageCenterActive
+              ? require('@/assets/svg/message-active.svg')
+              : require('@/assets/svg/message.svg')
+          "
           style="margin-right: 2em"
+          @click="openMessageCenter()"
         />
         <img
-          :class="{ active: isMonitorActive }"
           alt="monitor"
-          src="@/assets/svg/computer.svg"
+          :src="
+            isMonitorActive
+              ? require('@/assets/svg/computer-active.svg')
+              : require('@/assets/svg/computer.svg')
+          "
           style="margin-right: 2em"
           @click="openMonitorWidget()"
         />
@@ -70,33 +80,84 @@
 
 <script>
 import Vue from 'vue'
+import { mapGetters, mapMutations } from 'vuex'
 import MonitorWidget from '@/components/Monitor/Widget'
 import UserOptions from '@/components/Desktop/UserOptions'
 import DeviceSelector from '@/components/Desktop/DeviceSelector'
+import MessageCenter from '@/components/MessageCenter/Widget'
 
 export default Vue.extend({
   name: 'TopBar',
   data() {
     return {
-      isTodoListActive: false,
-      isMessageCenterActive: false,
-      isMonitorActive: false,
+      messageSvg: require('@/assets/svg/message.svg'),
+      monitorSvg: require('@/assets/svg/computer.svg'),
+      widget: null,
     }
   },
+  computed: {
+    ...mapGetters({
+      isTodoListActive: 'sys/isTodoListActive',
+      isMessageCenterActive: 'sys/isMessageCenterActive',
+      isMonitorActive: 'sys/isMonitorActive',
+    }),
+  },
   methods: {
+    ...mapMutations({
+      setTodoListActive: 'sys/SET_IS_TODOLIST_ACTIVE',
+      setMessageCenterActive: 'sys/SET_IS_MESSAGE_CENTER_ACTIVE',
+      setMonitorActive: 'sys/SET_IS_MONITOR_ACTIVE',
+    }),
     getUsername() {
       return this.$store.getters['user/username']
     },
     openMonitorWidget() {
+      const vm = this
       if (document.getElementById('monitor-widget-wrapper') !== null) {
-        this.isTodoListActive = false
+        document.getElementById('monitor-widget-wrapper').style.opacity = '0'
+        setTimeout(() => {
+          document.getElementById('monitor-widget-wrapper').remove()
+        }, 150)
+        this.setMonitorActive(false)
         return
       }
-      this.isTodoListActive = true
+      if (document.getElementById('message-center-widget-wrapper') !== null) {
+        setTimeout(() => {
+          document.getElementById('message-center-widget-wrapper').remove()
+          vm.setMessageCenterActive(false)
+        }, 150)
+      }
+      this.setMonitorActive(true)
       const MonitorWidgetVueComponent = Vue.extend(MonitorWidget)
       const settingsWrapper = document.createElement('div')
       document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
-      this.dialog = new MonitorWidgetVueComponent().$mount(settingsWrapper)
+      this.widget = new MonitorWidgetVueComponent().$mount(settingsWrapper)
+    },
+    openMessageCenter() {
+      const vm = this
+      if (document.getElementById('message-center-widget-wrapper') !== null) {
+        setTimeout(() => {
+          document.getElementById('message-center-widget-wrapper').remove()
+        }, 150)
+        this.setMessageCenterActive(false)
+        return
+      }
+      if (document.getElementById('monitor-widget-wrapper') !== null) {
+        document.getElementById('monitor-widget-wrapper').style.opacity = '0'
+        setTimeout(() => {
+          document.getElementById('monitor-widget-wrapper').remove()
+          vm.setMonitorActive(false)
+        }, 150)
+      }
+      this.setMessageCenterActive(true)
+      const MessageCenterWidgetVueComponent = Vue.extend(MessageCenter)
+      const messageCenterWrapper = document.createElement('div')
+      document
+        .getElementById('desktop-wrapper')
+        .appendChild(messageCenterWrapper)
+      this.widget = new MessageCenterWidgetVueComponent().$mount(
+        messageCenterWrapper
+      )
     },
     onUserOptionsClicked() {
       if (document.getElementById('user-option-wrapper') !== null) {

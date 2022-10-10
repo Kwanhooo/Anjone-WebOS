@@ -1,5 +1,5 @@
 <template>
-  <div id="device-selector-wrapper">
+  <div id="device-selector-wrapper" class="__closable__">
     <GeneralSelectBox :options="options" />
   </div>
 </template>
