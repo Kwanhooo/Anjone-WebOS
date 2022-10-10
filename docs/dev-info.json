@@ -1,0 +1,22 @@
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "cpu_info": "Rockchip RK3568 四核 2.0GHZ",
+    "flash_memory": "16GB eMMC V5.1",
+    "model_id": "HDC-202",
+    "stat": "SATA 3.0*2",
+    "wifi": "支持WIFI6",
+    "usb": "USB3.0*1, USB2.0*1",
+    "hdmi": "HDMI2.0a 4K@60HZ",
+    "screen": "5*",
+    "create_time": "2022-10-06 05:36:03",
+    "dev_id": "AHDC2022022092011003",
+    "memory": "2GB DDR4",
+    "disk_info": "2.5 HDD*2",
+    "bluetooth": "Bluetooth 5.0",
+    "cable": "1GbE RJ-45*2",
+    "zigbee": "ZigBee 3.0",
+    "speaker": "立体声"
+  }
+}

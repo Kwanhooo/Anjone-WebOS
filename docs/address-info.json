@@ -1,0 +1,15 @@
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "mac": "50:E5:49:3A:EA:90",
+    "ipv4": "192.168.100.107",
+    "ipv4_gateway": "192.168.100.1",
+    "ipv4_dns": "114.114.114.114",
+    "ipv4_extract": "113.246.132.18",
+    "ipv6": null,
+    "ipv6_gateway": null,
+    "ipv6_dns": null,
+    "ipv6_extract": null
+  }
+}
