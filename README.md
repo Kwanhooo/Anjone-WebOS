@@ -114,9 +114,9 @@ git push
 
 ![GitHub deployments](https://img.shields.io/github/deployments/Kwanhooo/Anjone-WebOS/Production?label=Dev-Env%20deploy&style=for-the-badge)
 
-![GitHub branch checks state](https://img.shields.io/github/checks-status/Kwanhooo/Anjone-WebOS/master?label=master%20%E5%88%86%E6%94%AF%E6%A3%80%E6%9F%A5&style=for-the-badge)
+![GitHub branch checks state](https://img.shields.io/github/checks-status/Kwanhooo/Anjone-WebOS/main?label=master%20%E5%88%86%E6%94%AF%E6%A3%80%E6%9F%A5&style=for-the-badge)
 
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/Kwanhooo/Anjone-WebOS/master?style=for-the-badge)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/Kwanhooo/Anjone-WebOS/main?style=for-the-badge)
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Kwanhooo/Anjone-WebOS?style=for-the-badge)
 
