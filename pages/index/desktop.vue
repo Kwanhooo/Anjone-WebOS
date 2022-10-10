@@ -46,6 +46,9 @@ export default Vue.extend({
       })
       if (isClosableClicked) return
       document.querySelector('.__closable__').remove()
+      this.$store.commit('sys/SET_IS_MONITOR_ACTIVE', false)
+      this.$store.commit('sys/SET_IS_TODOLIST_ACTIVE', false)
+      this.$store.commit('sys/SET_IS_MESSAGE_CENTER_ACTIVE', false)
     })
   },
 })
@@ -57,7 +60,7 @@ export default Vue.extend({
 #desktop-wrapper {
   width: 100vw;
   height: 100vh;
-  background: url('static/background.png') no-repeat center center fixed;
+  background: url('static/background-desktop.jpg') no-repeat center center fixed;
   background-size: cover;
 
   overflow-x: hidden;

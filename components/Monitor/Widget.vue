@@ -50,14 +50,14 @@
       <div id="monitor-charts-wrapper">
         <div style="margin-top: 1em">
           <span style="padding-left: 1em">CPU使用率</span>
-          <span style="float: right; padding-right: 2em; color: #019e48"
+          <span style="float: right; padding-right: 2em; color: #3380f3"
             >{{ cpu_q[0] }} %</span
           >
         </div>
         <div id="cpu-usage-wrapper"></div>
         <div>
           <span style="padding-left: 1em">内存使用率</span>
-          <span style="float: right; padding-right: 2em; color: #019e48"
+          <span style="float: right; padding-right: 2em; color: #3380f3"
             >{{ men_q[0] }} %</span
           >
         </div>
@@ -67,10 +67,10 @@
           <span style="float: right; padding-right: 2em">
             <img src="@/assets/svg/circle-dark.svg" />
             接收
-            <span style="color: #019e48">{{ recv_q[0] }} KB/s</span>
+            <span style="color: #3380f3">{{ recv_q[0] }} KB/s</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <img src="@/assets/svg/circle-light.svg" />发送
-            <span style="color: #019e48">{{ send_q[0] }}KB/s</span></span
+            <span style="color: #3380f3">{{ send_q[0] }}KB/s</span></span
           >
         </div>
         <div id="net-usage-wrapper"></div>
@@ -149,7 +149,7 @@ export default {
           y: 'center', // 通过x,y将标题(进度)定位在圆环中心
           textStyle: {
             fontSize: '14',
-            color: '#019e48',
+            color: '#3380F3',
             fontWeight: '400',
             fontFamily: 'sans-serif',
           },
@@ -189,7 +189,7 @@ export default {
               value: (((this.total - this.free) / this.total) * 100).toFixed(2),
               name: '',
               itemStyle: {
-                color: '#019e48',
+                color: '#3380F3',
               },
             },
             {

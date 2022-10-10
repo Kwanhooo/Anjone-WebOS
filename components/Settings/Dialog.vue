@@ -118,7 +118,7 @@ export default {
     .active-item-child {
       background: @ACTIVE_BACKGROUND !important;
       color: @STRONG_THEME_COLOR_LIGHT !important;
-      border-right: #019e48 solid 3px;
+      border-right: #3380f3 solid 3px;
     }
   }
 }
