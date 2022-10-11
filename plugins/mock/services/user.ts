@@ -16,7 +16,9 @@ const login = (options: any) => {
         phone: '18888888888',
         devs: [{ dev: 'HDC-101-1001', time: '2022-01-01' }],
         role: 'admin',
-        avatar: mock('@url'),
+        avatar: mock(
+          'https://cdn1.iconfinder.com/data/icons/facely-metapeople-3d-avatar-set/512/17._Designer.png'
+        ),
         create_time: mock('@datetime'),
       },
       '登录成功',

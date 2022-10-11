@@ -1,4 +1,4 @@
-import { login, reg, bind, captcha, setPassword } from '~/api/user'
+import { login, reg, bind, captcha, setPassword, resetInfo } from '~/api/user'
 import { getNewExpireTime } from '~/utils/expire'
 import { Status } from '~/utils/magic-numbers'
 
@@ -201,5 +201,9 @@ export const actions = {
   },
   async GetCaptcha({ commit }: { commit: any }, phone: object) {
     await captcha(phone)
+  },
+  async ResetInfo({ commit }: { commit: any }, info: object) {
+    const { data } = await resetInfo(info)
+    return data
   },
 }

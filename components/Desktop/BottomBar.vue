@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: 'TopBar',
+  name: 'BottomBar',
   data() {
     return {
       isShowStart: false,

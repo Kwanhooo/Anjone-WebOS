@@ -15,6 +15,7 @@ const authAPI = {
   Bind: '/check_serialNo',
   // 账户相关
   SetPassword: '/user/set_password',
+  ResetInfo: '/user/reset_info',
 }
 
 /**
@@ -96,5 +97,20 @@ export function setPassword(parameter: any) {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     data: fmtToForm(parameter),
+  })
+}
+
+/**
+ * 修改用户信息
+ * @param parameter
+ */
+export function resetInfo(parameter: any) {
+  return axiosInstance({
+    url: authAPI.ResetInfo,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: parameter,
   })
 }
