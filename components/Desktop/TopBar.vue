@@ -109,7 +109,7 @@ export default Vue.extend({
       setMonitorActive: 'sys/SET_IS_MONITOR_ACTIVE',
     }),
     getUsername() {
-      return this.$store.getters['user/username']
+      return this.$store.state.user.username
     },
     openMonitorWidget() {
       const vm = this

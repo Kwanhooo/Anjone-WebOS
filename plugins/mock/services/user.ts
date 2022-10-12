@@ -62,6 +62,11 @@ const setPwd = (options: any) => {
   )
 }
 
+const resetInfo = (options: any) => {
+  const body = getBody(options)
+  return builder({}, '设置成功！', Status.OK)
+}
+
 const bind = (options: any) => {
   const body = getFormDataParameters(options)
   const SNToBind = body.serialNo
@@ -85,4 +90,5 @@ mock(/\/user\/login/, 'post', login)
 mock(/\/user\/check_code/, 'post', reg)
 mock(/\/user\/register/, 'post', captcha)
 mock(/\/user\/set_password/, 'post', setPwd)
+mock(/\/user\/reset_info/, 'post', resetInfo)
 mock(/\/check_serialNo/, 'post', bind)

@@ -2,11 +2,32 @@
   <div class="wrapper">
     <div class="avatar-wrapper">
       <div class="avatar-editor">
-        <img :src="avatarUrl" alt="头像" />
+        <img
+          :src="fileList.length === 0 ? avatarUrl : newAvatarUrl"
+          alt="头像"
+        />
       </div>
       <div class="change-avatar-btn">
-        <div class="change-avatar-text" @click="onChangeAvatarClicked()">
-          更改头像
+        <div class="change-avatar-text">
+          <a-upload
+            :file-list="fileList"
+            :remove="handleRemove"
+            :before-upload="beforeUpload"
+            style="max-width: 150px"
+            accept="image/*"
+          >
+            <a-button> <a-icon type="upload" />更改头像</a-button>
+          </a-upload>
+          <a-button
+            v-show="fileList.length !== 0"
+            type="primary"
+            :disabled="fileList.length === 0"
+            :loading="uploading"
+            style="margin-left: 10px"
+            @click="handleUpload"
+          >
+            {{ uploading ? '正在上传' : '确认更改' }}
+          </a-button>
         </div>
         <input type="file" style="display: none" />
       </div>
@@ -58,8 +79,8 @@
       <img
         :src="
           isShowPassword
-            ? require('@/assets/svg/eye-hide.svg')
-            : require('@/assets/svg/eye.svg')
+            ? require('assets/svg/eye-hide.svg')
+            : require('assets/svg/eye.svg')
         "
         alt="show"
         :class="{
@@ -101,18 +122,24 @@
 import Vue from 'vue'
 import { isValidPhone } from '@/utils/validate'
 import { Status } from '@/utils/magic-numbers'
+import { resetAvatar } from '@/api/file'
 
 export default Vue.extend({
-  name: 'MyAccount',
+  name: 'Me',
   data() {
     return {
+      // view
       avatarUrl: '',
+      newAvatarUrl: '',
+      fileList: [],
+      uploading: false,
       username: '',
       phone: '',
       registerTime: '',
       role: '',
       password: '',
       captcha: '',
+      // logic effect
       active: {
         unlock: false,
         username: false,
@@ -131,11 +158,51 @@ export default Vue.extend({
     this.initData()
   },
   methods: {
+    handleRemove(file) {
+      const index = this.fileList.indexOf(file)
+      const newFileList = this.fileList.slice()
+      newFileList.splice(index, 1)
+      this.fileList = newFileList
+    },
+    beforeUpload(file) {
+      const vm = this
+      this.fileList = []
+      this.fileList = [...this.fileList, file]
+      if (/^image/.test(file.type)) {
+        // 创建一个reader
+        const reader = new FileReader()
+        // 将图片将转成 base64 格式
+        reader.readAsDataURL(file)
+        // 读取成功后的回调
+        reader.onloadend = function () {
+          vm.newAvatarUrl = this.result
+        }
+      }
+      return false
+    },
+    handleUpload() {
+      const { fileList } = this
+      const avatarFormData = new FormData()
+      avatarFormData.append('avatar', fileList[0])
+      this.uploading = true
+      resetAvatar(avatarFormData)
+        .then((res) => {
+          if (res.data.code === Status.OK) {
+            this.fileList = []
+            this.uploading = false
+            this.$message.success('头像更改成功！')
+          } else {
+            this.uploading = false
+            this.$message.error('头像更改失败！')
+          }
+        })
+        .catch(() => {
+          this.uploading = false
+          this.$message.error('头像上传失败，请检查网络后再试！')
+        })
+    },
     toggleShowPassword() {
       this.isShowPassword = !this.isShowPassword
-    },
-    onChangeAvatarClicked() {
-      // TODO:代理input的点击事件
     },
     onGetCaptchaClicked() {
       if (!this.active.getCaptcha) return
@@ -147,7 +214,7 @@ export default Vue.extend({
       }
       if (!this.active.captcha) {
         // 校验手机号的合法性
-        const oldPhone = $nuxt.$store.getters['user/phone']
+        const oldPhone = $nuxt.$store.state.user.phone
         if (this.phone === oldPhone) {
           this.$message.error('请输入新的手机号！')
           return
@@ -156,6 +223,7 @@ export default Vue.extend({
           const vm = this
           $nuxt.$store.dispatch('user/GetCaptcha', this.phone).then((res) => {
             vm.$message.success('验证码已发送至您的新手机号！')
+            vm.active.captcha = true
             vm.timer = setInterval(() => {
               vm.countDown--
               vm.captchaTips = vm.countDown + 's后重发'
@@ -173,11 +241,11 @@ export default Vue.extend({
       }
     },
     initData() {
-      this.avatarUrl = $nuxt.$store.getters['user/avatar']
-      this.username = $nuxt.$store.getters['user/username']
-      this.phone = $nuxt.$store.getters['user/phone']
-      this.registerTime = $nuxt.$store.getters['user/create_time']
-      this.role = $nuxt.$store.getters['user/role']
+      this.avatarUrl = $nuxt.$store.state.user.avatar
+      this.username = $nuxt.$store.state.user.username
+      this.phone = $nuxt.$store.state.user.phone
+      this.registerTime = $nuxt.$store.state.user.create_time
+      this.role = $nuxt.$store.state.user.role
     },
     onModifyClicked() {
       if (!this.active.unlock) {
@@ -188,6 +256,14 @@ export default Vue.extend({
         this.active.password = true
         this.active.captcha = false
       } else {
+        if (
+          this.phone !== '' &&
+          this.phone !== $nuxt.$store.state.user.phone &&
+          this.code === ''
+        ) {
+          this.$message.error('修改手机号须接收并输入验证码！')
+          return
+        }
         const infoObject = {
           username: this.username,
           password: this.password,
@@ -202,7 +278,10 @@ export default Vue.extend({
             this.active.phone = false
             this.active.getCaptcha = false
             this.active.password = false
-            this.active.captcha = true
+            this.active.captcha = false
+            this.initData()
+            this.password = ''
+            this.captcha = ''
           }
         })
       }
@@ -212,7 +291,7 @@ export default Vue.extend({
 </script>
 
 <style lang="less" scoped>
-@import '@/assets/style/global';
+@import 'assets/style/global.less';
 
 @INPUT_BORDER_COLOR: #c4c4c4;
 
@@ -242,6 +321,7 @@ export default Vue.extend({
       display: inline-block;
       padding-left: 2.5em;
       padding-bottom: 2.2em;
+      width: 15em;
 
       cursor: pointer;
       pointer-events: auto;
@@ -250,10 +330,12 @@ export default Vue.extend({
         padding: 0.2em 0.5em;
         border-radius: 8px;
         transition: all ease-in-out 0.1s;
+        display: flex;
+        flex-direction: row;
 
-        &:hover {
-          background-color: #b7b4b4;
-        }
+        //&:hover {
+        //  background-color: #b7b4b4;
+        //}
       }
     }
   }

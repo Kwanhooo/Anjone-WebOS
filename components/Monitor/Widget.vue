@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { storage } from '@/api/sys'
+import { storage } from '@/api/system'
 import { monitorWSHost } from '@/config/api-host.config'
 
 export default {
@@ -113,8 +113,8 @@ export default {
     storage().then((res) => {
       this.total = res.data.data.total
       this.free = res.data.data.free
+      this.storageInit()
     })
-    this.storageInit()
   },
   methods: {
     onPinClicked() {

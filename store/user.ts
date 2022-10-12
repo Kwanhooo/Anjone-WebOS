@@ -11,86 +11,86 @@ export const state = () => ({
   devs: [],
 })
 
-export const getters = {
-  username: () => {
-    if (state().username !== '') {
-      return state().username
-    } else {
-      const sessionState = sessionStorage.getItem('USER_STATE')
-      if (sessionState !== null) {
-        const sessionStateObj = JSON.parse(sessionState)
-        return sessionStateObj.username
-      } else {
-        return ''
-      }
-    }
-  },
-  avatar: () => {
-    if (state().avatar !== '') {
-      return state().avatar
-    } else {
-      const sessionState = sessionStorage.getItem('USER_STATE')
-      if (sessionState !== null) {
-        const sessionStateObj = JSON.parse(sessionState)
-        return sessionStateObj.avatar
-      } else {
-        return ''
-      }
-    }
-  },
-  phone: () => {
-    if (state().phone !== '') {
-      return state().phone
-    } else {
-      const sessionState = sessionStorage.getItem('USER_STATE')
-      if (sessionState !== null) {
-        const sessionStateObj = JSON.parse(sessionState)
-        return sessionStateObj.phone
-      } else {
-        return ''
-      }
-    }
-  },
-  role: () => {
-    if (state().role !== '') {
-      return state().role
-    } else {
-      const sessionState = sessionStorage.getItem('USER_STATE')
-      if (sessionState !== null) {
-        const sessionStateObj = JSON.parse(sessionState)
-        return sessionStateObj.role
-      } else {
-        return ''
-      }
-    }
-  },
-  create_time: () => {
-    if (state().create_time !== '') {
-      return state().create_time
-    } else {
-      const sessionState = sessionStorage.getItem('USER_STATE')
-      if (sessionState !== null) {
-        const sessionStateObj = JSON.parse(sessionState)
-        return sessionStateObj.create_time
-      } else {
-        return ''
-      }
-    }
-  },
-  devs: () => {
-    if (state().devs.length !== 0) {
-      return state().devs
-    } else {
-      const sessionState = sessionStorage.getItem('USER_STATE')
-      if (sessionState !== null) {
-        const sessionStateObj = JSON.parse(sessionState)
-        return sessionStateObj.devs
-      } else {
-        return []
-      }
-    }
-  },
-}
+// export const getters = {
+//   username: () => {
+//     if (state().username !== '') {
+//       return state().username
+//     } else {
+//       const sessionState = sessionStorage.getItem('USER_STATE')
+//       if (sessionState !== null) {
+//         const sessionStateObj = JSON.parse(sessionState)
+//         return sessionStateObj.username
+//       } else {
+//         return ''
+//       }
+//     }
+//   },
+//   avatar: () => {
+//     if (state().avatar !== '') {
+//       return state().avatar
+//     } else {
+//       const sessionState = sessionStorage.getItem('USER_STATE')
+//       if (sessionState !== null) {
+//         const sessionStateObj = JSON.parse(sessionState)
+//         return sessionStateObj.avatar
+//       } else {
+//         return ''
+//       }
+//     }
+//   },
+//   phone: () => {
+//     if (state().phone !== '') {
+//       return state().phone
+//     } else {
+//       const sessionState = sessionStorage.getItem('USER_STATE')
+//       if (sessionState !== null) {
+//         const sessionStateObj = JSON.parse(sessionState)
+//         return sessionStateObj.phone
+//       } else {
+//         return ''
+//       }
+//     }
+//   },
+//   role: () => {
+//     if (state().role !== '') {
+//       return state().role
+//     } else {
+//       const sessionState = sessionStorage.getItem('USER_STATE')
+//       if (sessionState !== null) {
+//         const sessionStateObj = JSON.parse(sessionState)
+//         return sessionStateObj.role
+//       } else {
+//         return ''
+//       }
+//     }
+//   },
+//   create_time: () => {
+//     if (state().create_time !== '') {
+//       return state().create_time
+//     } else {
+//       const sessionState = sessionStorage.getItem('USER_STATE')
+//       if (sessionState !== null) {
+//         const sessionStateObj = JSON.parse(sessionState)
+//         return sessionStateObj.create_time
+//       } else {
+//         return ''
+//       }
+//     }
+//   },
+//   devs: () => {
+//     if (state().devs.length !== 0) {
+//       return state().devs
+//     } else {
+//       const sessionState = sessionStorage.getItem('USER_STATE')
+//       if (sessionState !== null) {
+//         const sessionStateObj = JSON.parse(sessionState)
+//         return sessionStateObj.devs
+//       } else {
+//         return []
+//       }
+//     }
+//   },
+// }
 
 export const mutations = {
   SET_USERNAME(state: any, username: string) {
@@ -202,8 +202,28 @@ export const actions = {
   async GetCaptcha({ commit }: { commit: any }, phone: object) {
     await captcha(phone)
   },
-  async ResetInfo({ commit }: { commit: any }, info: object) {
-    const { data } = await resetInfo(info)
+  async ResetInfo(
+    { commit, rootState }: { commit: any; rootState: any },
+    info: { username: string; password: string; phone: string; code: string }
+  ) {
+    const summitInfo = {
+      username: '',
+      password: '',
+      phone: '',
+      code: '',
+    }
+    // 判断哪些字段更新了
+    if (info.username !== '' && info.username !== rootState.user.username)
+      summitInfo.username = info.username
+    if (info.password !== '') summitInfo.password = info.password
+    if (info.phone !== '' && info.phone !== rootState.user.phone)
+      summitInfo.phone = info.phone
+    if (info.code !== '') summitInfo.code = info.code
+    const { data } = await resetInfo(summitInfo)
+    if (data.code === Status.OK) {
+      summitInfo.username !== '' && commit('SET_USERNAME', summitInfo.username)
+      summitInfo.phone !== '' && commit('SET_PHONE', summitInfo.phone)
+    }
     return data
   },
 }
