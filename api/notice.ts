@@ -5,17 +5,17 @@ const axiosInstance = axios.create({
   baseURL: xhrHost,
 })
 
-const sysAPI = {
+export const noticeAPI = {
   // 身份认证相关
-  Storage: '/system/get_disk_usage',
+  DeleteAll: '/notice/delete_all',
 }
 
 /**
- * 获取磁盘使用情况
+ * 删除所有通知
  */
-export function storage() {
+export function deleteAll() {
   return axiosInstance({
-    url: sysAPI.Storage,
-    method: 'get',
+    url: noticeAPI.DeleteAll,
+    method: 'post',
   })
 }

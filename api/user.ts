@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { fmtToForm } from '@/utils/api'
 import { xhrHost } from '~/config/api-host.config'
+import { fmtToForm } from '@/utils/api'
 
 const axiosInstance = axios.create({
   baseURL: xhrHost,
 })
 
-const authAPI = {
+export const authAPI = {
   // 身份认证相关
   Login: '/user/login',
   Reg: '/user/check_code',
@@ -16,6 +16,7 @@ const authAPI = {
   // 账户相关
   SetPassword: '/user/set_password',
   ResetInfo: '/user/reset_info',
+  GetCode: '/user/get_code',
 }
 
 /**
@@ -112,5 +113,20 @@ export function resetInfo(parameter: any) {
       'Content-Type': 'application/json',
     },
     data: parameter,
+  })
+}
+
+/**
+ * 修改用户信息
+ * @param parameter
+ */
+export function getCode(parameter: any) {
+  return axiosInstance({
+    url: authAPI.GetCode,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: fmtToForm(parameter),
   })
 }
