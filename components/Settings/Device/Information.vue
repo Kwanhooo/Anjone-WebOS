@@ -274,7 +274,7 @@ export default Vue.extend({
           }
 
           &:first-child {
-            background: #ababab;
+            background: #ababab !important;
             color: white;
           }
         }
@@ -300,7 +300,7 @@ export default Vue.extend({
           }
 
           &:first-child {
-            background: #ababab;
+            background: #ababab !important;
             color: white;
           }
         }

@@ -206,7 +206,7 @@
         id="device-information-wrapper"
         style="width: 100%; height: 100%"
       >
-        <LazySettingsDeviceInformation />
+        <SettingsDeviceInformation />
       </div>
       <div
         v-if="activeIndex === 3"

@@ -50,6 +50,15 @@ export default Vue.extend({
       this.$store.commit('sys/SET_IS_TODOLIST_ACTIVE', false)
       this.$store.commit('sys/SET_IS_MESSAGE_CENTER_ACTIVE', false)
     })
+    this.preLoadImages()
+  },
+  methods: {
+    preLoadImages() {
+      new Image().src = require('@/static/device-image.png')
+      new Image().src =
+        this.$store.state.user.avatar ||
+        JSON.parse(sessionStorage.getItem('USER_STATE')).avatar
+    },
   },
 })
 </script>

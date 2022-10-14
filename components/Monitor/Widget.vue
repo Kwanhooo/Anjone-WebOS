@@ -139,21 +139,35 @@ export default {
         document.getElementById('storage-chart-wrapper')
       )
       const option = {
-        title: {
-          show: true,
-          text:
-            '使用率\n' +
-            (((this.total - this.free) / this.total) * 100).toFixed(2) +
-            '%',
-          x: 'center',
-          y: 'center', // 通过x,y将标题(进度)定位在圆环中心
-          textStyle: {
-            fontSize: '14',
-            color: '#3380F3',
-            fontWeight: '400',
-            fontFamily: 'sans-serif',
+        title: [
+          {
+            show: true,
+            text: '使用率\n',
+            x: 'center',
+            y: 'center', // 通过x,y将标题(进度)定位在圆环中心
+            textStyle: {
+              fontSize: '15',
+              color: '#bbbbbb',
+              fontWeight: '400',
+              fontFamily: 'sans-serif',
+            },
           },
-        },
+          {
+            show: true,
+            text:
+              '\n\n' +
+              (((this.total - this.free) / this.total) * 100).toFixed(2) +
+              '%',
+            x: 'center',
+            y: 'center', // 通过x,y将标题(进度)定位在圆环中心
+            textStyle: {
+              fontSize: '15',
+              color: '#3380F3',
+              fontWeight: '600',
+              fontFamily: 'sans-serif',
+            },
+          },
+        ],
         tooltip: {
           trigger: 'item',
           formatter: '{d}%',
@@ -167,7 +181,7 @@ export default {
         series: {
           name: '',
           type: 'pie',
-          radius: ['65%', '85%'],
+          radius: ['75%', '85%'],
           avoidLabelOverlap: true,
           hoverAnimation: false,
           label: {
