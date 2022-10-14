@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
 
 const sysAPI = {
   Storage: '/system/get_disk_usage',
-  GetDevInfo: '/system/get_disk_usage',
+  GetDevInfo: '/system/get_dev_info',
   GetVersion: '/system/get_version',
   GetAddress: '/system/get_address',
 }

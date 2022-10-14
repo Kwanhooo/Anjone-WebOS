@@ -1,3 +1,6 @@
+import { storage } from '~/api/system'
+import { Status } from '~/utils/magic-numbers'
+
 export const state = () => ({
   wallpaper: '',
   dialogIdentifier: 0,
@@ -6,6 +9,10 @@ export const state = () => ({
   isMonitorActive: false,
   monitorWS: null,
   messageCenterWS: null,
+  storage: {
+    free: 0,
+    total: 0,
+  },
 })
 
 export const getters = {
@@ -16,6 +23,7 @@ export const getters = {
   isMonitorActive: (state: any) => state.isMonitorActive,
   monitorWS: (state: any) => state.monitorWS,
   messageCenterWS: (state: any) => state.messageCenterWS,
+  storage: (state: any) => state.storage,
 }
 
 export const mutations = {
@@ -49,10 +57,21 @@ export const mutations = {
   SET_MESSAGE_CENTER_WS(state: any, messageCenterWS: WebSocket) {
     state.messageCenterWS = messageCenterWS
   },
+  SET_STORAGE(state: any, free: number, total: number) {
+    state.storage.free = free
+    state.storage.total = total
+  },
 }
 
 export const actions = {
   GetNewDialogIdentifier({ commit }: any) {
     return commit('SET_DIALOG_IDENTIFIER')
+  },
+  async GetStorageStatus({ commit, rootState }: any) {
+    const { data } = await storage()
+    if (data.code === Status.OK) {
+      commit('SET_STORAGE', data.data.free, data.data.total)
+    }
+    return data
   },
 }

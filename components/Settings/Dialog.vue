@@ -201,6 +201,41 @@
       >
         <LazySettingsAccountAllocation />
       </div>
+      <div
+        v-if="activeIndex === 2"
+        id="device-information-wrapper"
+        style="width: 100%; height: 100%"
+      >
+        <LazySettingsDeviceInformation />
+      </div>
+      <div
+        v-if="activeIndex === 3"
+        id="device-status-wrapper"
+        style="width: 100%; height: 100%"
+      >
+        <LazySettingsDeviceStatus />
+      </div>
+      <div
+        v-if="activeIndex === 4"
+        id="device-log-wrapper"
+        style="width: 100%; height: 100%"
+      >
+        <LazySettingsDeviceLog />
+      </div>
+      <div
+        v-if="activeIndex === 5"
+        id="customer-feedback-wrapper"
+        style="width: 100%; height: 100%"
+      >
+        <LazySettingsCustomerFeedback />
+      </div>
+      <div
+        v-if="activeIndex === 6"
+        id="customer-documentations-wrapper"
+        style="width: 100%; height: 100%"
+      >
+        <LazySettingsCustomerDocumentations />
+      </div>
     </template>
   </DialogBody>
 </template>
