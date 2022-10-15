@@ -160,7 +160,8 @@ export const mutations = {
 
 export const actions = {
   async Login({ commit }: { commit: any }, identity: object) {
-    const { data } = await login(identity)
+    const { data, headers } = await login(identity)
+    console.log(headers)
     if (data.data.devs.length <= 0) {
       sessionStorage.setItem('BIND_NEEDED', 'true')
     }

@@ -2,9 +2,7 @@ import axios from 'axios'
 import { xhrHost } from '~/config/api-host.config'
 import { fmtToForm } from '@/utils/api'
 
-const axiosInstance = axios.create({
-  baseURL: xhrHost,
-})
+import { axiosInstance } from '~/plugins/axios'
 
 export const authAPI = {
   // 身份认证相关

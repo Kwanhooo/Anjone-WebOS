@@ -27,6 +27,7 @@
 <script>
 import Vue from 'vue'
 import { Status } from '@/utils/magic-numbers'
+import { isValidPhone } from '@/utils/validate'
 
 export default Vue.extend({
   name: 'Reg',
@@ -45,6 +46,10 @@ export default Vue.extend({
       this.$router.back()
     },
     handleGetCaptcha() {
+      if (this.phone === '' || isValidPhone(this.phone) === false) {
+        this.$message.error('请输入正确的手机号码！')
+        return
+      }
       if (this.timer != null) {
         this.$message.error(
           '验证码已发送，请过' + this.countDown + 's后再试...'
@@ -67,6 +72,14 @@ export default Vue.extend({
         })
     },
     handleReg() {
+      if (this.phone === '' || isValidPhone(this.phone) === false) {
+        this.$message.error('请输入正确的手机号码！')
+        return
+      }
+      if (this.captcha.length !== 4) {
+        this.$message.error('请输入4位验证码！')
+        return
+      }
       const vm = this
       this.$store
         .dispatch('user/Reg', { phone: this.phone, code: this.captcha })

@@ -22,6 +22,7 @@
       >
         <img alt="start" src="@/assets/svg/start.svg" />
       </div>
+      3
     </div>
     <div id="go-to-desktop"></div>
   </div>

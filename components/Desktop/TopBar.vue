@@ -35,7 +35,7 @@
           src="@/assets/svg/user.svg"
           style="margin-right: 0.5em"
         />
-        <span>{{ getUsername() }}</span>
+        <span style="padding-right: 1.5em">{{ getUsername() }}</span>
         <img alt="list" src="@/assets/svg/list.svg" class="list-logo" />
         <img
           alt="separator"
@@ -288,7 +288,7 @@ export default Vue.extend({
       pointer-events: auto;
       .header-top-bar-item;
 
-      width: 10em;
+      width: auto;
 
       .list-logo {
         display: block;

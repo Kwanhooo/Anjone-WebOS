@@ -43,7 +43,9 @@
           <div class="value">{{ overview.systemVersion }}</div>
         </div>
         <div class="btn-wrapper">
-          <button class="btn">检查更新</button>
+          <button class="btn" @click.prevent="handleCheckUpdate()">
+            检查更新
+          </button>
         </div>
       </div>
     </div>
@@ -144,7 +146,9 @@
           </tr>
         </table>
         <div class="btn-wrapper">
-          <button class="btn">修改网络设置</button>
+          <button class="btn" @click="handleModifyNetworkSettings()">
+            修改网络设置
+          </button>
         </div>
       </div>
     </div>
@@ -158,49 +162,45 @@ export default Vue.extend({
   name: 'Information',
   data() {
     return {
-      overview: {
-        deviceModel: 'HDC-101 1001',
-        deviceSN: '104f-1a2b-3c4d-5e6f',
-        registerTime: '2022-10-13 12:00:00',
-        storageSpace: '总容量 1.8TB',
-        firmwareVersion: '1.0.0',
-        systemVersion: '1.0.0',
-      },
-      hardware: {
-        cpu: 'Rockchip RK3568 四核 2.0GHz',
-        memory: '2GB DDR4',
-        diskNumber: '16GB eMMC V5.1',
-        sata: '2.5" HDD*2',
-        bluetooth: 'Bluetooth 5.0',
-        wifi: '支持WIFI 6',
-        ethernet: '1GbE RJ-45*2',
-        usb: 'USB3.0*1, USB2.0*1',
-        hdmi: 'HDMI2.0a 4K@60Hz',
-        zigbee: 'ZigBee 3.0',
-        touchScreen: '5"',
-        speakers: '立体声',
-      },
+      overview: {},
+      hardware: {},
       network: {},
     }
   },
-  mounted() {
-    // this.initData()
+  beforeMount() {
+    this.initData()
   },
   methods: {
     initData() {
-      this.deviceModel = $nuxt.$store.state.user.devs[0].dev
-      this.deviceSN = $nuxt.$store.state.user.devs[0].dev
-      this.registerTime = $nuxt.$store.state.user.devs[0].create_time
-      $nuxt.$store.dispatch('sys/GetStorageStatus').then((res) => {
-        if (res.data.code === Status.OK) {
-          this.storageSpace =
-            '总容量' + Number(res.data.data.total).toFixed(2) + 'GB'
-        } else {
-          this.$message.error(res.data.msg)
-        }
-      })
+      const vm = this
+      this.loadCacheData()
+      $nuxt.$store
+        .dispatch('system/GetAllDeviceInfo')
+        .then(() => {
+          vm.overview = $nuxt.$store.getters['system/GET_OVERVIEW']
+          vm.hardware = $nuxt.$store.getters['system/GET_HARDWARE']
+          vm.network = $nuxt.$store.getters['system/GET_NETWORK']
+        })
+        .catch(() => {
+          this.$message.error('获取设备信息失败，请检查网络！')
+        })
     },
-    handleCheckUpdate() {},
+    loadCacheData() {
+      const overview = $nuxt.$store.getters['system/GET_OVERVIEW']
+      const hardware = $nuxt.$store.getters['system/GET_HARDWARE']
+      const network = $nuxt.$store.getters['system/GET_NETWORK']
+      if (overview && hardware && network) {
+        this.overview = overview
+        this.hardware = hardware
+        this.network = network
+      }
+    },
+    handleCheckUpdate() {
+      this.$message.success('您目前使用的是最新版本！')
+    },
+    handleModifyNetworkSettings() {
+      this.$message.info('暂时不支持修改网络信息！')
+    },
   },
 })
 </script>

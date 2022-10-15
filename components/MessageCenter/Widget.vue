@@ -57,6 +57,7 @@
 <script>
 import Vue from 'vue'
 import { messageCenterWSHost, monitorWSHost } from '@/config/api-host.config'
+import { deleteAll } from '@/api/notice'
 
 export default Vue.extend({
   name: 'MessageCenterWidget',
@@ -74,7 +75,12 @@ export default Vue.extend({
   },
   methods: {
     onClearClicked() {
-      this.messages = []
+      if (this.messages.length === 0) {
+        return
+      }
+      deleteAll().then(() => {
+        this.messages = []
+      })
     },
     onCloseClicked() {
       $nuxt.$store.commit('sys/SET_IS_MESSAGE_CENTER_ACTIVE', false)

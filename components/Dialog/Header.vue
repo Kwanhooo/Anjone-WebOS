@@ -4,26 +4,14 @@
       <slot name="title"></slot>
     </div>
     <div class="dialog-op">
-      <div class="dialog-op-item">
-        <img
-          alt="minimize"
-          src="@/assets/svg/minimize.svg"
-          @click="onMinimizeClicked()"
-        />
+      <div class="dialog-op-item" @click="onMinimizeClicked()">
+        <img alt="minimize" src="@/assets/svg/minimize.svg" />
       </div>
-      <div class="dialog-op-item">
-        <img
-          alt="fullscreen"
-          src="@/assets/svg/fullscreen.svg"
-          @click="onFullscreenClicked()"
-        />
+      <div class="dialog-op-item" @click="onFullscreenClicked()">
+        <img alt="fullscreen" src="@/assets/svg/fullscreen.svg" />
       </div>
-      <div class="dialog-op-item">
-        <img
-          alt="close"
-          src="@/assets/svg/close.svg"
-          @click="onCloseClicked()"
-        />
+      <div class="dialog-op-item" @click="onCloseClicked()">
+        <img alt="close" src="@/assets/svg/close.svg" />
       </div>
     </div>
   </div>

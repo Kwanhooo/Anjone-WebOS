@@ -1,9 +1,7 @@
 import axios from 'axios'
 import { xhrHost } from '~/config/api-host.config'
 
-const axiosInstance = axios.create({
-  baseURL: xhrHost,
-})
+import { axiosInstance } from '~/plugins/axios'
 
 export const fileAPI = {
   // 上传头像

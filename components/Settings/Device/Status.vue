@@ -86,7 +86,7 @@
         </tr>
         <tr>
           <td>IPv4地址</td>
-          <td>{{ network.MAC }}</td>
+          <td>{{ network.IPv4 }}</td>
           <td>WIFI热点IP地址</td>
           <td>{{ network.hotspotIP }}</td>
         </tr>
@@ -139,16 +139,32 @@
           <td></td>
         </tr>
         <tr>
-          <td><div></div></td>
-          <td><div></div></td>
-          <td><div></div></td>
-          <td><div></div></td>
+          <td>
+            <div></div>
+          </td>
+          <td>
+            <div></div>
+          </td>
+          <td>
+            <div></div>
+          </td>
+          <td>
+            <div></div>
+          </td>
         </tr>
         <tr>
-          <td><div></div></td>
-          <td><div></div></td>
-          <td><div></div></td>
-          <td><div></div></td>
+          <td>
+            <div></div>
+          </td>
+          <td>
+            <div></div>
+          </td>
+          <td>
+            <div></div>
+          </td>
+          <td>
+            <div></div>
+          </td>
         </tr>
       </table>
     </div>
@@ -171,7 +187,7 @@ export default Vue.extend({
       overview: {
         personal: 315.6,
         team: 712,
-        system: 47.6,
+        system: 87.6,
         disks: [
           {
             name: '硬盘1',
@@ -185,34 +201,28 @@ export default Vue.extend({
           },
         ],
       },
-      network: {
-        situation: '正常',
-        freq: '2.4G',
-        MAC: '00:00:00:00:00:00',
-        hotspot: 'Anjone',
-        hotspotIP: '',
-        hotspotMask: '',
-        hotspotDeviceNumber: 0,
-        IPv4Gateway: '',
-        IPv4Mask: '',
-        IPv4DNS: '',
-        publicIPv4Address: '',
-        IPv6Address: '',
-        IPv6Gateway: '',
-        localIPv6Address: '',
-        IPv6DNS: '',
-        bluetoothStatus: '正常',
-        bluetoothName: '蓝牙名称',
-        bluetoothDeviceNumber: 0,
-        zigbeeStatus: '正常',
-        zigbeeDeviceNumber: 0,
-      },
+      network: {},
     }
+  },
+  beforeMount() {
+    this.initData()
   },
   mounted() {
     this.initStorageChart()
   },
   methods: {
+    initData() {
+      const vm = this
+      $nuxt.$store
+        .dispatch('system/GetNetworkInfo')
+        .then(() => {
+          vm.network = $nuxt.$store.getters['system/GET_ADDRESS']
+        })
+        .catch((err) => {
+          console.log(err)
+          this.$message.error('获取设备信息失败，请检查网络！')
+        })
+    },
     initStorageChart() {
       storage().then((res) => {
         this.storage.total = res.data.data.total
@@ -420,6 +430,7 @@ export default Vue.extend({
         text-align: center;
         border: 1px solid #dddddd;
         font-family: @GLOBAL_FONT_FAMILY;
+
         div {
           min-height: 1.7em;
         }

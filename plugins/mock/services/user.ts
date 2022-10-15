@@ -32,13 +32,14 @@ const reg = (options: any) => {
   const body = getFormDataParameters(options)
   return builder(
     {
-      username: 'Anjone用户',
-      SNs: [],
-      info: {
-        role: 'admin',
-        avatar: mock('@url'),
-        phone: body.phone,
-      },
+      username: mock('Anjone用户'),
+      phone: body.phone,
+      devs: [],
+      role: 'admin',
+      avatar: mock(
+        'https://cdn1.iconfinder.com/data/icons/facely-metapeople-3d-avatar-set/512/17._Designer.png'
+      ),
+      create_time: mock('@datetime'),
     },
     '注册成功，欢迎使用Anjone！',
     Status.OK
@@ -49,13 +50,14 @@ const setPwd = (options: any) => {
   const body = getFormDataParameters(options)
   return builder(
     {
-      username: 'Anjone用户',
-      SNs: [],
-      info: {
-        role: 'admin',
-        avatar: mock('@url'),
-        phone: body.phone,
-      },
+      username: mock('Anjone用户'),
+      phone: body.phone,
+      devs: [],
+      role: 'admin',
+      avatar: mock(
+        'https://cdn1.iconfinder.com/data/icons/facely-metapeople-3d-avatar-set/512/17._Designer.png'
+      ),
+      create_time: mock('@datetime'),
     },
     '设置新密码成功！',
     Status.OK
@@ -86,9 +88,14 @@ const captcha = (options: any) => {
   return builder({}, '获取成功！', Status.OK)
 }
 
+const deleteAll = (options: any) => {
+  return builder({}, '删除成功！', Status.OK)
+}
+
 mock(/\/user\/login/, 'post', login)
 mock(/\/user\/check_code/, 'post', reg)
 mock(/\/user\/register/, 'post', captcha)
 mock(/\/user\/set_password/, 'post', setPwd)
 mock(/\/user\/reset_info/, 'post', resetInfo)
 mock(/\/check_serialNo/, 'post', bind)
+mock(/\/notice\/deleteAll/, 'post', deleteAll)
