@@ -335,12 +335,12 @@ export default Vue.extend({
     }
 
     .info-item {
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       color: #4f4f4f;
       flex: 1;
       display: inline-flex;
       flex-direction: row;
-      font-family: '黑体', sans-serif;
+      font-family: @GLOBAL_FONT_FAMILY;
       font-weight: 650;
 
       .key {
@@ -419,6 +419,7 @@ export default Vue.extend({
       td {
         text-align: center;
         border: 1px solid #dddddd;
+        font-family: @GLOBAL_FONT_FAMILY;
         div {
           min-height: 1.7em;
         }

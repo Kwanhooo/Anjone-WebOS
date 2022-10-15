@@ -10,7 +10,7 @@
       v-model="password"
       type="password"
       class="input-password"
-      placeholder="清输入密码"
+      placeholder="请输入密码"
     />
     <button class="login-btn-submit" @click.prevent="handleLogin()">
       登录
@@ -90,7 +90,7 @@ export default Vue.extend({
     width: @INPUT_WIDTH;
     height: @INPUT_HEIGHT;
     border-radius: @INPUT_BORDER_RADIUS;
-    font-family: @INPUT_FONT_FAMILY;
+    font-family: @GLOBAL_FONT_FAMILY;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 40%);
     transition: all ease-in-out 0.15s;
   }

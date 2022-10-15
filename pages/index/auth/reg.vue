@@ -101,7 +101,7 @@ export default Vue.extend({
   button {
     margin: 0.45rem 0;
     border-radius: @INPUT_BORDER_RADIUS;
-    font-family: @INPUT_FONT_FAMILY;
+    font-family: @GLOBAL_FONT_FAMILY;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 40%);
     transition: all ease-in-out 0.15s;
   }

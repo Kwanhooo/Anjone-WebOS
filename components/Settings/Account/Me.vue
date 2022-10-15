@@ -344,7 +344,7 @@ export default Vue.extend({
     height: 50px;
 
     .info-editor-key {
-      font-family: '黑体', sans-serif;
+      font-family: @GLOBAL_FONT_FAMILY;
       font-weight: 600;
     }
 
@@ -353,7 +353,7 @@ export default Vue.extend({
       margin-left: 2.5em;
 
       &:not(input) {
-        font-family: '黑体', sans-serif;
+        font-family: @GLOBAL_FONT_FAMILY;
         font-weight: 600;
       }
 
@@ -381,7 +381,7 @@ export default Vue.extend({
       transition: all ease-in-out 0.15s;
       cursor: pointer;
       pointer-events: auto;
-      font-family: '黑体', sans-serif;
+      font-family: @GLOBAL_FONT_FAMILY;
       outline: none;
 
       &:hover {

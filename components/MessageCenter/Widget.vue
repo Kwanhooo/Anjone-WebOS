@@ -238,7 +238,7 @@ export default Vue.extend({
         flex-direction: row;
 
         .type {
-          font-family: '黑体', sans-serif;
+          font-family: @GLOBAL_FONT_FAMILY;
           flex: 1;
           font-weight: 600;
           color: @STRONG_THEME_COLOR_LIGHT;

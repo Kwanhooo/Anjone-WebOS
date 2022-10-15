@@ -226,7 +226,7 @@ export default Vue.extend({
     justify-items: center;
     flex-direction: row;
     color: @HEADER_FONT_COLOR;
-    font-family: sans-serif;
+    font-family: @GLOBAL_FONT_FAMILY;
   }
 
   #center-switch-wrapper {

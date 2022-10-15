@@ -238,7 +238,7 @@ export default Vue.extend({
         flex: 1;
         display: inline-flex;
         flex-direction: row;
-        font-family: '黑体', sans-serif;
+        font-family: @GLOBAL_FONT_FAMILY;
         font-weight: 650;
 
         .key {
@@ -282,6 +282,7 @@ export default Vue.extend({
         td {
           text-align: center;
           border: 1px solid #dddddd;
+          font-family: @GLOBAL_FONT_FAMILY;
         }
       }
     }
@@ -308,6 +309,7 @@ export default Vue.extend({
         td {
           text-align: center;
           border: 1px solid #dddddd;
+          font-family: @GLOBAL_FONT_FAMILY;
 
           div {
             min-height: 1.5em;
@@ -327,7 +329,7 @@ export default Vue.extend({
       color: white;
       font-size: 0.8rem;
       font-weight: 550;
-      font-family: '黑体', sans-serif;
+      font-family: @GLOBAL_FONT_FAMILY;
       cursor: pointer;
       pointer-events: auto;
       border: none;

@@ -507,7 +507,7 @@ export default {
         padding-left: 0.6em;
 
         #device-info-wrapper {
-          font-family: sans-serif;
+          font-family: @GLOBAL_FONT_FAMILY;
           font-size: 14px;
 
           .device-name {
@@ -531,7 +531,7 @@ export default {
       font-size: 14px;
       font-weight: bold;
       color: #6c6c6c;
-      font-family: sans-serif;
+      font-family: @GLOBAL_FONT_FAMILY;
 
       #cpu-usage-wrapper {
         width: 28em;
