@@ -99,7 +99,7 @@ export const actions = {
       situation: '正常',
       freq: '2.4G',
       MAC: '',
-      hotspot: 'Anjone',
+      hotspot: '',
       IPv4: '',
       hotspotIP: '',
       hotspotMask: '',
@@ -112,25 +112,29 @@ export const actions = {
       IPv6Gateway: '',
       localIPv6Address: '',
       IPv6DNS: '',
-      bluetoothStatus: '正常',
-      bluetoothName: '蓝牙名称',
+      bluetoothStatus: '',
+      bluetoothName: '',
       bluetoothDeviceNumber: 0,
-      zigbeeStatus: '正常',
+      zigbeeStatus: '',
       zigbeeDeviceNumber: 0,
     }
-    address.MAC = addressInfo.mac
-    address.IPv4 = addressInfo.ipv4
-    address.IPv4Gateway = addressInfo.ipv4_gateway
-    address.IPv4DNS = addressInfo.ipv4_dns
-    address.publicIPv4Address = addressInfo.ipv4_extract
-    address.IPv6Address = addressInfo.ipv6 === null ? '' : addressInfo.ipv6
+    address.MAC = addressInfo.data.mac
+    address.IPv4 = addressInfo.data.ipv4
+    address.IPv4Gateway = addressInfo.data.ipv4_gateway
+    address.IPv4DNS = addressInfo.data.ipv4_dns
+    address.publicIPv4Address = addressInfo.data.ipv4_extract
+    address.IPv6Address =
+      addressInfo.data.ipv6 === null ? '' : addressInfo.data.ipv6
     address.IPv6Gateway =
-      addressInfo.ipv6_gateway === null ? '' : addressInfo.ipv6_gateway
-    address.IPv6DNS = addressInfo.ipv6_dns === null ? '' : addressInfo.ipv6_dns
+      addressInfo.data.ipv6_gateway === null
+        ? ''
+        : addressInfo.data.ipv6_gateway
+    address.IPv6DNS =
+      addressInfo.data.ipv6_dns === null ? '' : addressInfo.data.ipv6_dns
     address.localIPv6Address =
-      addressInfo.ipv6_extract === null ? '' : addressInfo.ipv6_extract
-
-    console.log(address)
+      addressInfo.data.ipv6_extract === null
+        ? ''
+        : addressInfo.data.ipv6_extract
 
     commit('SET_ADDRESS', address)
   },

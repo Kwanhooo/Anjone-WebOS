@@ -6,12 +6,16 @@ axios.defaults.withCredentials = true
 export const axiosInstance = axios.create({
   baseURL: xhrHost,
   withCredentials: true,
-  headers: {
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Origin': xhrHost,
-    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-    'Access-Control-Allow-Headers':
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials,Set-Cookie',
-    'Access-Control-Expose-Headers': 'Set-Cookie',
-  },
+})
+
+// request 监听器
+axiosInstance.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem('TOKEN')
+  // 如果 token 存在
+  // 让每个请求头携带自定义 token
+  if (token) {
+    // @ts-ignore
+    config.headers.Authorization = token
+  }
+  return config
 })

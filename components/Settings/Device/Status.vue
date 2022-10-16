@@ -204,22 +204,26 @@ export default Vue.extend({
       network: {},
     }
   },
-  beforeMount() {
-    this.initData()
-  },
+  beforeMount() {},
   mounted() {
     this.initStorageChart()
+    this.initData()
   },
   methods: {
+    preloadData() {
+      if ($nuxt.$store.state.system.address !== null) {
+        this.network = $nuxt.$store.state.system.address
+      }
+    },
     initData() {
+      this.preloadData()
       const vm = this
       $nuxt.$store
         .dispatch('system/GetNetworkInfo')
         .then(() => {
-          vm.network = $nuxt.$store.getters['system/GET_ADDRESS']
+          vm.network = $nuxt.$store.state.system.address
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(() => {
           this.$message.error('获取设备信息失败，请检查网络！')
         })
     },

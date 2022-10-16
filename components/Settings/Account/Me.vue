@@ -181,6 +181,7 @@ export default Vue.extend({
       return false
     },
     handleUpload() {
+      const vm = this
       const { fileList } = this
       const avatarFormData = new FormData()
       avatarFormData.append('avatar', fileList[0])
@@ -188,8 +189,11 @@ export default Vue.extend({
       resetAvatar(avatarFormData)
         .then((res) => {
           if (res.data.code === Status.OK) {
-            this.fileList = []
-            this.uploading = false
+            vm.fileList = []
+            vm.uploading = false
+            $nuxt.$store.commit('user/SET_AVATAR', res.data.data.avatar)
+            vm.avatarUrl = res.data.data.avatar
+            vm.newAvatarUrl = res.data.data.avatar
             this.$message.success('头像更改成功！')
           } else {
             this.uploading = false
@@ -221,20 +225,22 @@ export default Vue.extend({
         }
         if (isValidPhone(this.phone)) {
           const vm = this
-          $nuxt.$store.dispatch('user/GetCaptcha', this.phone).then((res) => {
-            vm.$message.success('验证码已发送至您的新手机号！')
-            vm.active.captcha = true
-            vm.timer = setInterval(() => {
-              vm.countDown--
-              vm.captchaTips = vm.countDown + 's后重发'
-              if (vm.countDown <= 0) {
-                clearInterval(vm.timer)
-                vm.timer = null
-                vm.captchaTips = '重新获取'
-                vm.countDown = 10
-              }
-            }, 1000)
-          })
+          $nuxt.$store
+            .dispatch('user/GetCode', { phone: this.phone })
+            .then((res) => {
+              vm.$message.success('验证码已发送至您的新手机号！')
+              vm.active.captcha = true
+              vm.timer = setInterval(() => {
+                vm.countDown--
+                vm.captchaTips = vm.countDown + 's后重发'
+                if (vm.countDown <= 0) {
+                  clearInterval(vm.timer)
+                  vm.timer = null
+                  vm.captchaTips = '重新获取'
+                  vm.countDown = 10
+                }
+              }, 1000)
+            })
         } else {
           $nuxt.$message.error('请输入正确的手机号！')
         }

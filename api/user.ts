@@ -124,6 +124,7 @@ export function getCode(parameter: any) {
     method: 'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: sessionStorage.getItem('TOKEN'),
     },
     data: fmtToForm(parameter),
   })

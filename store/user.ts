@@ -1,4 +1,12 @@
-import { login, reg, bind, captcha, setPassword, resetInfo } from '~/api/user'
+import {
+  login,
+  reg,
+  bind,
+  captcha,
+  setPassword,
+  resetInfo,
+  getCode,
+} from '~/api/user'
 import { getNewExpireTime } from '~/utils/expire'
 import { Status } from '~/utils/magic-numbers'
 
@@ -161,7 +169,8 @@ export const mutations = {
 export const actions = {
   async Login({ commit }: { commit: any }, identity: object) {
     const { data, headers } = await login(identity)
-    console.log(headers)
+    sessionStorage.setItem('TOKEN', headers.authorization)
+
     if (data.data.devs.length <= 0) {
       sessionStorage.setItem('BIND_NEEDED', 'true')
     }
@@ -203,6 +212,9 @@ export const actions = {
   async GetCaptcha({ commit }: { commit: any }, phone: object) {
     await captcha(phone)
   },
+  async GetCode({ commit }: { commit: any }, phone: string) {
+    await getCode(phone)
+  },
   async ResetInfo(
     { commit, rootState }: { commit: any; rootState: any },
     info: { username: string; password: string; phone: string; code: string }
@@ -214,14 +226,14 @@ export const actions = {
       code: '',
     }
     // 判断哪些字段更新了
-    if (info.username !== '' && info.username !== rootState.user.username)
-      summitInfo.username = info.username
+    summitInfo.username = info.username
     if (info.password !== '') summitInfo.password = info.password
-    if (info.phone !== '' && info.phone !== rootState.user.phone)
-      summitInfo.phone = info.phone
+    summitInfo.phone = info.phone
     if (info.code !== '') summitInfo.code = info.code
-    const { data } = await resetInfo(summitInfo)
+    const { data, headers } = await resetInfo(summitInfo)
     if (data.code === Status.OK) {
+      const newToken = headers.authorization
+      sessionStorage.setItem('TOKEN', newToken)
       summitInfo.username !== '' && commit('SET_USERNAME', summitInfo.username)
       summitInfo.phone !== '' && commit('SET_PHONE', summitInfo.phone)
     }

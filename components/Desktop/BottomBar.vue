@@ -22,13 +22,43 @@
       >
         <img alt="start" src="@/assets/svg/start.svg" />
       </div>
-      3
+      <div
+        :class="{
+          'task-bar-item': true,
+          'task-bar-item-active': isShowStart,
+        }"
+        @click="onSettingsClicked()"
+      >
+        <img
+          alt="file-manager"
+          src="@/assets/image/settings.png"
+          style="width: 30px; height: 30px"
+        />
+      </div>
+      <div
+        :class="{
+          'task-bar-item': true,
+          'task-bar-item-active': isShowStart,
+        }"
+        @click="onFileManagerClicked()"
+      >
+        <img
+          alt="file-manager"
+          src="@/assets/image/file-manager.png"
+          style="width: 30px; height: 30px"
+        />
+      </div>
     </div>
-    <div id="go-to-desktop"></div>
+
+    <div id="go-to-desktop" @click="handleGoToDesktop()"></div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import SettingsDialog from '@/components/Settings/Dialog'
+import FileManager from '@/components/FileManager/Dialog'
+
 export default {
   name: 'BottomBar',
   data() {
@@ -54,6 +84,23 @@ export default {
         }, 10)
       }
     },
+    onSettingsClicked() {
+      const SettingsVueComponent = Vue.extend(SettingsDialog)
+      const settingsWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
+      this.dialog = new SettingsVueComponent().$mount(settingsWrapper)
+      const closable = document.querySelector('.__closable__')
+      closable !== null && closable.remove()
+    },
+    onFileManagerClicked() {
+      const FileManagerVueComponent = Vue.extend(FileManager)
+      const fileManagerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(fileManagerWrapper)
+      this.dialog = new FileManagerVueComponent().$mount(fileManagerWrapper)
+      const closable = document.querySelector('.__closable__')
+      closable !== null && closable.remove()
+    },
+    handleGoToDesktop() {},
   },
 }
 </script>
@@ -117,6 +164,8 @@ export default {
 
   #task-bar-wrapper {
     height: inherit;
+    display: flex;
+    flex-direction: row;
 
     .task-bar-item {
       display: flex;
@@ -137,6 +186,17 @@ export default {
 
   .task-bar-item-active {
     background: rgba(#e8e8e8, 100%);
+  }
+
+  #go-to-desktop {
+    background-color: #bbbbbb;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    width: 35px;
+    pointer-events: auto;
+    cursor: pointer;
   }
 }
 </style>
