@@ -4,7 +4,6 @@
       <span>我的文件</span>
     </template>
     <template #side>
-      <!-- 账户管理 -->
       <div class="file-catalog">
         <div
           :class="{
@@ -40,24 +39,175 @@
         </div>
         <div v-show="getIsShow(0)" class="children-wrapper">
           <div
+            v-for="(dir, index) in rootDir"
+            :key="index"
             :class="{
               'item-child': true,
               item: true,
-              'active-item-child': activeIndex === 0,
+              'active-item-child': activeIndex === `${index}`,
             }"
-            @click="setActive(0)"
+            @click="setActive(`${index}`)"
           >
-            <span>我的账户</span>
+            <span>{{ dir.filename }}</span>
           </div>
         </div>
       </div>
     </template>
     <template #body>
+      <div v-if="openedImg !== ''" id="file-opener">
+        <img :src="openedImg" alt="opened-image" />
+      </div>
       <div class="main-area-wrapper">
         <div class="operation-bar">
-          <div></div>
+          <div class="tool-group">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path
+                  d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                ></path>
+              </g>
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 cOCwig svg-icon-path-icon fill"
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path
+                  d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                ></path>
+              </g>
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+              </g>
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              @click="handleBackClicked()"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path
+                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
+                ></path>
+              </g>
+            </svg>
+          </div>
+          <div class="breadcrumb">
+            <span>{{ breadcrumb }}</span>
+          </div>
+          <div class="renew">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path
+                  d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                ></path>
+              </g>
+            </svg>
+          </div>
+          <div class="search-wrapper">
+            <a-input-search
+              :placeholder="'在 ' + currentLoc + ' 中搜索'"
+              size="default"
+              @search="onSearch"
+            />
+          </div>
+          <div>
+            <a-dropdown class="more-operation">
+              <a-menu slot="overlay">
+                <a-menu-item key="1">新建文件夹</a-menu-item>
+                <a-menu-item key="2">上传文件</a-menu-item>
+                <a-menu-item key="3">删除文件</a-menu-item>
+                <a-menu-item key="4">文件详情</a-menu-item>
+                <a-menu-item key="5">重命名</a-menu-item>
+                <a-menu-item key="6">文件分享</a-menu-item>
+                <a-menu-item key="7">下载到本地</a-menu-item>
+                <a-menu-item key="8">取消分享</a-menu-item>
+              </a-menu>
+              <a-button style="margin-left: 8px"
+                ><span>更多操作</span>
+                <a-icon type="down" />
+              </a-button>
+            </a-dropdown>
+          </div>
+          <div class="tool-group">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              viewBox="0 0 32 32"
+              width="18"
+              height="18"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path
+                  d="M6.222 8.889c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778zM11.111 5.778h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM11.111 14.667h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM11.111 23.556h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM6.222 17.778c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778zM6.222 26.667c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778z"
+                ></path>
+              </g>
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+            >
+              <defs data-reactroot=""></defs>
+              <g>
+                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+              </g>
+            </svg>
+          </div>
         </div>
-        <div class="body"></div>
+        <div class="body">
+          <a-table
+            :row-selection="{
+              selectedRowKeys: selectedRowKeys,
+              onChange: onSelectChange,
+            }"
+            :columns="columns"
+            :data-source="displayData"
+            size="middle"
+          >
+            <a
+              slot="filename"
+              slot-scope="text, record"
+              style="color: #3380f3"
+              @click.prevent="handleFileClicked(text, record)"
+              >{{ text }}</a
+            >
+          </a-table>
+        </div>
       </div>
     </template>
   </DialogBody>
@@ -65,8 +215,48 @@
 
 <script>
 import Vue from 'vue'
+import { back, enter, enterAbs, startService, stopService } from '@/api/samb'
+import SettingsDialog from '@/components/Settings/Dialog'
 
-export default {
+const columns = [
+  {
+    title: '名称',
+    dataIndex: 'filename',
+    scopedSlots: { customRender: 'filename' },
+  },
+  {
+    title: '修改日期',
+    dataIndex: 'create_time',
+  },
+  {
+    title: '最近访问',
+    dataIndex: 'last_access_time',
+  },
+  {
+    title: '最近写入',
+    dataIndex: 'last_write_time',
+  },
+  {
+    title: '大小',
+    dataIndex: 'file_size',
+  },
+  {
+    title: '类型',
+    dataIndex: 'is_dir',
+    customRender: (text, record) => {
+      return text === true ? '文件夹' : '文件'
+    },
+  },
+  {
+    title: '只读',
+    dataIndex: 'read_only',
+    customRender: (text, record) => {
+      return text === true ? '是' : '否'
+    },
+  },
+]
+
+export default Vue.extend({
   name: 'FileManager',
   data() {
     return {
@@ -76,11 +266,40 @@ export default {
         1: false,
         2: false,
       },
+      rootDir: [],
+      breadcrumb: '',
+      currentLoc: '',
+      columns,
+      displayData: [],
+      selectedRowKeys: [],
+      defaultTopParent: '我的文件',
+      openedImg: '',
     }
   },
-  mounted() {},
+  computed: {
+    hasSelected() {
+      return this.selectedRowKeys.length > 0
+    },
+  },
+  beforeMount() {
+    this.startSMB()
+  },
+  beforeDestroy() {
+    this.stopSMB()
+  },
   methods: {
+    startSMB() {
+      const vm = this
+      this.currentLoc = this.defaultTopParent
+      startService().then((res) => {
+        vm.rootDir = res.data.data
+      })
+    },
+    stopSMB() {
+      stopService()
+    },
     toggleCategoryShow(index) {
+      if (index === 0) this.currentLoc = this.defaultTopParent
       this.categoryShow[index] = !this.categoryShow[index]
     },
     getIsShow(index) {
@@ -88,9 +307,47 @@ export default {
     },
     setActive(active) {
       this.activeIndex = active
+      this.onActiveChange(active)
+      this.currentLoc = this.rootDir[active].filename
+    },
+    onSearch() {
+      this.$message.info('搜索功能暂未开放')
+    },
+    onActiveChange(active) {
+      const vm = this
+      enterAbs({ filepath: '/' + this.rootDir[active].filename }).then(
+        (res) => {
+          vm.displayData = res.data.data
+          vm.breadcrumb =
+            vm.defaultTopParent + ' > ' + vm.rootDir[active].filename
+        }
+      )
+    },
+    onSelectChange(selectedRowKeys) {
+      console.log('选择了: ', selectedRowKeys)
+      this.selectedRowKeys = selectedRowKeys
+    },
+    handleFileClicked(filename, record) {
+      const isDir = record.is_dir
+      const vm = this
+      enter('/' + filename).then((res) => {
+        if (isDir) {
+          vm.displayData = res.data.data
+          vm.breadcrumb += ' > ' + filename
+        } else {
+          vm.openedImg = res.data.data
+        }
+      })
+    },
+    handleBackClicked() {
+      const vm = this
+      back().then((res) => {
+        vm.displayData = res.data.data
+        vm.breadcrumb.split(' > ').pop()
+      })
     },
   },
-}
+})
 </script>
 
 <style lang="less" scoped>
@@ -160,11 +417,83 @@ export default {
   flex-direction: column;
 
   .operation-bar {
-    height: 2.3em;
+    height: 2.5em;
+    //background-color: green;
+    display: flex;
+    flex-direction: row;
+    padding: 0 1em;
+
+    svg {
+      fill: @STRONG_THEME_COLOR_LIGHT;
+    }
+
+    svg.active {
+      fill: @STRONG_THEME_COLOR_LIGHT !important;
+    }
+
+    .tool-group {
+      flex: 6;
+      padding-top: 0.65em;
+
+      svg {
+        width: 1.4em !important;
+        height: 1.4em !important;
+      }
+
+      &:last-child {
+        flex: 3 !important;
+      }
+    }
+
+    .breadcrumb {
+      background-color: #ffffff;
+      flex: 12;
+      //height: 1.4em;
+      border-radius: 8px;
+      color: #6c6c6c;
+      margin: 0.4em 0;
+      padding-left: 0.5em;
+    }
+
+    .renew {
+      flex: 0.8;
+      padding-top: 0.65em;
+      margin-left: 0.5em;
+    }
+
+    .search-wrapper {
+      flex: 10;
+      margin: 0.4em 0.8em;
+    }
+
+    .more-operation {
+      flex: 5;
+      background-color: #ffffff;
+      border-radius: 8px;
+      color: #6c6c6c;
+      margin: 0.4em 0.8em 0.4em 0;
+      height: 2em;
+      box-shadow: none;
+      border: none;
+    }
   }
 
   .body {
+    //background-color: purple;
     flex: 1;
+
+    table {
+      height: 100px !important;
+    }
+  }
+
+  #file-opener {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
   }
 }
 </style>

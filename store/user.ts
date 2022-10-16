@@ -169,6 +169,9 @@ export const mutations = {
 export const actions = {
   async Login({ commit }: { commit: any }, identity: object) {
     const { data, headers } = await login(identity)
+    if (data.code !== Status.OK) {
+      return data
+    }
     sessionStorage.setItem('TOKEN', headers.authorization)
 
     if (data.data.devs.length <= 0) {

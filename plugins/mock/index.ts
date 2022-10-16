@@ -5,6 +5,7 @@ console.log('Mock is mounting')
 
 require('./services/user')
 require('./services/system')
+require('./services/samb')
 
 const minTimeOut = 200
 const maxTimeOut = 800 - minTimeOut

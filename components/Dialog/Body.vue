@@ -5,6 +5,7 @@
     v-drag
     class="dialog-wrapper"
     :style="extraStyle"
+    @click="handleZIndexUpdate()"
   >
     <div class="dialog-header">
       <DialogHeader
@@ -65,7 +66,12 @@ export default Vue.extend({
       isMinimize: false,
       isFullscreen: false,
       extraStyle: '',
+      zIndexStyle: '',
     }
+  },
+  mounted() {
+    const zIndex = $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+    this.zIndexStyle = '{ z-index: ' + zIndex + ' }'
   },
   methods: {
     handleClose() {
@@ -87,6 +93,12 @@ export default Vue.extend({
           'px; }'
         this.isFullscreen = true
       }
+    },
+    handleZIndexUpdate() {
+      $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+      const zIndex = $nuxt.$store.state.sys.dialogZIndex
+      this.zIndexStyle = '{z-index:' + zIndex + ';}'
+      console.log(zIndex)
     },
   },
 })

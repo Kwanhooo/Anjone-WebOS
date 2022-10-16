@@ -2,11 +2,13 @@ import axios from 'axios'
 import { xhrHost } from '~/config/api-host.config'
 
 import { axiosInstance } from '~/plugins/axios'
+import { fmtToForm } from '~/utils/api'
 
 const sysAPI = {
   StartService: '/samb/start',
   StopService: '/samb/stop',
   Enter: '/samb/enter',
+  EnterAbs: '/samb/enter_abs',
   Back: '/samb/back',
 }
 
@@ -32,12 +34,24 @@ export function stopService() {
 
 /**
  * 进入SMB共享目录
- * @param dir 目录 如：/mnt/usb/sda1
+ * @param dir 目录 如：/music
  */
 export function enter(dir: string) {
   return axiosInstance({
     url: sysAPI.Enter + `${dir}`,
     method: 'post',
+  })
+}
+
+/**
+ * 进入SMB共享目录
+ * @param dir 目录 如：/music
+ */
+export function enterAbs(dir: object) {
+  return axiosInstance({
+    url: sysAPI.EnterAbs,
+    method: 'post',
+    data: fmtToForm(dir),
   })
 }
 

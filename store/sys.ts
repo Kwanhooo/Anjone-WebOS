@@ -4,6 +4,7 @@ import { Status } from '~/utils/magic-numbers'
 export const state = () => ({
   wallpaper: '',
   dialogIdentifier: 0,
+  dialogZIndex: 999,
   isTodoListActive: false,
   isMessageCenterActive: false,
   isMonitorActive: false,
@@ -60,6 +61,9 @@ export const mutations = {
   SET_STORAGE(state: any, free: number, total: number) {
     state.storage.free = free
     state.storage.total = total
+  },
+  SET_DIALOG_Z_INDEX(state: any) {
+    state.dialogZIndex = state.dialogZIndex + 1
   },
 }
 
