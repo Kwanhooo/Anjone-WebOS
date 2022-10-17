@@ -42,6 +42,9 @@ export default Vue.extend({
       }
     })
   },
+  beforeMount() {
+    document.title = '登录 - 安居佑'
+  },
   methods: {
     goToReg() {
       this.$router.push('/auth/reg')

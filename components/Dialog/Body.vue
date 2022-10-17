@@ -3,9 +3,9 @@
     v-if="!isClose"
     v-show="!isMinimize"
     v-drag
+    v-index
     class="dialog-wrapper"
     :style="extraStyle"
-    @click="handleZIndexUpdate()"
   >
     <div class="dialog-header">
       <DialogHeader
@@ -42,6 +42,10 @@ export default Vue.extend({
       bind(el) {
         const oDiv = el
         oDiv.onmousedown = (e) => {
+          if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
+            $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+            el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+          }
           // 算出鼠标相对元素的位置
           const disX = e.clientX - oDiv.offsetLeft
           const disY = e.clientY - oDiv.offsetTop
@@ -55,6 +59,20 @@ export default Vue.extend({
           document.onmouseup = (e) => {
             document.onmousemove = null
             document.onmouseup = null
+          }
+        }
+      },
+    },
+    index: {
+      bind(el) {
+        el.onload = () => {
+          $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+          el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+        }
+        el.onclick = () => {
+          if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
+            $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+            el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
           }
         }
       },
@@ -76,6 +94,7 @@ export default Vue.extend({
   methods: {
     handleClose() {
       this.isClose = true
+      this.$emit('destroyResource')
     },
     handleMinimize() {
       this.isMinimize = true
@@ -94,12 +113,12 @@ export default Vue.extend({
         this.isFullscreen = true
       }
     },
-    handleZIndexUpdate() {
-      $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
-      const zIndex = $nuxt.$store.state.sys.dialogZIndex
-      this.zIndexStyle = '{z-index:' + zIndex + ';}'
-      console.log(zIndex)
-    },
+    // handleZIndexUpdate() {
+    //   $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+    //   const zIndex = $nuxt.$store.state.sys.dialogZIndex
+    //   this.zIndexStyle = '{z-index:' + zIndex + ';}'
+    //   console.log(zIndex)
+    // },
   },
 })
 </script>
@@ -110,8 +129,8 @@ export default Vue.extend({
 @DIALOG_BODY_COLOR_LIGHT: #ebebeb;
 
 .dialog-wrapper {
+  z-index: 999999;
   font-size: 16px;
-  z-index: 999;
   position: absolute;
   left: calc(50% - 500px);
   top: calc(50% - 350px);

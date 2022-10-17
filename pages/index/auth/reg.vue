@@ -40,7 +40,9 @@ export default Vue.extend({
       countDown: 10,
     }
   },
-  mounted() {},
+  mounted() {
+    document.title = '注册 - 安居佑'
+  },
   methods: {
     backToLogin() {
       this.$router.back()

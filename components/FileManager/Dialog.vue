@@ -1,5 +1,8 @@
 <template>
-  <DialogBody class="dialog-file-manager">
+  <DialogBody
+    class="dialog-file-manager"
+    @destroyResource="handleDestroyResource()"
+  >
     <template #title>
       <span>我的文件</span>
     </template>
@@ -217,6 +220,7 @@
 import Vue from 'vue'
 import { back, enter, enterAbs, startService, stopService } from '@/api/samb'
 import SettingsDialog from '@/components/Settings/Dialog'
+import { Status } from '@/utils/magic-numbers'
 
 const columns = [
   {
@@ -284,10 +288,12 @@ export default Vue.extend({
   beforeMount() {
     this.startSMB()
   },
-  beforeDestroy() {
-    this.stopSMB()
-  },
   methods: {
+    handleDestroyResource() {
+      stopService().then(() => {
+        this.$destroy()
+      })
+    },
     startSMB() {
       const vm = this
       this.currentLoc = this.defaultTopParent
@@ -324,7 +330,6 @@ export default Vue.extend({
       )
     },
     onSelectChange(selectedRowKeys) {
-      console.log('选择了: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     handleFileClicked(filename, record) {

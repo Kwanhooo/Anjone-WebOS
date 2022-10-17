@@ -5,3 +5,5 @@
 export const tokenMaxLife = 7 * 24 * 60 * 60 * 1000
 
 export const whiteList = ['/auth', '/auth/login', '/auth/reg', '/test']
+
+export const tempStoreKey = '_tmp_s'

@@ -1,5 +1,8 @@
 <template>
-  <DialogBody class="dialog-settings">
+  <DialogBody
+    class="dialog-settings"
+    @destroyResource="handleDestroyResource()"
+  >
     <template #title>
       <span>系统设置</span>
     </template>
@@ -259,6 +262,11 @@ export default {
     }
   },
   methods: {
+    handleDestroyResource() {
+      setTimeout(() => {
+        this.$destroy()
+      }, 1000)
+    },
     toggleCategoryShow(index) {
       this.categoryShow[index] = !this.categoryShow[index]
     },

@@ -24,7 +24,9 @@ export default Vue.extend({
       SN: '',
     }
   },
-  mounted() {},
+  beforeMount() {
+    document.title = '设备绑定 - 安居佑'
+  },
   methods: {
     backToLogin() {
       sessionStorage.clear()

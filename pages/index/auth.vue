@@ -17,9 +17,6 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'Auth',
-  mounted() {
-    document.title = '认证 - 安居佑'
-  },
 })
 </script>
 

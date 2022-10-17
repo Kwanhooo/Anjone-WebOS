@@ -24,8 +24,8 @@ export default Vue.extend({
       password: '',
     }
   },
-  mounted() {
-    const vm = this
+  beforeMount() {
+    document.title = '密码重设 - 安居佑'
   },
   methods: {
     backToLogin() {
