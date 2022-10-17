@@ -2,13 +2,14 @@
   <div
     v-if="!isClose"
     v-show="!isMinimize"
-    v-drag
+    v-drag="vm"
     v-index
     class="dialog-wrapper"
     :style="extraStyle"
   >
     <div class="dialog-header">
       <DialogHeader
+        v-dClick="vm"
         @close="handleClose()"
         @minimize="handleMinimize()"
         @fullscreen="handleFullscreen()"
@@ -28,6 +29,7 @@
         <slot name="body" />
       </div>
     </div>
+    <div v-resize="vm" class="resize-block" />
   </div>
 </template>
 
@@ -39,7 +41,8 @@ export default Vue.extend({
   name: 'Dialog',
   directives: {
     drag: {
-      bind(el) {
+      inserted(el, binding) {},
+      bind(el, binding) {
         const oDiv = el
         oDiv.onmousedown = (e) => {
           if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
@@ -49,14 +52,26 @@ export default Vue.extend({
           // 算出鼠标相对元素的位置
           const disX = e.clientX - oDiv.offsetLeft
           const disY = e.clientY - oDiv.offsetTop
-          if (disY > 30) return
+          if (disY > 30 || binding.value.isFullscreen) return
           document.onmousemove = (e) => {
             const left = e.clientX - disX
             const top = e.clientY - disY
-            oDiv.style.left = left + 'px'
-            oDiv.style.top = top + 'px'
+            // 水平
+            const width = oDiv.offsetWidth
+            const remain = (document.documentElement.clientWidth * 0.1).toFixed(
+              0
+            )
+            if (
+              left >= 0 - Number(width) + Number(remain) &&
+              left <= document.documentElement.clientWidth - remain
+            )
+              oDiv.style.left = left + 'px'
+            // 垂直
+            const bottom =
+              document.documentElement.clientHeight - top - oDiv.offsetHeight
+            if (top >= 50 && bottom >= 50) oDiv.style.top = top + 'px'
           }
-          document.onmouseup = (e) => {
+          document.onmouseup = () => {
             document.onmousemove = null
             document.onmouseup = null
           }
@@ -77,9 +92,66 @@ export default Vue.extend({
         }
       },
     },
+    dClick: {
+      inserted(el, binding) {},
+      bind(el, binding) {
+        el.ondblclick = (e) => {
+          binding.value.handleFullscreen()
+        }
+      },
+    },
+    resize: {
+      inserted(el, binding) {},
+      bind(el, binding) {
+        el.onmousedown = (e) => {
+          const minWidth = (
+            Number(document.documentElement.clientWidth) * 0.4
+          ).toFixed(0)
+          const minHeight = (
+            Number(document.documentElement.clientHeight) * 0.6
+          ).toFixed(0)
+
+          const disX = e.clientX - el.offsetLeft
+          const disY = e.clientY - el.offsetTop
+          const width = el.offsetWidth
+          const height = el.offsetHeight
+          document.onmousemove = (e) => {
+            const w = -(el.offsetWidth - e.clientX + disX)
+            const h = -(el.offsetHeight - e.clientY + disY)
+            console.log('minWidth', minWidth)
+            console.log('minHeight', minHeight)
+            console.log('w', w)
+            console.log('h', h)
+
+            if (w <= minWidth || h <= minHeight) return
+            const left = e.clientX - disX
+            const top = e.clientY - disY
+            if (
+              left >= 0 &&
+              left <= document.documentElement.clientWidth - width
+            ) {
+              el.style.left = left + 'px'
+              el.parentNode.style.width = width + left + 'px'
+            }
+            if (
+              top >= 0 &&
+              top <= document.documentElement.clientHeight - height
+            ) {
+              el.style.top = top + 'px'
+              el.parentNode.style.height = height + top + 'px'
+            }
+          }
+          document.onmouseup = () => {
+            document.onmousemove = null
+            document.onmouseup = null
+          }
+        }
+      },
+    },
   },
   data() {
     return {
+      vm: this,
       isClose: false,
       isMinimize: false,
       isFullscreen: false,
@@ -113,12 +185,6 @@ export default Vue.extend({
         this.isFullscreen = true
       }
     },
-    // handleZIndexUpdate() {
-    //   $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
-    //   const zIndex = $nuxt.$store.state.sys.dialogZIndex
-    //   this.zIndexStyle = '{z-index:' + zIndex + ';}'
-    //   console.log(zIndex)
-    // },
   },
 })
 </script>
@@ -154,5 +220,15 @@ export default Vue.extend({
       background: @DIALOG_BODY_COLOR_LIGHT;
     }
   }
+}
+
+.resize-block {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  background: #000;
+  cursor: nwse-resize;
 }
 </style>
