@@ -9,6 +9,7 @@ import { Status } from '@/utils/magic-numbers'
 
 const login = (options: any) => {
   const body = getFormDataParameters(options)
+  const token = '@guid'
   if (body.phone === '18888888888' && body.password === '000000') {
     return builder(
       {
@@ -22,7 +23,8 @@ const login = (options: any) => {
         create_time: mock('@datetime'),
       },
       '登录成功',
-      Status.OK
+      Status.OK,
+      { authorization: token }
     )
   }
   return builder({}, '账号或密码错误', Status.NoPermission)
@@ -30,6 +32,7 @@ const login = (options: any) => {
 
 const reg = (options: any) => {
   const body = getFormDataParameters(options)
+  const token = '@guid'
   return builder(
     {
       username: mock('Anjone用户'),
@@ -42,12 +45,14 @@ const reg = (options: any) => {
       create_time: mock('@datetime'),
     },
     '注册成功，欢迎使用Anjone！',
-    Status.OK
+    Status.OK,
+    { authorization: token }
   )
 }
 
 const setPwd = (options: any) => {
   const body = getFormDataParameters(options)
+  const token = '@guid'
   return builder(
     {
       username: mock('Anjone用户'),
@@ -60,13 +65,15 @@ const setPwd = (options: any) => {
       create_time: mock('@datetime'),
     },
     '设置新密码成功！',
-    Status.OK
+    Status.OK,
+    { authorization: token }
   )
 }
 
 const resetInfo = (options: any) => {
   const body = getBody(options)
-  return builder({}, '设置成功！', Status.OK)
+  const token = '@guid'
+  return builder({}, '设置成功！', Status.OK, { authorization: token })
 }
 
 const bind = (options: any) => {

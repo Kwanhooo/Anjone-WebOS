@@ -14,6 +14,7 @@ const sysAPI = {
 
 /**
  * 启动SMB服务
+ * @method POST
  */
 export function startService() {
   return axiosInstance({
@@ -24,6 +25,7 @@ export function startService() {
 
 /**
  * 停止SMB服务
+ * @method POST
  */
 export function stopService() {
   return axiosInstance({
@@ -34,6 +36,7 @@ export function stopService() {
 
 /**
  * 进入SMB共享目录
+ * @method POST
  * @param dir 目录 如：/music
  */
 export function enter(dir: string) {
@@ -44,7 +47,8 @@ export function enter(dir: string) {
 }
 
 /**
- * 进入SMB共享目录
+ * 进入SMB共享目录（绝对路径）
+ * @method POST
  * @param dir 目录 如：/music
  */
 export function enterAbs(dir: object) {
@@ -57,6 +61,7 @@ export function enterAbs(dir: object) {
 
 /**
  * 返回上一级目录
+ * @method POST
  */
 export function back() {
   return axiosInstance({

@@ -1,6 +1,3 @@
-import axios from 'axios'
-import { xhrHost } from '~/config/api-host.config'
-
 import { axiosInstance } from '~/plugins/axios'
 
 const sysAPI = {
@@ -12,6 +9,8 @@ const sysAPI = {
 
 /**
  * 获取磁盘使用情况
+ * @returns {Promise}
+ * @method GET
  */
 export function storage() {
   return axiosInstance({
@@ -22,6 +21,7 @@ export function storage() {
 
 /**
  * 获取设备信息
+ * @method GET
  */
 export function getDevInfo() {
   return axiosInstance({
@@ -32,6 +32,7 @@ export function getDevInfo() {
 
 /**
  * 获取版本信息
+ * @method GET
  */
 export function getVersion() {
   return axiosInstance({
@@ -42,6 +43,7 @@ export function getVersion() {
 
 /**
  * 获取设备地址
+ * @method GET
  */
 export function getAddress() {
   return axiosInstance({

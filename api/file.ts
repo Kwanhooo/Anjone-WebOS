@@ -10,6 +10,7 @@ export const fileAPI = {
 
 /**
  * 上传头像
+ * @method POST
  * @param parameter
  */
 export function resetAvatar(parameter: any) {

@@ -1,15 +1,26 @@
-import axios from 'axios'
-import { xhrHost } from '~/config/api-host.config'
-
 import { axiosInstance } from '~/plugins/axios'
 
 export const noticeAPI = {
-  // 身份认证相关
+  // 获取通知
+  GetNotice: '/notice/get_notice',
   DeleteAll: '/notice/delete_all',
 }
 
 /**
+ * 获取通知
+ * @method GET
+ * @constructor
+ */
+export function GetNotice() {
+  return axiosInstance({
+    url: noticeAPI.GetNotice,
+    method: 'get',
+  })
+}
+
+/**
  * 删除所有通知
+ * @method POST
  */
 export function deleteAll() {
   return axiosInstance({
