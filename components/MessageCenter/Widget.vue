@@ -13,7 +13,7 @@
         </div>
         <div
           class="op-item"
-          style="margin-right: 0.5em; margin-top: 0.3em"
+          style="margin-top: 0.3em; margin-right: 0.5em"
           @click="onCloseClicked()"
         >
           <img alt="minimize" src="@/assets/svg/monitor-close.svg" />

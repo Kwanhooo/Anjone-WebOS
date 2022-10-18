@@ -17,7 +17,7 @@
       <img
         alt="separator"
         src="@/assets/svg/separator.svg"
-        style="height: 30px; width: auto"
+        style="width: auto; height: 30px"
       />
     </div>
     <div id="inet-monitor-wrapper">
@@ -40,7 +40,7 @@
         <img
           alt="separator"
           src="@/assets/svg/separator.svg"
-          style="height: 30px; width: auto; cursor: auto"
+          style="width: auto; height: 30px; cursor: auto"
         />
       </div>
       <div id="sys-op-wrapper">

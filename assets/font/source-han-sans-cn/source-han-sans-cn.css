@@ -1,0 +1,8 @@
+/* source-han-sans-cn-normal */
+@font-face {
+  font-family: SourceHanSansCN;
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Han Sans CN Normal'), local('SourceHanSansCN-Normal'),
+    url(source-han-sans-cn-normal.woff2) format('woff2');
+}

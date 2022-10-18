@@ -26,10 +26,10 @@
         <a-divider
           type="vertical"
           style="
-            height: 130px;
-            background-color: #bbb;
             width: 2px;
+            height: 130px;
             margin-right: 3em;
+            background-color: #bbb;
           "
         />
       </div>

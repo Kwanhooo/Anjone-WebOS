@@ -41,7 +41,7 @@
       <div class="info-column-divider">
         <a-divider
           type="vertical"
-          style="background-color: #bbb; width: 2px; height: 100%"
+          style="width: 2px; height: 100%; background-color: #bbb"
         />
       </div>
       <div class="info-column-r column">

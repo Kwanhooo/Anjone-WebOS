@@ -59,7 +59,7 @@
           <span class="op-forbidden">禁用</span>
           <a-divider
             type="vertical"
-            style="background-color: #3380f3; width: 2px"
+            style="width: 2px; background-color: #3380f3"
           />
           <span class="op-cancellation">注销</span>
           <span>{{ record }}</span>

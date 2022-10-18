@@ -29,7 +29,7 @@
         <slot name="body" />
       </div>
     </div>
-    <div v-resize="vm" class="resize-block" />
+    <div v-if="!isFullscreen" v-resize="vm" class="resize-block" />
   </div>
 </template>
 
@@ -118,10 +118,6 @@ export default Vue.extend({
           document.onmousemove = (e) => {
             const w = -(el.offsetWidth - e.clientX + disX)
             const h = -(el.offsetHeight - e.clientY + disY)
-            console.log('minWidth', minWidth)
-            console.log('minHeight', minHeight)
-            console.log('w', w)
-            console.log('h', h)
 
             if (w <= minWidth || h <= minHeight) return
             const left = e.clientX - disX
@@ -230,5 +226,6 @@ export default Vue.extend({
   height: 15px;
   background: #000;
   cursor: nwse-resize;
+  opacity: 0;
 }
 </style>

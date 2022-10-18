@@ -21,7 +21,7 @@
           <span>所有未保存的工作都将丢失！</span>
         </templete>
 
-        <div href="#" style="color: #6c6c6c; padding: 0.5em 1.5em">关机</div>
+        <div href="#" style="padding: 0.5em 1.5em; color: #6c6c6c">关机</div>
       </a-popconfirm>
     </div>
     <div class="select-box-item" style="padding: 0">
@@ -38,7 +38,7 @@
           ><br />
           <span>所有未保存的工作都将丢失！</span>
         </templete>
-        <div href="#" style="color: #6c6c6c; padding: 0.5em 1.5em">重启</div>
+        <div href="#" style="padding: 0.5em 1.5em; color: #6c6c6c">重启</div>
       </a-popconfirm>
     </div>
   </div>
