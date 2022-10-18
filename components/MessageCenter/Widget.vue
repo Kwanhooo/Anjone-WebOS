@@ -57,7 +57,7 @@
 <script>
 import Vue from 'vue'
 import { messageCenterWSHost, monitorWSHost } from '@/config/api-host.config'
-import { deleteAll } from '@/api/notice'
+import { deleteAll, GetNotice } from '@/api/notice'
 
 export default Vue.extend({
   name: 'MessageCenterWidget',
@@ -67,7 +67,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.connectWebsocket()
+    this.startPolling()
     setTimeout(() => {
       document.getElementById('message-center-widget-wrapper').style.opacity =
         '1'
@@ -92,35 +92,14 @@ export default Vue.extend({
         document.getElementById('message-center-widget-wrapper').remove()
       }, 150)
     },
-    connectWebsocket() {
+    startPolling() {
       const vm = this
-      if (typeof WebSocket === 'undefined') {
-        this.$message.error('您的浏览器不支持WebSocket，无法获取消息推送！')
-      } else {
-        // 打开WebSocket
-        let newWS = $nuxt.$store.getters['sys/messageCenterWS']
-        if (newWS === null) {
-          newWS = new WebSocket(messageCenterWSHost)
-        }
-        // 建立连接时
-        newWS.onopen = () => {
-          // 向服务端发送测试数据
-          const data = 'Hello Anjone'
-          newWS.send(data)
-        }
-        // 接收服务端返回的数据时
-        newWS.onmessage = (evt) => {
-          const data = JSON.parse(evt.data)
-          vm.messages = data
-        }
-        // 发生错误时
-        newWS.onerror = (evt) => {
-          this.$message.error('连接监控服务时发生错误，请稍候再试！')
-        }
-        // 关闭连接时
-        newWS.onclose = (evt) => {}
-        $nuxt.$store.commit('sys/SET_MESSAGE_CENTER_WS', newWS)
-      }
+      GetNotice().then((res) => {
+        vm.messages = res.data.data
+        setTimeout(() => {
+          vm.startPolling()
+        }, 30000)
+      })
     },
   },
 })
