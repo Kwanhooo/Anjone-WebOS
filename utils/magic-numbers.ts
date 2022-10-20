@@ -1,5 +1,6 @@
 export const Status = {
   OK: 0,
+  NoFile: 1,
   NoPermission: 401,
   BusinessFailed: 501,
 }

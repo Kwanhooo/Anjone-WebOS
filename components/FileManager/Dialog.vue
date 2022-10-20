@@ -1,226 +1,248 @@
 <template>
-  <DialogBody
-    class="dialog-file-manager"
-    @destroyResource="handleDestroyResource()"
-  >
-    <template #title>
-      <span>我的文件</span>
-    </template>
-    <template #side>
-      <div class="file-catalog">
-        <div
-          :class="{
-            'item-parent': true,
-            item: true,
-            'active-item-parent': activeIndex >= 0 && activeIndex <= 1,
-          }"
-          @click="toggleCategoryShow(0)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="svg-icon fill"
-            viewBox="0 0 32 32"
-          >
-            <path
-              d="M5.333 22.293v6.151h21.333v-6.151l-5.736-2.738h-9.862l-5.736 2.738zM4.568 20.689l5.736-2.738c0.224-0.109 0.487-0.173 0.766-0.173 0 0 0 0 0 0h9.862c0.265 0 0.527 0.059 0.766 0.173l5.736 2.738c0.603 0.293 1.012 0.901 1.012 1.604v0 6.151c0 0.982-0.796 1.778-1.778 1.778h-21.333c-0.982 0-1.778-0.796-1.778-1.778v-6.151c0-0.703 0.409-1.312 1.001-1.6l0.011-0.005zM16 14.222c2.945 0 5.333-2.388 5.333-5.333s-2.388-5.333-5.333-5.333-5.333 2.388-5.333 5.333 2.388 5.333 5.333 5.333zM16 16c-3.927 0-7.111-3.184-7.111-7.111s3.184-7.111 7.111-7.111 7.111 3.184 7.111 7.111-3.184 7.111-7.111 7.111zM18.667 23.111h3.556c0.491 0 0.889 0.398 0.889 0.889s-0.398 0.889-0.889 0.889h-3.556c-0.491 0-0.889-0.398-0.889-0.889s0.398-0.889 0.889-0.889z"
-            ></path>
-          </svg>
-          <span>我的文件</span>
-          <svg
-            t="1664882277620"
-            class="icon-list"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="2476"
-            :style="getIsShow(0) ? 'transform: rotate(180deg);' : ''"
-          >
-            <path
-              d="M890.335385 330.911222c-12.576374-12.416396-32.800753-12.352748-45.248112 0.192662L517.248327 661.951458 184.831931 332.512727c-12.576374-12.447359-32.800753-12.352748-45.280796 0.192662-12.447359 12.576374-12.352748 32.831716 0.192662 45.280796l353.311652 350.112082c0.543583 0.543583 1.247144 0.672598 1.792447 1.183497 0.127295 0.127295 0.159978 0.287273 0.287273 0.416288 6.239161 6.175514 14.399785 9.280473 22.527725 9.280473 8.224271 0 16.479505-3.168606 22.720387-9.471415l350.112082-353.311652C902.975407 363.615643 902.880796 343.360301 890.335385 330.911222z"
-            ></path>
-          </svg>
-        </div>
-        <div v-show="getIsShow(0)" class="children-wrapper">
+  <div>
+    <VDPhoto
+      v-if="imgData !== ''"
+      ref="VDPhoto"
+      :img-data="imgData"
+      :title="title"
+      @publish="publish"
+    />
+    <DialogBody
+      class="dialog-file-manager"
+      @destroyResource="handleDestroyResource()"
+    >
+      <template #title>
+        <span>我的文件</span>
+      </template>
+      <template #side>
+        <div class="file-catalog">
           <div
-            v-for="(dir, index) in rootDir"
-            :key="index"
             :class="{
-              'item-child': true,
+              'item-parent': true,
               item: true,
-              'active-item-child': activeIndex === `${index}`,
+              'active-item-parent': activeIndex >= 0 && activeIndex <= 1,
             }"
-            @click="setActive(`${index}`)"
+            @click="toggleCategoryShow(0)"
           >
-            <span>{{ dir.filename }}</span>
-          </div>
-        </div>
-      </div>
-    </template>
-    <template #body>
-      <div v-if="openedImg !== ''" id="file-opener">
-        <img :src="openedImg" alt="opened-image" />
-      </div>
-      <div class="main-area-wrapper">
-        <div class="operation-bar">
-          <div class="tool-group">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-            >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path
-                  d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-                ></path>
-              </g>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 cOCwig svg-icon-path-icon fill"
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-            >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path
-                  d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
-                ></path>
-              </g>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-            >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-              </g>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              @click="handleBackClicked()"
-            >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path
-                  d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                ></path>
-              </g>
-            </svg>
-          </div>
-          <div class="breadcrumb">
-            <span>{{ breadcrumb }}</span>
-          </div>
-          <div class="renew">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-            >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path
-                  d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
-                ></path>
-              </g>
-            </svg>
-          </div>
-          <div class="search-wrapper">
-            <a-input-search
-              :placeholder="'在 ' + currentLoc + ' 中搜索'"
-              size="default"
-              @search="onSearch"
-            />
-          </div>
-          <div>
-            <a-dropdown class="more-operation">
-              <a-menu slot="overlay">
-                <a-menu-item key="1">新建文件夹</a-menu-item>
-                <a-menu-item key="2">上传文件</a-menu-item>
-                <a-menu-item key="3">删除文件</a-menu-item>
-                <a-menu-item key="4">文件详情</a-menu-item>
-                <a-menu-item key="5">重命名</a-menu-item>
-                <a-menu-item key="6">文件分享</a-menu-item>
-                <a-menu-item key="7">下载到本地</a-menu-item>
-                <a-menu-item key="8">取消分享</a-menu-item>
-              </a-menu>
-              <a-button style="margin-left: 8px"
-                ><span>更多操作</span>
-                <a-icon type="down" />
-              </a-button>
-            </a-dropdown>
-          </div>
-          <div class="tool-group">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+              class="svg-icon fill"
               viewBox="0 0 32 32"
-              width="18"
-              height="18"
             >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path
-                  d="M6.222 8.889c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778zM11.111 5.778h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM11.111 14.667h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM11.111 23.556h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM6.222 17.778c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778zM6.222 26.667c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778z"
-                ></path>
-              </g>
+              <path
+                d="M5.333 22.293v6.151h21.333v-6.151l-5.736-2.738h-9.862l-5.736 2.738zM4.568 20.689l5.736-2.738c0.224-0.109 0.487-0.173 0.766-0.173 0 0 0 0 0 0h9.862c0.265 0 0.527 0.059 0.766 0.173l5.736 2.738c0.603 0.293 1.012 0.901 1.012 1.604v0 6.151c0 0.982-0.796 1.778-1.778 1.778h-21.333c-0.982 0-1.778-0.796-1.778-1.778v-6.151c0-0.703 0.409-1.312 1.001-1.6l0.011-0.005zM16 14.222c2.945 0 5.333-2.388 5.333-5.333s-2.388-5.333-5.333-5.333-5.333 2.388-5.333 5.333 2.388 5.333 5.333 5.333zM16 16c-3.927 0-7.111-3.184-7.111-7.111s3.184-7.111 7.111-7.111 7.111 3.184 7.111 7.111-3.184 7.111-7.111 7.111zM18.667 23.111h3.556c0.491 0 0.889 0.398 0.889 0.889s-0.398 0.889-0.889 0.889h-3.556c-0.491 0-0.889-0.398-0.889-0.889s0.398-0.889 0.889-0.889z"
+              ></path>
             </svg>
+            <span>我的文件</span>
             <svg
+              t="1664882277620"
+              class="icon-list"
+              viewBox="0 0 1024 1024"
+              version="1.1"
               xmlns="http://www.w3.org/2000/svg"
-              class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
+              p-id="2476"
+              :style="getIsShow(0) ? 'transform: rotate(180deg);' : ''"
             >
-              <defs data-reactroot=""></defs>
-              <g>
-                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-              </g>
+              <path
+                d="M890.335385 330.911222c-12.576374-12.416396-32.800753-12.352748-45.248112 0.192662L517.248327 661.951458 184.831931 332.512727c-12.576374-12.447359-32.800753-12.352748-45.280796 0.192662-12.447359 12.576374-12.352748 32.831716 0.192662 45.280796l353.311652 350.112082c0.543583 0.543583 1.247144 0.672598 1.792447 1.183497 0.127295 0.127295 0.159978 0.287273 0.287273 0.416288 6.239161 6.175514 14.399785 9.280473 22.527725 9.280473 8.224271 0 16.479505-3.168606 22.720387-9.471415l350.112082-353.311652C902.975407 363.615643 902.880796 343.360301 890.335385 330.911222z"
+              ></path>
             </svg>
           </div>
-        </div>
-        <div class="body">
-          <a-table
-            :row-selection="{
-              selectedRowKeys: selectedRowKeys,
-              onChange: onSelectChange,
-            }"
-            :columns="columns"
-            :data-source="displayData"
-            size="middle"
-          >
-            <a
-              slot="filename"
-              slot-scope="text, record"
-              style="color: #3380f3"
-              @click.prevent="handleFileClicked(text, record)"
-              >{{ text }}</a
+          <div v-show="getIsShow(0)" class="children-wrapper">
+            <div
+              v-for="(dir, index) in rootDir"
+              :key="index"
+              :class="{
+                'item-child': true,
+                item: true,
+                'active-item-child': activeIndex === `${index}`,
+              }"
+              @click="setActive(`${index}`)"
             >
-          </a-table>
+              <span>{{ dir.filename }}</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </template>
-  </DialogBody>
+      </template>
+      <template #body>
+        <div v-if="openedImg !== ''" id="file-opener">
+          <img :src="openedImg" alt="opened-image" />
+        </div>
+        <div>
+          <button @click.prevent="previewAudio('dfs', 'afaf')">TEST</button>
+        </div>
+        <div class="main-area-wrapper">
+          <div class="operation-bar">
+            <div class="tool-group">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  ></path>
+                </g>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 cOCwig svg-icon-path-icon fill"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path
+                    d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                  ></path>
+                </g>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </g>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                @click="handleBackClicked()"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path
+                    d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
+                  ></path>
+                </g>
+              </svg>
+            </div>
+            <div class="breadcrumb">
+              <span>{{ breadcrumb }}</span>
+            </div>
+            <div class="renew">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path
+                    d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                  ></path>
+                </g>
+              </svg>
+            </div>
+            <div class="search-wrapper">
+              <a-input-search
+                :placeholder="'在 ' + currentLoc + ' 中搜索'"
+                size="default"
+                @search="onSearch"
+              />
+            </div>
+            <div>
+              <a-dropdown class="more-operation">
+                <a-menu slot="overlay">
+                  <a-menu-item key="1">新建文件夹</a-menu-item>
+                  <a-menu-item key="2">上传文件</a-menu-item>
+                  <a-menu-item key="3">删除文件</a-menu-item>
+                  <a-menu-item key="4">文件详情</a-menu-item>
+                  <a-menu-item key="5">重命名</a-menu-item>
+                  <a-menu-item key="6">文件分享</a-menu-item>
+                  <a-menu-item key="7">下载到本地</a-menu-item>
+                  <a-menu-item key="8">取消分享</a-menu-item>
+                </a-menu>
+                <a-button style="margin-left: 8px"
+                  ><span>更多操作</span>
+                  <a-icon type="down" />
+                </a-button>
+              </a-dropdown>
+            </div>
+            <div class="tool-group">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+                viewBox="0 0 32 32"
+                width="18"
+                height="18"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path
+                    d="M6.222 8.889c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778zM11.111 5.778h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM11.111 14.667h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM11.111 23.556h15.111c0.736 0 1.333 0.597 1.333 1.333s-0.597 1.333-1.333 1.333h-15.111c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333zM6.222 17.778c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778zM6.222 26.667c-0.982 0-1.778-0.796-1.778-1.778s0.796-1.778 1.778-1.778c0.982 0 1.778 0.796 1.778 1.778s-0.796 1.778-1.778 1.778z"
+                  ></path>
+                </g>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+              >
+                <defs data-reactroot=""></defs>
+                <g>
+                  <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="body">
+            <a-table
+              :row-selection="{
+                selectedRowKeys: selectedRowKeys,
+                onChange: onSelectChange,
+              }"
+              :columns="columns"
+              :data-source="displayData"
+              size="middle"
+            >
+              <a
+                slot="filename"
+                slot-scope="text, record"
+                style="color: #3380f3"
+                @click.prevent="handleFileClicked(text, record)"
+                >{{ text }}</a
+              >
+            </a-table>
+          </div>
+        </div>
+      </template>
+    </DialogBody>
+  </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import { back, enter, enterAbs, startService, stopService } from '@/api/samb'
-import SettingsDialog from '@/components/Settings/Dialog'
+import {
+  back,
+  checkFile,
+  enter,
+  enterAbs,
+  startService,
+  stopService,
+  sysAPI,
+} from '@/api/samb'
+import ImageOpener from '@/components/FileOpener/ImageOpener'
+import AudioOpener from '@/components/FileOpener/AudioOpener'
 import { Status } from '@/utils/magic-numbers'
+import { xhrHost } from '@/config/api-host.config'
 
 const columns = [
   {
@@ -264,6 +286,9 @@ export default Vue.extend({
   name: 'FileManager',
   data() {
     return {
+      imgData:
+        'https://i.picsum.photos/id/132/300/200.jpg?hmac=2N8jz1dK3-iM_g-_Bl-cJdFysVCuyHtyJ7H0TmAxGVk',
+      title: 'Ohayo',
       activeIndex: 0,
       categoryShow: {
         0: true,
@@ -335,14 +360,77 @@ export default Vue.extend({
     handleFileClicked(filename, record) {
       const isDir = record.is_dir
       const vm = this
-      enter('/' + filename).then((res) => {
-        if (isDir) {
-          vm.displayData = res.data.data
-          vm.breadcrumb += ' > ' + filename
+      // 在enter之前发送检查请求
+      checkFile(filename).then((res) => {
+        if (res.data.code !== Status.NoFile) {
+          const type = res.data.data
+          // 打开文件
+          const fileLink =
+            xhrHost +
+            sysAPI.Enter +
+            '/' +
+            `${filename}` +
+            '?type=' +
+            type +
+            '&token=' +
+            sessionStorage.getItem('TOKEN')
+          if (type === 'dir') {
+            enter(filename, type).then((res) => {
+              vm.displayData = res.data.data
+              vm.breadcrumb += ' > ' + filename
+            })
+          } else if (type === 'image') {
+            this.previewImage(fileLink, filename)
+          } else if (type === 'video') {
+            this.previewVideo(fileLink, filename)
+          } else if (type === 'audio') {
+            this.previewAudio(fileLink, filename)
+          } else if (type === 'other') {
+            this.$message.error('未知文件类型')
+          }
         } else {
-          vm.openedImg = res.data.data
+          vm.$message.error('您访问的文件不存在！')
         }
       })
+    },
+    previewImage(image, fileName) {
+      const ImageOpenerVueComponent = Vue.extend(ImageOpener)
+      const imageOpenerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(imageOpenerWrapper)
+      const comp = new ImageOpenerVueComponent({
+        el: imageOpenerWrapper,
+        propsData: {
+          image,
+          fileName,
+        },
+      })
+    },
+    previewAudio(audio, fileName) {
+      const AudioOpenerVueComponent = Vue.extend(AudioOpener)
+      const audioOpenerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(audioOpenerWrapper)
+      const comp = new AudioOpenerVueComponent({
+        el: audioOpenerWrapper,
+        propsData: {
+          audio,
+          fileName,
+        },
+      })
+    },
+    previewVideo(video, fileName) {
+      const AudioOpenerVueComponent = Vue.extend(AudioOpener)
+      const audioOpenerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(audioOpenerWrapper)
+      const comp = new AudioOpenerVueComponent({
+        el: audioOpenerWrapper,
+        propsData: {
+          video,
+          fileName,
+        },
+      })
+    },
+    publish() {
+      this.$message.info('publish')
     },
     handleBackClicked() {
       const vm = this
@@ -365,6 +453,7 @@ export default Vue.extend({
 @ITEM_FONT_SIZE: 0.8rem;
 
 .file-catalog {
+  min-width: 12em;
   font-size: @ITEM_FONT_SIZE;
 
   .item {

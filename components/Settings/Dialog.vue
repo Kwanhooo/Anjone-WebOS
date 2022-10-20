@@ -291,6 +291,7 @@ export default {
 
 .settings-catalog {
   font-size: @ITEM_FONT_SIZE;
+  min-width: 12em;
 
   .item {
     padding: @CONTENT_PADDING;

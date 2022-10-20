@@ -18,7 +18,6 @@ export default Vue.extend({
 
 .side-wrapper {
   background: white;
-  flex: 1;
   max-width: 12em;
 }
 </style>

@@ -7,6 +7,7 @@ require('./services/user')
 require('./services/system')
 require('./services/samb')
 require('./services/notice')
+require('./services/file')
 
 const minTimeOut = 200
 const maxTimeOut = 800 - minTimeOut

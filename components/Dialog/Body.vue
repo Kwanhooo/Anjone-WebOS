@@ -116,6 +116,7 @@ export default Vue.extend({
           const width = el.offsetWidth
           const height = el.offsetHeight
           document.onmousemove = (e) => {
+            // console.log(el.parentNode)
             const w = -(el.offsetWidth - e.clientX + disX)
             const h = -(el.offsetHeight - e.clientY + disY)
 

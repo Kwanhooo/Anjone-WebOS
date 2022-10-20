@@ -4,12 +4,13 @@ import { xhrHost } from '~/config/api-host.config'
 import { axiosInstance } from '~/plugins/axios'
 import { fmtToForm } from '~/utils/api'
 
-const sysAPI = {
+export const sysAPI = {
   StartService: '/samb/start',
   StopService: '/samb/stop',
   Enter: '/samb/enter',
   EnterAbs: '/samb/enter_abs',
   Back: '/samb/back',
+  CheckFile: '/samb/check',
 }
 
 /**
@@ -38,11 +39,18 @@ export function stopService() {
  * 进入SMB共享目录
  * @method POST
  * @param dir 目录 如：/music
+ * @param type
  */
-export function enter(dir: string) {
+export function enter(dir: string, type: string) {
   return axiosInstance({
-    url: sysAPI.Enter + `${dir}`,
-    method: 'post',
+    url:
+      sysAPI.Enter +
+      `${dir}` +
+      '?type=' +
+      type +
+      '&token=' +
+      sessionStorage.getItem('TOKEN'),
+    method: 'get',
   })
 }
 
@@ -66,6 +74,17 @@ export function enterAbs(dir: object) {
 export function back() {
   return axiosInstance({
     url: sysAPI.Back,
+    method: 'post',
+  })
+}
+
+/**
+ * 检索文件类型
+ * @method POST
+ */
+export function checkFile(filename: string) {
+  return axiosInstance({
+    url: sysAPI.CheckFile + '/' + `${filename}`,
     method: 'post',
   })
 }

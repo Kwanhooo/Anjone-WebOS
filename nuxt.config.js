@@ -30,6 +30,7 @@ export default {
     '@/plugins/guard',
     '@/plugins/echarts',
     '@/plugins/axios',
+    '@/plugins/vue-dark-photo',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
