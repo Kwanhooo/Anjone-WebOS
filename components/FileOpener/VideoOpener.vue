@@ -1,8 +1,8 @@
 <template>
   <DialogBody
     style="
-      top: 25% !important;
-      left: 42% !important;
+      top: 10% !important;
+      left: 25% !important;
       width: auto !important;
       height: auto !important;
       max-width: 50% !important;
@@ -12,18 +12,22 @@
       <span>{{ fileName }}</span>
     </template>
     <template #body>
-      <audio :src="audio" controls autoplay preload="auto">
-        {{ fileName }}
-      </audio>
+      <video controls autoplay preload="auto">
+        <source :src="video" :type="videoType" />
+      </video>
     </template>
   </DialogBody>
 </template>
 
 <script>
 export default {
-  name: 'AudioOpener',
+  name: 'VideoOpener',
   props: {
-    audio: {
+    video: {
+      type: String,
+      required: true,
+    },
+    videoType: {
       type: String,
       required: true,
     },
@@ -40,4 +44,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+video {
+  width: 100%;
+  height: 100%;
+}
+</style>

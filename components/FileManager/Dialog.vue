@@ -69,7 +69,24 @@
           <img :src="openedImg" alt="opened-image" />
         </div>
         <div>
-          <button @click.prevent="previewAudio('dfs', 'afaf')">TEST</button>
+          <button
+            @click.prevent="
+              previewAudio('http://cloud.0xcafebabe.cn/test.mp3', 'test')
+            "
+          >
+            AUDIO
+          </button>
+          <button
+            @click.prevent="
+              previewVideo(
+                'http://cloud.0xcafebabe.cn/test.mp4',
+                'test',
+                'video/mp4'
+              )
+            "
+          >
+            VIDEO
+          </button>
         </div>
         <div class="main-area-wrapper">
           <div class="operation-bar">
@@ -243,6 +260,7 @@ import ImageOpener from '@/components/FileOpener/ImageOpener'
 import AudioOpener from '@/components/FileOpener/AudioOpener'
 import { Status } from '@/utils/magic-numbers'
 import { xhrHost } from '@/config/api-host.config'
+import VideoOpener from '@/components/FileOpener/VideoOpener'
 
 const columns = [
   {
@@ -417,15 +435,16 @@ export default Vue.extend({
         },
       })
     },
-    previewVideo(video, fileName) {
-      const AudioOpenerVueComponent = Vue.extend(AudioOpener)
-      const audioOpenerWrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(audioOpenerWrapper)
-      const comp = new AudioOpenerVueComponent({
-        el: audioOpenerWrapper,
+    previewVideo(video, fileName, videoType) {
+      const VideoOpenerVueComponent = Vue.extend(VideoOpener)
+      const videoOpenerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(videoOpenerWrapper)
+      const comp = new VideoOpenerVueComponent({
+        el: videoOpenerWrapper,
         propsData: {
           video,
           fileName,
+          videoType,
         },
       })
     },
