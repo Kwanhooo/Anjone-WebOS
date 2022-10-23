@@ -128,7 +128,7 @@
               </svg>
             </div>
             <div class="breadcrumb">
-              <!--              <span>{{ getBreadCrumb() }}</span>-->
+              <span>{{ getBreadCrumb() }}</span>
             </div>
             <div class="renew" @click="refreshContent()">
               <svg
@@ -153,10 +153,9 @@
                 @search="onSearch"
               />
             </div>
-
             <div>
               <a-button
-                style="margin-top: 5px; margin-left: 8px"
+                style="margin-top: 6px; margin-right: 8px"
                 @click="toggleShowMoreOp()"
               >
                 <span>更多操作</span>
@@ -253,7 +252,7 @@
             </div>
             <a-button
               v-if="fileList.length !== 0"
-              style="margin-top: 5px; margin-left: 8px"
+              style="margin-top: 6px; margin-right: 8px"
               @click="handleUpload()"
             >
               <span>确认上传</span>
@@ -393,13 +392,12 @@ export default Vue.extend({
         2: false,
       },
       rootDir: [],
-      breadcrumb: '',
-      bc: [],
       currentLoc: '',
       columns,
       displayData: [],
       selectedRowKeys: [],
       defaultTopParent: '我的文件',
+      breadcrumb: ['我的文件'],
       openedImg: '',
     }
   },
@@ -428,11 +426,10 @@ export default Vue.extend({
     },
     getBreadCrumb() {
       let str = ''
-      bc.forEach((item) => {
+      this.breadcrumb.forEach((item) => {
         str += item + ' > '
       })
-      str.substring(0, str.length - 3)
-      return str
+      return str.substring(0, str.length - 3)
     },
     handleFileRename() {
       this.isShowRenameModal = false
@@ -476,7 +473,7 @@ export default Vue.extend({
           content: '删除文件后将无法恢复，是否继续？',
           okText: '确认',
           cancelText: '取消',
-          zIndex: 999999,
+          zIndex: '999999',
           onOk: () => {
             let files = ''
             this.selectedRowKeys.forEach((item) => {
@@ -575,8 +572,7 @@ export default Vue.extend({
       enterAbs({ filepath: '/' + this.rootDir[active].filename }).then(
         (res) => {
           vm.displayData = res.data.data
-          vm.breadcrumb =
-            vm.defaultTopParent + ' > ' + vm.rootDir[active].filename
+          vm.breadcrumb.push(vm.rootDir[active].filename)
         }
       )
     },
@@ -603,7 +599,7 @@ export default Vue.extend({
           if (type === 'dir') {
             enter(filename, type).then((res) => {
               vm.displayData = res.data.data
-              vm.breadcrumb += ' > ' + filename
+              vm.breadcrumb.push(filename)
             })
           } else if (type === 'image') {
             this.previewImage(fileLink, filename)
@@ -663,7 +659,7 @@ export default Vue.extend({
       const vm = this
       back().then((res) => {
         vm.displayData = res.data.data
-        vm.breadcrumb.split(' > ').pop()
+        vm.breadcrumb.pop()
       })
     },
   },
@@ -738,7 +734,7 @@ export default Vue.extend({
   flex-direction: column;
 
   .operation-bar {
-    height: 2.5em;
+    height: 2.7em;
     //background-color: green;
     display: flex;
     flex-direction: row;
@@ -754,7 +750,7 @@ export default Vue.extend({
 
     .tool-group {
       flex: 6;
-      padding-top: 0.65em;
+      padding-top: 0.7em;
 
       svg {
         width: 1.4em !important;
@@ -769,16 +765,17 @@ export default Vue.extend({
     .breadcrumb {
       background-color: #ffffff;
       flex: 12;
-      //height: 1.4em;
+      height: 1.9em;
       border-radius: 8px;
       color: #6c6c6c;
-      margin: 0.4em 0;
+      margin-top: 0.4em;
       padding-left: 0.5em;
+      padding-top: 0.18em;
     }
 
     .renew {
       flex: 0.8;
-      padding-top: 0.65em;
+      padding-top: 0.8em;
       margin-left: 0.5em;
     }
 
@@ -820,9 +817,9 @@ export default Vue.extend({
   .select-box-wrapper {
     position: absolute;
     top: 40px;
-    right: 80px;
+    right: 85px;
     z-index: 9999;
-    width: 100px;
+    width: 105px;
 
     font-size: 14px;
     background: white;

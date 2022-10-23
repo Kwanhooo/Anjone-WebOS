@@ -26,7 +26,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/antd-ui',
-    // '@/plugins/mock',
+    '@/plugins/mock',
     '@/plugins/guard',
     '@/plugins/echarts',
     '@/plugins/axios',
@@ -50,6 +50,8 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    // 解决动态引入的问题，相当于runtimeCompiler: true
+    'nuxt-runtime-compiler',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
