@@ -15,6 +15,7 @@
             :before-upload="beforeUpload"
             style="max-width: 150px"
             accept="image/*"
+            @change="handleUpload"
           >
             <a-button> <a-icon type="upload" />更改头像</a-button>
           </a-upload>

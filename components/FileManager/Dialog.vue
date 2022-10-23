@@ -68,26 +68,6 @@
         <div v-if="openedImg !== ''" id="file-opener">
           <img :src="openedImg" alt="opened-image" />
         </div>
-        <div>
-          <button
-            @click.prevent="
-              previewAudio('http://cloud.0xcafebabe.cn/test.mp3', 'test')
-            "
-          >
-            AUDIO
-          </button>
-          <button
-            @click.prevent="
-              previewVideo(
-                'http://cloud.0xcafebabe.cn/test.mp4',
-                'test',
-                'video/mp4'
-              )
-            "
-          >
-            VIDEO
-          </button>
-        </div>
         <div class="main-area-wrapper">
           <div class="operation-bar">
             <div class="tool-group">
@@ -148,9 +128,9 @@
               </svg>
             </div>
             <div class="breadcrumb">
-              <span>{{ breadcrumb }}</span>
+              <!--              <span>{{ getBreadCrumb() }}</span>-->
             </div>
-            <div class="renew">
+            <div class="renew" @click="refreshContent()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
@@ -173,24 +153,111 @@
                 @search="onSearch"
               />
             </div>
+
             <div>
-              <a-dropdown class="more-operation">
-                <a-menu slot="overlay">
-                  <a-menu-item key="1">新建文件夹</a-menu-item>
-                  <a-menu-item key="2">上传文件</a-menu-item>
-                  <a-menu-item key="3">删除文件</a-menu-item>
-                  <a-menu-item key="4">文件详情</a-menu-item>
-                  <a-menu-item key="5">重命名</a-menu-item>
-                  <a-menu-item key="6">文件分享</a-menu-item>
-                  <a-menu-item key="7">下载到本地</a-menu-item>
-                  <a-menu-item key="8">取消分享</a-menu-item>
-                </a-menu>
-                <a-button style="margin-left: 8px"
-                  ><span>更多操作</span>
-                  <a-icon type="down" />
-                </a-button>
-              </a-dropdown>
+              <a-button
+                style="margin-top: 5px; margin-left: 8px"
+                @click="toggleShowMoreOp()"
+              >
+                <span>更多操作</span>
+                <a-icon type="down" />
+              </a-button>
             </div>
+            <a-modal
+              v-model="isShowCreateDirModal"
+              title="新建文件夹"
+              z-index="9999999"
+              @ok="handleCreateDir"
+            >
+              <p>输入新文件夹的名称</p>
+              <input
+                v-model="newDirName"
+                type="text"
+                style="
+                  border: 1px solid #6c6c6c;
+                  border-radius: 8px;
+                  outline: none;
+                "
+              />
+            </a-modal>
+            <a-modal
+              v-model="isShowRenameModal"
+              title="重命名"
+              z-index="9999999"
+              @ok="handleFileRename"
+            >
+              <p>输入新名称</p>
+              <input
+                v-model="newDirName"
+                type="text"
+                style="
+                  border: 1px solid #6c6c6c;
+                  border-radius: 8px;
+                  outline: none;
+                "
+              />
+            </a-modal>
+            <div
+              v-show="showDropDown"
+              class="select-box-wrapper"
+              @blur="showDropDown = false"
+            >
+              <div
+                class="select-box-item"
+                @click="
+                  isShowCreateDirModal = true
+                  showDropDown = false
+                "
+              >
+                <span>新建文件夹</span>
+              </div>
+              <div class="select-box-item" style="padding: 0.5em 0">
+                <a-upload
+                  :file-list="fileList"
+                  :remove="handleRemove"
+                  :before-upload="beforeUpload"
+                  style="max-width: 150px"
+                  accept="*/*"
+                  multiple="true"
+                  @change="showDropDown = false"
+                >
+                  <a-button style="background: transparent; border: none"
+                    >选择文件
+                  </a-button>
+                </a-upload>
+              </div>
+              <div class="select-box-item" @click="deleteFiles()">
+                <span>删除文件</span>
+              </div>
+              <div class="select-box-item" @click="showFileInfo()">
+                <span>文件详情</span>
+              </div>
+              <div
+                class="select-box-item"
+                @click="
+                  isShowRenameModal = true
+                  showDropDown = false
+                "
+              >
+                <span>重命名</span>
+              </div>
+              <div class="select-box-item">
+                <span>文件分享</span>
+              </div>
+              <div class="select-box-item">
+                <span>下载到本地</span>
+              </div>
+              <div class="select-box-item">
+                <span>取消分享</span>
+              </div>
+            </div>
+            <a-button
+              v-if="fileList.length !== 0"
+              style="margin-top: 5px; margin-left: 8px"
+              @click="handleUpload()"
+            >
+              <span>确认上传</span>
+            </a-button>
             <div class="tool-group">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -250,17 +317,24 @@ import Vue from 'vue'
 import {
   back,
   checkFile,
+  createDir,
+  deleteFile,
   enter,
   enterAbs,
+  fileInfo,
+  refresh,
+  rename,
   startService,
   stopService,
   sysAPI,
+  uploadFile,
 } from '@/api/samb'
 import ImageOpener from '@/components/FileOpener/ImageOpener'
 import AudioOpener from '@/components/FileOpener/AudioOpener'
 import { Status } from '@/utils/magic-numbers'
 import { xhrHost } from '@/config/api-host.config'
 import VideoOpener from '@/components/FileOpener/VideoOpener'
+import { resetAvatar } from '@/api/file'
 
 const columns = [
   {
@@ -304,6 +378,11 @@ export default Vue.extend({
   name: 'FileManager',
   data() {
     return {
+      isShowRenameModal: false,
+      isShowCreateDirModal: false,
+      newDirName: '',
+      showDropDown: false,
+      fileList: [],
       imgData:
         'https://i.picsum.photos/id/132/300/200.jpg?hmac=2N8jz1dK3-iM_g-_Bl-cJdFysVCuyHtyJ7H0TmAxGVk',
       title: 'Ohayo',
@@ -315,6 +394,7 @@ export default Vue.extend({
       },
       rootDir: [],
       breadcrumb: '',
+      bc: [],
       currentLoc: '',
       columns,
       displayData: [],
@@ -328,10 +408,138 @@ export default Vue.extend({
       return this.selectedRowKeys.length > 0
     },
   },
-  beforeMount() {
+  created() {
     this.startSMB()
   },
   methods: {
+    refreshContent() {
+      refresh()
+        .then((res) => {
+          if (res.data.code === Status.OK) {
+            this.displayData = res.data.data
+            this.$message.success('已刷新文件列表')
+          } else {
+            this.$message.error('刷新失败')
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+    },
+    getBreadCrumb() {
+      let str = ''
+      bc.forEach((item) => {
+        str += item + ' > '
+      })
+      str.substring(0, str.length - 3)
+      return str
+    },
+    handleFileRename() {
+      this.isShowRenameModal = false
+      const oldName = this.displayData.at(this.selectedRowKeys[0]).filename
+      const vm = this
+      const parameter = { old_name: oldName, new_name: this.newDirName }
+      rename(parameter)
+        .then((res) => {
+          if (res.data.code === Status.OK) {
+            vm.displayData = res.data.data
+            vm.$message.success('重命名成功！')
+            vm.selectedRowKeys = []
+          }
+        })
+        .catch((res) => {
+          vm.$message.error('请求失败')
+        })
+    },
+    handleCreateDir() {
+      this.isShowCreateDirModal = false
+      const vm = this
+      const param = { dir_name: this.newDirName }
+      createDir(param).then((res) => {
+        if (res.data.code === Status.OK) {
+          vm.displayData = res.data.data
+        } else {
+          this.$message.error('创建错误')
+        }
+      })
+    },
+    showFileInfo() {
+      const filename = this.displayData.at(selectedRowKeys[0])
+      fileInfo(filename).then((res) => {})
+    },
+    deleteFiles() {
+      this.showDropDown = false
+      const vm = this
+      if (this.hasSelected) {
+        this.$confirm({
+          title: '确认删除文件',
+          content: '删除文件后将无法恢复，是否继续？',
+          okText: '确认',
+          cancelText: '取消',
+          zIndex: 999999,
+          onOk: () => {
+            let files = ''
+            this.selectedRowKeys.forEach((item) => {
+              files += this.displayData[item].filename + ','
+            })
+            // 删除最后一个逗号
+            files = files.substring(0, files.length - 1)
+            deleteFile({ filename: files })
+              .then((res) => {
+                if (res.data.code === Status.OK) {
+                  vm.displayData = res.data.data
+                  vm.$message.success('删除成功')
+                } else {
+                  vm.$message.error('删除失败')
+                }
+              })
+              .catch(() => {
+                vm.$message.error('删除失败，请检查网络连接')
+              })
+          },
+        })
+      } else {
+        this.$message.info('无选中文件')
+      }
+    },
+    toggleShowMoreOp() {
+      this.showDropDown = !this.showDropDown
+    },
+    handleRemove(file) {
+      const index = this.fileList.indexOf(file)
+      const newFileList = this.fileList.slice()
+      newFileList.splice(index, 1)
+      this.fileList = newFileList
+    },
+    beforeUpload(file) {
+      this.fileList = [...this.fileList, file]
+      return false
+    },
+    handleUpload() {
+      const vm = this
+      const { fileList } = this
+      const fileFormData = new FormData()
+      fileList.forEach((file) => {
+        fileFormData.append('file', file)
+      })
+      this.uploading = true
+      uploadFile(fileFormData)
+        .then((res) => {
+          if (res.data.code === Status.OK) {
+            vm.fileList = []
+            vm.uploading = false
+            this.$message.success('文件上传成功！')
+            vm.displayData = res.data.data
+          } else {
+            this.uploading = false
+            this.$message.error('文件上传失败！')
+          }
+        })
+        .catch(() => {
+          this.uploading = false
+          this.$message.error('文件上传失败，请检查网络后再试！')
+        })
+    },
     handleDestroyResource() {
       stopService().then(() => {
         this.$destroy()
@@ -607,6 +815,29 @@ export default Vue.extend({
     height: 100vh;
     width: 100vw;
     background-color: white;
+  }
+
+  .select-box-wrapper {
+    position: absolute;
+    top: 40px;
+    right: 80px;
+    z-index: 9999;
+    width: 100px;
+
+    font-size: 14px;
+    background: white;
+    box-shadow: rgb(0 0 0 / 5%) 0px 9px 28px 8px, rgb(0 0 0 / 8%) 0px 6px 16px,
+      rgb(0 0 0 / 12%) 0px 3px 6px -4px;
+
+    .select-box-item {
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 0.5em 1em;
+
+      &:hover {
+        background: #f5f5f5;
+      }
+    }
   }
 }
 </style>

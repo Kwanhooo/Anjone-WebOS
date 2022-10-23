@@ -3,6 +3,7 @@ import { xhrHost } from '~/config/api-host.config'
 
 import { axiosInstance } from '~/plugins/axios'
 import { fmtToForm } from '~/utils/api'
+import { fileAPI } from '~/api/file'
 
 export const sysAPI = {
   StartService: '/samb/start',
@@ -11,6 +12,12 @@ export const sysAPI = {
   EnterAbs: '/samb/enter_abs',
   Back: '/samb/back',
   CheckFile: '/samb/check',
+  UploadFile: '/samb/upload',
+  DeleteFile: '/samb/delete',
+  CreateDir: '/samb/create_dir',
+  FileInfo: '/samb/file_info/',
+  Rename: '/samb/rename',
+  Refresh: '/samb/refresh',
 }
 
 /**
@@ -86,5 +93,87 @@ export function checkFile(filename: string) {
   return axiosInstance({
     url: sysAPI.CheckFile + '/' + `${filename}`,
     method: 'post',
+  })
+}
+
+/**
+ * 上传文件
+ * @param file
+ */
+export function uploadFile(file: any) {
+  return axiosInstance({
+    url: sysAPI.UploadFile,
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: file,
+  })
+}
+
+/**
+ * 删除文件
+ * @param filename
+ */
+export function deleteFile(filename: any) {
+  return axiosInstance({
+    url: sysAPI.DeleteFile,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: fmtToForm(filename),
+  })
+}
+
+/**
+ * 创建目录
+ * @param dirName 目录名
+ */
+export function createDir(dirName: any) {
+  return axiosInstance({
+    url: sysAPI.CreateDir,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: fmtToForm(dirName),
+  })
+}
+
+/**
+ * 文件详情
+ * @param filename
+ */
+export function fileInfo(filename: any) {
+  return axiosInstance({
+    url: sysAPI.FileInfo + filename,
+    method: 'get',
+  })
+}
+
+/**
+ * 重命名
+ * @param parameter
+ */
+export function rename(parameter: any) {
+  return axiosInstance({
+    url: sysAPI.Rename,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: fmtToForm(parameter),
+  })
+}
+
+/**
+ * 刷新
+ * @param parameter
+ */
+export function refresh() {
+  return axiosInstance({
+    url: sysAPI.Refresh,
+    method: 'get',
   })
 }
