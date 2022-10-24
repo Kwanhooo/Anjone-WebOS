@@ -63,7 +63,17 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
+      name: 'Anjone',
+      short_name: '安居佑',
+      description: '您的家庭数据中心',
+      background_color: '#ffffff',
+      theme_color: '#3380f3',
+      lang: 'zh',
+      start_url: '/',
+    },
+    icon: {
+      source: 'logo.png',
+      fileName: 'logo.png',
     },
   },
 
