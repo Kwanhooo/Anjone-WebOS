@@ -31,7 +31,17 @@
             background-color: #bbb;
           "
         />
-        <div class="on-expand"></div>
+        <div class="on-expand">
+          <div
+            v-for="(instance, index) in extraRegistry"
+            :key="index"
+            class="start-instance"
+            @click="onInstanceClicked(instance)"
+          >
+            <img :alt="instance.name" :src="instance.icon" />
+            <div class="app-name">{{ instance.name }}</div>
+          </div>
+        </div>
       </div>
       <div id="start-toggle-bar" @click="toggleStartExpand()">
         <img
@@ -101,6 +111,7 @@ export default {
   computed: {
     ...mapState({
       registry: (state) => state.dock.registry,
+      extraRegistry: (state) => state.dock.extraRegistry,
       pending: (state) => state.dock.pending,
     }),
   },
@@ -119,6 +130,9 @@ export default {
         setTimeout(() => {
           vm.opacityGoing = false
         }, 10)
+      }
+      if (this.isExpandStart) {
+        this.isExpandStart = false
       }
     },
     toggleStartExpand() {
@@ -208,6 +222,7 @@ export default {
   box-shadow: 2px 1px 0 0 rgba(0, 0, 0, 40%);
 
   #start-wrapper {
+    z-index: 99999999;
     min-width: 424px;
     width: 20vw;
     height: 50vh;
@@ -264,13 +279,10 @@ export default {
       padding: 1em 0;
 
       .start-instance {
-        width: 28%;
         display: inline-block;
         align-items: center;
         cursor: pointer;
         border-radius: 8px;
-        padding: 0.5em 0.1em 0.5em 0.1em;
-        margin: 0 2% 2em 2%;
         transition: background-color 0.15s ease-in-out;
 
         &:hover {
@@ -296,12 +308,24 @@ export default {
         flex: 1;
         min-width: 340px;
         max-width: 340px;
+
+        .start-instance {
+          width: 28%;
+          padding: 0.5em 0.1em 0.5em 0.1em;
+          margin: 0 2% 2em 2%;
+        }
       }
 
       .on-expand {
         height: 100%;
         flex: 1;
         padding-right: 14px;
+
+        .start-instance {
+          width: 6.7em;
+          padding: 0.5em 0.1em 0.5em 0.1em;
+          margin: 0 1em 2em 0;
+        }
       }
     }
   }

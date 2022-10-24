@@ -12,6 +12,13 @@ export const state = () => ({
       component: require('@/components/Settings/Dialog.vue'),
     },
   ],
+  extraRegistry: [
+    {
+      icon: require('@/assets/image/file-manager.png'),
+      name: '我的文件',
+      component: require('@/components/FileManager/Dialog.vue'),
+    },
+  ],
   pending: [],
   pendingBeforeGotoDesktop: [],
   isOnGotoDesktop: false,
