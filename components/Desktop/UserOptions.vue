@@ -55,10 +55,27 @@ export default {
   },
   methods: {
     loadAccountSettings() {
-      const SettingsVueComponent = Vue.extend(SettingsDialog)
-      const settingsWrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
-      this.dialog = new SettingsVueComponent().$mount(settingsWrapper)
+      $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
+        const pendingObj = {
+          uid: res,
+          icon: require('@/assets/image/file-manager.png'),
+          name: '我的文件',
+          isActive: true,
+        }
+        // extend一个要打开的组件
+        const VueComponent = Vue.extend(SettingsDialog)
+        const wrapper = document.createElement('div')
+        document.getElementById('desktop-wrapper').appendChild(wrapper)
+        const newInstance = new VueComponent({
+          el: wrapper,
+          propsData: {
+            uid: pendingObj.uid,
+          },
+        })
+        // 在pending表中添加打开的组件
+        $nuxt.$store.commit('dock/NEW_PENDING', pendingObj)
+      })
+      // 关闭所有可关闭的小组件(__closable__)
       const closable = document.querySelector('.__closable__')
       closable !== null && closable.remove()
     },

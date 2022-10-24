@@ -1,5 +1,6 @@
 <template>
   <DialogBody
+    :uid="uid"
     class="dialog-settings"
     @destroyResource="handleDestroyResource()"
   >
@@ -251,6 +252,12 @@ import Vue from 'vue'
 
 export default {
   name: 'SettingsDialog',
+  props: {
+    uid: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       activeIndex: 0,

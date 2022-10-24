@@ -8,6 +8,7 @@
       @publish="publish"
     />
     <DialogBody
+      :uid="uid"
       class="dialog-file-manager"
       @destroyResource="handleDestroyResource()"
     >
@@ -165,7 +166,7 @@
             <a-modal
               v-model="isShowCreateDirModal"
               title="新建文件夹"
-              z-index="9999999"
+              :z-index="9999999"
               @ok="handleCreateDir"
             >
               <p>输入新文件夹的名称</p>
@@ -182,7 +183,7 @@
             <a-modal
               v-model="isShowRenameModal"
               title="重命名"
-              z-index="9999999"
+              :z-index="9999999"
               @ok="handleFileRename"
             >
               <p>输入新名称</p>
@@ -217,7 +218,7 @@
                   :before-upload="beforeUpload"
                   style="max-width: 150px"
                   accept="*/*"
-                  multiple="true"
+                  :multiple="true"
                   @change="showDropDown = false"
                 >
                   <a-button style="background: transparent; border: none"
@@ -375,6 +376,12 @@ const columns = [
 
 export default Vue.extend({
   name: 'FileManager',
+  props: {
+    uid: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       isShowRenameModal: false,

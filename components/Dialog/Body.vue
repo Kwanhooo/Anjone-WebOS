@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="!isClose"
-    v-show="!isMinimize"
+    v-show="getIsShow()"
     v-drag="vm"
     v-index
-    class="dialog-wrapper"
+    :class="{ 'dialog-wrapper': true }"
     :style="extraStyle"
   >
     <div class="dialog-header">
@@ -146,11 +146,17 @@ export default Vue.extend({
       },
     },
   },
+  props: {
+    uid: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       vm: this,
       isClose: false,
-      isMinimize: false,
+      // isMinimize: false,
       isFullscreen: false,
       extraStyle: '',
       zIndexStyle: '',
@@ -161,12 +167,19 @@ export default Vue.extend({
     this.zIndexStyle = '{ z-index: ' + zIndex + ' }'
   },
   methods: {
+    getIsShow() {
+      const pendingDialog = $nuxt.$store.state.dock.pending.find((item) => {
+        return item.uid === this.uid
+      })
+      return pendingDialog === undefined ? true : pendingDialog.isActive
+    },
     handleClose() {
       this.isClose = true
+      $nuxt.$store.commit('dock/REMOVE_PENDING', this.uid)
       this.$emit('destroyResource')
     },
     handleMinimize() {
-      this.isMinimize = true
+      $nuxt.$store.commit('dock/SET_MINIMIZE', this.uid)
     },
     handleFullscreen() {
       if (this.isFullscreen) {
@@ -228,5 +241,9 @@ export default Vue.extend({
   background: #000;
   cursor: nwse-resize;
   opacity: 0;
+}
+
+.hidden {
+  display: none;
 }
 </style>

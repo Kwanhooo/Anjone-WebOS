@@ -12,15 +12,11 @@
       </div>
       <div id="start-main">
         <div class="always">
-          <!--          <div class="start-instance" @click="onFileManagerClicked">-->
-          <!--            <img alt="我的文件" src="@/assets/image/file-manager.png">-->
-          <!--            <div class="app-name">我的文件</div>-->
-          <!--          </div>-->
           <div
             v-for="(instance, index) in registry"
             :key="index"
             class="start-instance"
-            @click="onInstanceClicked(instance.component.default)"
+            @click="onInstanceClicked(instance)"
           >
             <img :alt="instance.name" :src="instance.icon" />
             <div class="app-name">{{ instance.name }}</div>
@@ -56,18 +52,27 @@
         }"
         @click="onStartClicked()"
       >
-        <img alt="start" src="@/assets/svg/start.svg" />
+        <img
+          alt="start"
+          :src="
+            isShowStart
+              ? require('@/assets/svg/start.svg')
+              : require('@/assets/svg/start-inactive.svg')
+          "
+        />
       </div>
       <div
+        v-for="(app, index) in pending"
+        :key="index"
         :class="{
           'task-bar-item': true,
-          'task-bar-item-active': isShowStart,
+          'task-bar-item-active': app.isActive,
         }"
-        @click="onTestClick()"
+        @click="onDockItemClicked(app, index)"
       >
         <img
-          alt="file-manager"
-          src="@/assets/image/file-manager.png"
+          :src="app.icon"
+          :alt="app.name"
           style="width: 30px; height: 30px"
         />
       </div>
@@ -87,11 +92,10 @@ export default {
   name: 'BottomBar',
   data() {
     return {
+      vm: this,
       isShowStart: false,
       isExpandStart: false,
       opacityGoing: false,
-      // testDialog: null,
-      // testCondition: false,
     }
   },
   computed: {
@@ -128,31 +132,41 @@ export default {
         document.getElementById('start-toggle-bar').style.left = '410px'
       }
     },
-    onInstanceClicked(component) {
+    onInstanceClicked(instance) {
+      // 关闭开始菜单
       this.onStartClicked()
-      const VueComponent = Vue.extend(component)
-      const wrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(wrapper)
-      const newInstance = new VueComponent().$mount(wrapper)
+      // 生成uid
+      this.$store.dispatch('dock/GetNewUid').then((res) => {
+        const pendingObj = {
+          uid: res,
+          icon: instance.icon,
+          name: instance.name,
+          isActive: true,
+        }
+        // extend一个要打开的组件
+        const VueComponent = Vue.extend(instance.component.default)
+        const wrapper = document.createElement('div')
+        document.getElementById('desktop-wrapper').appendChild(wrapper)
+        const newInstance = new VueComponent({
+          el: wrapper,
+          propsData: {
+            uid: pendingObj.uid,
+          },
+        })
+        // 在pending表中添加打开的组件
+        this.$store.commit('dock/NEW_PENDING', pendingObj)
+      })
+      // 关闭所有可关闭的小组件(__closable__)
       const closable = document.querySelector('.__closable__')
       closable !== null && closable.remove()
     },
-    // onSettingsClicked() {
-    //   const SettingsVueComponent = Vue.extend(SettingsDialog)
-    //   const settingsWrapper = document.createElement('div')
-    //   document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
-    //   const newDialog = new SettingsVueComponent().$mount(settingsWrapper)
-    //   const closable = document.querySelector('.__closable__')
-    //   closable !== null && closable.remove()
-    // },
+    onDockItemClicked(app) {
+      this.$store.commit('dock/TOGGLE_MINIMIZE', app.uid)
+    },
     onTestClick() {
-      // this.testCondition = !this.testCondition
-      // console.log(this.testDialog.$el.style.display)
-      // if (this.testCondition)
-      //   this.testDialog.$el.style.display = 'none'
-      // else
-      //   this.testDialog.$el.style.display = ''
-      // console.log(this.registry)
+      this.testCondition = !this.testCondition
+      if (this.testCondition) this.testDialog.$el.style.display = 'none'
+      else this.testDialog.$el.style.display = ''
     },
     onFileManagerClicked() {
       this.onStartClicked()
@@ -163,7 +177,9 @@ export default {
       const closable = document.querySelector('.__closable__')
       closable !== null && closable.remove()
     },
-    handleGoToDesktop() {},
+    handleGoToDesktop() {
+      this.$store.commit('dock/GO_TO_DESKTOP')
+    },
   },
 }
 </script>

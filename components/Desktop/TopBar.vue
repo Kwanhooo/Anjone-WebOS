@@ -23,10 +23,14 @@
     <div id="inet-monitor-wrapper">
       <img
         alt="separator"
-        src="@/assets/svg/internet.svg"
+        :src="
+          isLAN()
+            ? require('@/assets/svg/lan.svg')
+            : require('@/assets/svg/internet.svg')
+        "
         style="margin-right: 0.8em"
       />
-      <span>互联网访问</span>
+      <span>{{ isLAN() ? '局域网访问' : '互联网访问' }}</span>
     </div>
     <div id="header-right-wrapper">
       <div id="user-op-wrapper" @click="onUserOptionsClicked()">
@@ -85,6 +89,7 @@ import MonitorWidget from '@/components/Monitor/Widget'
 import UserOptions from '@/components/Desktop/UserOptions'
 import DeviceSelector from '@/components/Desktop/DeviceSelector'
 import MessageCenter from '@/components/MessageCenter/Widget'
+import { isLAN } from '@/utils/network'
 
 export default Vue.extend({
   name: 'TopBar',
@@ -108,6 +113,9 @@ export default Vue.extend({
       setMessageCenterActive: 'sys/SET_IS_MESSAGE_CENTER_ACTIVE',
       setMonitorActive: 'sys/SET_IS_MONITOR_ACTIVE',
     }),
+    isLAN() {
+      return isLAN()
+    },
     getUsername() {
       return this.$store.state.user.username
     },

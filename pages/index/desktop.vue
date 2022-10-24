@@ -41,6 +41,7 @@ export default Vue.extend({
       path.forEach((item) => {
         if (
           (item.id && item.id === 'top-bar-wrapper') ||
+          (item.id && item.id === 'task-bar-wrapper') ||
           (item.classList && item.classList.contains('__closable__'))
         ) {
           isClosableClicked = true
