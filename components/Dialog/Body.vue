@@ -105,10 +105,10 @@ export default Vue.extend({
       bind(el, binding) {
         el.onmousedown = (e) => {
           const minWidth = (
-            Number(document.documentElement.clientWidth) * 0.4
+            Number(document.documentElement.clientWidth) * 0.5
           ).toFixed(0)
           const minHeight = (
-            Number(document.documentElement.clientHeight) * 0.6
+            Number(document.documentElement.clientHeight) * 0.7
           ).toFixed(0)
 
           const disX = e.clientX - el.offsetLeft

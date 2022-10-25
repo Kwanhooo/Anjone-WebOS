@@ -62,14 +62,19 @@
         }"
         @click="onStartClicked()"
       >
-        <img
-          alt="start"
-          :src="
-            isShowStart
-              ? require('@/assets/svg/start.svg')
-              : require('@/assets/svg/start-inactive.svg')
-          "
-        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="30"
+          height="30"
+        >
+          <g>
+            <path
+              d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
+              :fill="!isShowStart ? '#6c6c6c' : '#3380f3'"
+            ></path>
+          </g>
+        </svg>
       </div>
       <div
         v-for="(app, index) in pending"
@@ -222,7 +227,7 @@ export default {
   box-shadow: 2px 1px 0 0 rgba(0, 0, 0, 40%);
 
   #start-wrapper {
-    z-index: 99999999;
+    z-index: 9999999;
     min-width: 424px;
     width: 20vw;
     height: 50vh;
@@ -341,8 +346,9 @@ export default {
       align-items: center;
       width: @TASK_BAR_ITEM_WIDTH;
       height: 100%;
-      transition: background-color 0.2s ease-in-out;
-
+      transition: background-color 0.2s ease-in-out,
+        border-bottom-color 0.15s ease-in-out;
+      border-bottom: 3px solid transparent;
       cursor: pointer;
       pointer-events: auto;
 
@@ -354,6 +360,10 @@ export default {
 
   .task-bar-item-active {
     background: rgba(#e8e8e8, 100%);
+    // 下边框
+    &:not(:first-child) {
+      border-bottom: 3px solid #3380f3 !important;
+    }
   }
 
   #go-to-desktop {

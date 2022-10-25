@@ -167,6 +167,8 @@
               v-model="isShowCreateDirModal"
               title="新建文件夹"
               :z-index="9999999"
+              ok-text="好"
+              cancel-text="取消"
               @ok="handleCreateDir"
             >
               <p>输入新文件夹的名称</p>
@@ -174,7 +176,9 @@
                 v-model="newDirName"
                 type="text"
                 style="
-                  border: 1px solid #6c6c6c;
+                  padding: 0.3em 0.5em;
+                  font-size: 0.9rem;
+                  border: 2px solid #bbb;
                   border-radius: 8px;
                   outline: none;
                 "
@@ -183,6 +187,8 @@
             <a-modal
               v-model="isShowRenameModal"
               title="重命名"
+              ok-text="好"
+              cancel-text="取消"
               :z-index="9999999"
               @ok="handleFileRename"
             >
@@ -191,7 +197,9 @@
                 v-model="newDirName"
                 type="text"
                 style="
-                  border: 1px solid #6c6c6c;
+                  padding: 0.3em 0.5em;
+                  font-size: 0.9rem;
+                  border: 2px solid #bbb;
                   border-radius: 8px;
                   outline: none;
                 "

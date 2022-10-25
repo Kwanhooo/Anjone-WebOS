@@ -31,6 +31,7 @@ export default {
     '@/plugins/echarts',
     '@/plugins/axios',
     '@/plugins/vue-dark-photo',
+    '@/plugins/clipboard-vue',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

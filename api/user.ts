@@ -15,6 +15,7 @@ export const authAPI = {
   SetPassword: '/user/set_password',
   ResetInfo: '/user/reset_info',
   GetCode: '/user/get_code',
+  LoginLog: '/user/login_log',
 }
 
 /**
@@ -127,5 +128,12 @@ export function getCode(parameter: any) {
       Authorization: sessionStorage.getItem('TOKEN'),
     },
     data: fmtToForm(parameter),
+  })
+}
+
+export function loginLog() {
+  return axiosInstance({
+    url: authAPI.LoginLog,
+    method: 'get',
   })
 }

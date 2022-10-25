@@ -80,19 +80,23 @@ export default {
       closable !== null && closable.remove()
     },
     onExitClicked() {
-      sessionStorage.clear()
+      this.clearUserState()
       $nuxt.$router.push('/auth')
       this.$message.success('您已安全退出！')
     },
     onShutdownConfirm() {
       this.$message.warn('设备正在关闭！即将断开连接...')
-      sessionStorage.clear()
+      this.clearUserState()
       $nuxt.$router.push('/auth')
     },
     onRebootConfirm() {
       this.$message.warn('设备正在重启！即将断开连接...')
-      sessionStorage.clear()
+      this.clearUserState()
       $nuxt.$router.push('/auth')
+    },
+    clearUserState() {
+      $nuxt.$store.dispatch('dock/ClearUserState')
+      sessionStorage.clear()
     },
   },
 }

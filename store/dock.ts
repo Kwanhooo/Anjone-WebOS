@@ -65,11 +65,22 @@ export const mutations = {
       state.pending = cloneDeep(state.pendingBeforeGotoDesktop)
     }
   },
+  CLEAR_PENDING(state: any) {
+    state.pending = []
+    state.pendingBeforeGotoDesktop = []
+  },
+  RESET_UID(state: any) {
+    state.uid = 1000
+  },
 }
 
 export const actions = {
   GetNewUid({ commit, rootState }: any) {
     commit('SET_UID', rootState.dock.uid + 1)
     return rootState.dock.uid
+  },
+  ClearUserState({ commit }: any) {
+    commit('CLEAR_PENDING')
+    commit('RESET_UID')
   },
 }
