@@ -66,6 +66,57 @@
         </div>
       </template>
       <template #body>
+        <div v-if="fileInfoModalVisible" class="mask">
+          <div class="file-info-modal">
+            <div class="title">
+              <span>文件详情</span>
+              <div
+                class="modal-close-btn"
+                @click="fileInfoModalVisible = false"
+              >
+                <img alt="close" src="@/assets/svg/close.svg" />
+              </div>
+            </div>
+            <div class="main">
+              <div class="row">
+                <div class="key"><span>名称</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <div class="key"><span>修改日期</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <div class="key"><span>最近访问</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <div class="key"><span>最近写入</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <div class="key"><span>大小</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <div class="key"><span>类型</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <div class="key"><span>只读</span></div>
+                <div class="val"><span>{{}}</span></div>
+              </div>
+              <div class="row">
+                <button
+                  class="confirm-btn"
+                  @click="fileInfoModalVisible = false"
+                >
+                  好
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div v-if="openedImg !== ''" id="file-opener">
           <img :src="openedImg" alt="opened-image" />
         </div>
@@ -80,7 +131,7 @@
                 width="18"
                 height="18"
                 :style="
-                  isBackwardEnable ? '' : 'cursor: not-allowed !important;'
+                  isBackwardEnable() ? '' : 'cursor: not-allowed !important;'
                 "
                 @click="handleBackwardClicked()"
               >
@@ -88,7 +139,7 @@
                 <g>
                   <path
                     d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-                    :fill="isBackwardEnable ? '#3380f3' : '#6c6c6c'"
+                    :fill="isBackwardEnable() ? '#3380f3' : '#6c6c6c'"
                   ></path>
                 </g>
               </svg>
@@ -100,7 +151,7 @@
                 width="18"
                 height="18"
                 :style="
-                  isForwardEnable ? '' : 'cursor: not-allowed !important;'
+                  isForwardEnable() ? '' : 'cursor: not-allowed !important;'
                 "
                 @click="handleForwardClicked()"
               >
@@ -108,7 +159,7 @@
                 <g>
                   <path
                     d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
-                    :fill="isForwardEnable ? '#3380f3' : '#6c6c6c'"
+                    :fill="isForwardEnable() ? '#3380f3' : '#6c6c6c'"
                   ></path>
                 </g>
               </svg>
@@ -132,14 +183,14 @@
                 viewBox="0 0 24 24"
                 width="18"
                 height="18"
-                :style="isBackEnable ? '' : 'cursor: not-allowed !important;'"
+                :style="isBackEnable() ? '' : 'cursor: not-allowed !important;'"
                 @click="handleBackClicked()"
               >
                 <defs data-reactroot=""></defs>
                 <g>
                   <path
                     d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-                    :fill="isBackEnable ? '#3380f3' : '#6c6c6c'"
+                    :fill="isBackEnable() ? '#3380f3' : '#6c6c6c'"
                   ></path>
                 </g>
               </svg>
@@ -219,6 +270,7 @@
                   border-radius: 8px;
                   outline: none;
                 "
+                autofocus
               />
             </a-modal>
             <div
@@ -248,7 +300,7 @@
                   :multiple="true"
                   @change="showDropDown = false"
                 >
-                  <a-button class="upload-select-btn">上传文件 </a-button>
+                  <a-button class="upload-select-btn">上传文件</a-button>
                 </a-upload>
               </div>
               <div class="select-box-item" @click="deleteFiles()">
@@ -321,6 +373,7 @@
               :columns="columns"
               :data-source="displayData"
               size="middle"
+              :locale="{ emptyText: '这个文件夹是空的哦！' }"
             >
               <a
                 slot="filename"
@@ -360,6 +413,7 @@ import { Status } from '@/utils/magic-numbers'
 import { xhrHost } from '@/config/api-host.config'
 import VideoOpener from '@/components/FileOpener/VideoOpener'
 import { resetAvatar } from '@/api/file'
+import TextOpener from '~/components/FileOpener/TextOpener'
 
 const columns = [
   {
@@ -409,6 +463,8 @@ export default Vue.extend({
   },
   data() {
     return {
+      fileInfoModalVisible: false,
+      fileInfoToShow: {},
       isShowRenameModal: false,
       isShowCreateDirModal: false,
       newDirName: '',
@@ -432,9 +488,6 @@ export default Vue.extend({
       breadcrumb: ['我的文件'],
       popBreadCrumb: [],
       openedImg: '',
-      isBackwardEnable: false,
-      isForwardEnable: false,
-      isBackEnable: false,
     }
   },
   computed: {
@@ -446,6 +499,15 @@ export default Vue.extend({
     this.startSMB()
   },
   methods: {
+    isBackwardEnable() {
+      return this.breadcrumb.length >= 2
+    },
+    isForwardEnable() {
+      return this.popBreadCrumb.length >= 1
+    },
+    isBackEnable() {
+      return this.breadcrumb.length >= 2
+    },
     refreshContent() {
       refresh()
         .then((res) => {
@@ -462,10 +524,26 @@ export default Vue.extend({
     },
     getBreadCrumb() {
       let str = ''
-      this.breadcrumb.forEach((item) => {
-        str += item + ' > '
-      })
-      return str.substring(0, str.length - 3)
+      // 取this.breadcrumb的最后三个
+      if (this.breadcrumb.length > 3) {
+        str = '...'
+        for (
+          let i = this.breadcrumb.length - 3;
+          i < this.breadcrumb.length;
+          i++
+        ) {
+          str += this.breadcrumb[i] + '>'
+        }
+      } else {
+        for (let i = 0; i < this.breadcrumb.length; i++) {
+          str += this.breadcrumb[i] + '>'
+        }
+      }
+      // this.breadcrumb.forEach((item) => {
+      //   str += item + ' > '
+      // })
+      // return str.substring(0, str.length - 3)
+      return str.substring(0, str.length - 1)
     },
     handleFileRename() {
       this.isShowRenameModal = false
@@ -497,7 +575,12 @@ export default Vue.extend({
       })
     },
     showFileInfo() {
-      const filename = this.displayData.at(selectedRowKeys[0])
+      if (
+        this.selectedRowKeys === undefined ||
+        this.selectedRowKeys.length === 0
+      )
+        return
+      const filename = this.displayData.at(this.selectedRowKeys[0])
       fileInfo(filename).then((res) => {})
     },
     deleteFiles() {
@@ -608,6 +691,7 @@ export default Vue.extend({
       enterAbs({ filepath: '/' + this.rootDir[active].filename }).then(
         (res) => {
           vm.displayData = res.data.data
+          vm.breadcrumb = []
           vm.breadcrumb.push(vm.rootDir[active].filename)
         }
       )
@@ -645,7 +729,9 @@ export default Vue.extend({
           } else if (type === 'audio') {
             this.previewAudio(fileLink, filename)
           } else if (type === 'other') {
-            this.$message.error('未知文件类型')
+            this.previewText(fileLink, filename)
+            this.$copyText(fileLink)
+            this.$message.error('未知文件类型，文件链接已复制，请下载后浏览！')
           }
         } else {
           vm.$message.error('您访问的文件不存在！')
@@ -689,10 +775,23 @@ export default Vue.extend({
         },
       })
     },
+    previewText(text, fileName) {
+      const TextOpenerVueComponent = Vue.extend(TextOpener)
+      const textOpenerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(textOpenerWrapper)
+      const comp = new TextOpenerVueComponent({
+        el: textOpenerWrapper,
+        propsData: {
+          text,
+          fileName,
+        },
+      })
+    },
     publish() {
       this.$message.info('publish')
     },
     handleBackClicked() {
+      if (!this.isBackEnable()) return
       const vm = this
       back().then((res) => {
         vm.displayData = res.data.data
@@ -700,6 +799,7 @@ export default Vue.extend({
       })
     },
     handleBackwardClicked() {
+      if (!this.isBackEnable()) return
       const vm = this
       back().then((res) => {
         vm.displayData = res.data.data
@@ -708,6 +808,7 @@ export default Vue.extend({
       })
     },
     handleForwardClicked() {
+      if (!this.isForwardEnable()) return
       const vm = this
       this.handleFileClicked(vm.popBreadCrumb.pop())
     },
@@ -918,5 +1019,129 @@ export default Vue.extend({
   border: none;
   box-shadow: none;
   height: auto;
+}
+
+.mask {
+  background-color: rgba(#9d9d9d, 50%);
+  z-index: 999;
+  position: absolute;
+  width: calc(100% - 10.8em);
+  height: 100%;
+
+  .file-info-modal {
+    width: 50%;
+    height: 60%;
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    background-color: white;
+    z-index: 999;
+
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      min-height: 3em;
+      max-height: 3em;
+      background-color: #ebebeb;
+      color: #6b6b6b;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      justify-items: center;
+      align-content: center;
+      align-items: center;
+      margin-bottom: 0.5em;
+    }
+
+    .modal-close-btn {
+      width: 1.5em;
+      height: 1.5em;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      transition: all ease-in-out 0.15s;
+      position: absolute;
+      right: 1em;
+
+      &:hover {
+        background: #a4a4a4;
+      }
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+
+      .row {
+        display: flex;
+        flex-direction: row;
+        margin-top: 0.5em;
+
+        .key {
+          margin-right: 3em;
+          padding: 0.2em 0;
+        }
+
+        .val {
+          input {
+            outline: none;
+            border: 1px solid #bbbbbb;
+            border-radius: 8px;
+            padding: 0.2em 0.5em;
+          }
+        }
+
+        .copy-info-btn {
+          background: white;
+          margin: 0.5em;
+          padding: 0.5em 1.2em;
+          border: 2px solid #3380f3;
+          color: #3380f3;
+          border-radius: 8px;
+          transition: all ease-in-out 0.15s;
+          cursor: pointer;
+          pointer-events: auto;
+          font-family: @GLOBAL_FONT_FAMILY;
+          outline: none;
+          font-weight: 500;
+          font-size: 0.8rem;
+
+          &:hover {
+            background: #4f98fd !important;
+            color: white;
+          }
+
+          &:first-child {
+            margin-right: 7em;
+          }
+        }
+
+        .confirm-btn {
+          background: @STRONG_THEME_COLOR_LIGHT;
+          margin: 0.5em;
+          padding: 0.5em 1.2em;
+          border: none;
+          color: white;
+          border-radius: 8px;
+          transition: all ease-in-out 0.15s;
+          cursor: pointer;
+          pointer-events: auto;
+          font-family: @GLOBAL_FONT_FAMILY;
+          outline: none;
+          font-weight: 500;
+          font-size: 0.8rem;
+
+          &:hover {
+            background: #4f98fd !important;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

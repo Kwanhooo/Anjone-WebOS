@@ -52,7 +52,7 @@ export function enter(dir: string, type: string) {
   return axiosInstance({
     url:
       sysAPI.Enter +
-      `${dir}` +
+      `/${dir}` +
       '?type=' +
       type +
       '&token=' +

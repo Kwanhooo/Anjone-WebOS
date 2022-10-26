@@ -54,6 +54,7 @@
             <span>我的账户</span>
           </div>
           <div
+            v-if="isAdmin"
             :class="{
               'item-child': true,
               item: true,
@@ -104,6 +105,7 @@
         </div>
         <div v-show="getIsShow(1)" class="children-wrapper">
           <div
+            v-if="isAdmin"
             :class="{
               'item-child': true,
               item: true,
@@ -114,6 +116,7 @@
             <span>设备信息</span>
           </div>
           <div
+            v-if="isAdmin"
             :class="{
               'item-child': true,
               item: true,
@@ -272,6 +275,7 @@ export default {
   },
   data() {
     return {
+      isAdmin: false,
       activeIndex: 0,
       categoryShow: {
         0: true,
@@ -281,6 +285,7 @@ export default {
     }
   },
   beforeMount() {
+    this.isAdmin = $nuxt.$store.state.user.role === 'admin'
     const cloneDeep = require('lodash.clonedeep')
     this.activeIndex = cloneDeep(this.meta.activeIndex)
     this.categoryShow = cloneDeep(this.meta.categoryShow)
