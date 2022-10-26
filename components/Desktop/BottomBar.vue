@@ -170,6 +170,7 @@ export default {
           el: wrapper,
           propsData: {
             uid: pendingObj.uid,
+            meta: instance.meta,
           },
         })
         // 在pending表中添加打开的组件

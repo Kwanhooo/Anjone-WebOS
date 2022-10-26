@@ -11,12 +11,33 @@ export const state = () => ({
       name: '系统设置',
       component: require('@/components/Settings/Dialog.vue'),
     },
+    {
+      icon: require('@/assets/image/help.png'),
+      name: '使用帮助',
+      component: require('@/components/Settings/Dialog.vue'),
+      meta: {
+        activeIndex: 5,
+        categoryShow: {
+          0: false,
+          1: false,
+          2: true,
+        },
+      },
+    },
   ],
   extraRegistry: [
     {
-      icon: require('@/assets/image/file-manager.png'),
-      name: '我的文件',
-      component: require('@/components/FileManager/Dialog.vue'),
+      icon: require('@/assets/image/help.png'),
+      name: '使用帮助',
+      component: require('@/components/Settings/Dialog.vue'),
+      meta: {
+        activeIndex: 5,
+        categoryShow: {
+          0: false,
+          1: false,
+          2: true,
+        },
+      },
     },
   ],
   pending: [],

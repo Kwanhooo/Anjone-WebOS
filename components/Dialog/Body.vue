@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="!isClose"
-    v-show="getIsShow()"
+    v-show="setIsShow() === null ? isShow : isShow"
     v-drag="vm"
     v-index
     :class="{ 'dialog-wrapper': true }"
@@ -44,6 +44,7 @@ export default Vue.extend({
       inserted(el, binding) {},
       bind(el, binding) {
         const oDiv = el
+        binding.value.el = el.classList
         oDiv.onmousedown = (e) => {
           if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
             $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
@@ -160,26 +161,66 @@ export default Vue.extend({
       isFullscreen: false,
       extraStyle: '',
       zIndexStyle: '',
+      el: null,
+      isShow: true,
     }
   },
   mounted() {
+    // setTimeout(() => {
+    //   this.el.add('opacity-visible')
+    // }, 10)
     const zIndex = $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
     this.zIndexStyle = '{ z-index: ' + zIndex + ' }'
   },
   methods: {
     getIsShow() {
-      const pendingDialog = $nuxt.$store.state.dock.pending.find((item) => {
-        return item.uid === this.uid
+      return new Promise((resolve, reject) => {
+        const pendingDialog = $nuxt.$store.state.dock.pending.find((item) => {
+          return item.uid === this.uid
+        })
+
+        if (pendingDialog === undefined || pendingDialog.isActive === true) {
+          resolve(true)
+          setTimeout(() => {
+            this.el.add('opacity-visible')
+          }, 10)
+          // setTimeout(() => {
+          //
+          // }, 150)
+        } else {
+          setTimeout(() => {
+            this.el.remove('opacity-visible')
+          }, 10)
+          setTimeout(() => {
+            resolve(false)
+          }, 150)
+        }
       })
-      return pendingDialog === undefined ? true : pendingDialog.isActive
+    },
+    setIsShow() {
+      const vm = this
+      this.getIsShow().then((res) => {
+        vm.isShow = res
+      })
+      return null
     },
     handleClose() {
-      this.isClose = true
-      $nuxt.$store.commit('dock/REMOVE_PENDING', this.uid)
-      this.$emit('destroyResource')
+      setTimeout(() => {
+        this.el.remove('opacity-visible')
+        setTimeout(() => {
+          this.isClose = true
+          $nuxt.$store.commit('dock/REMOVE_PENDING', this.uid)
+          this.$emit('destroyResource')
+        }, 150)
+      }, 10)
     },
     handleMinimize() {
-      $nuxt.$store.commit('dock/SET_MINIMIZE', this.uid)
+      setTimeout(() => {
+        this.el.remove('opacity-visible')
+        setTimeout(() => {
+          $nuxt.$store.commit('dock/SET_MINIMIZE', this.uid)
+        }, 150)
+      }, 10)
     },
     handleFullscreen() {
       if (this.isFullscreen) {
@@ -216,6 +257,8 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   box-shadow: #6c6c6c 0 0 5px;
+  transition: opacity 0.15s ease-in-out;
+  opacity: 0;
 
   .dialog-main {
     position: relative;
@@ -245,5 +288,9 @@ export default Vue.extend({
 
 .hidden {
   display: none;
+}
+
+.opacity-visible {
+  opacity: 1;
 }
 </style>

@@ -20,6 +20,8 @@ export default Vue.extend({
       // 将窗口打开记录表清空
       target.dock.uid = 1000
       target.dock.pending = []
+      target.dock.registry = this.$store.state.dock.registry
+      target.dock.extraRegistry = this.$store.state.dock.extraRegistry
       this.$store.replaceState(Object.assign({}, this.$store.state, target))
       sessionStorage.removeItem(tempStoreKey)
     }

@@ -257,6 +257,18 @@ export default {
       type: Number,
       required: true,
     },
+    meta: {
+      type: Object,
+      required: false,
+      default: () => ({
+        activeIndex: 0,
+        categoryShow: {
+          0: true,
+          1: false,
+          2: false,
+        },
+      }),
+    },
   },
   data() {
     return {
@@ -267,6 +279,11 @@ export default {
         2: false,
       },
     }
+  },
+  beforeMount() {
+    const cloneDeep = require('lodash.clonedeep')
+    this.activeIndex = cloneDeep(this.meta.activeIndex)
+    this.categoryShow = cloneDeep(this.meta.categoryShow)
   },
   methods: {
     handleDestroyResource() {
