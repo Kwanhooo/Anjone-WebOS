@@ -72,34 +72,47 @@
         <div class="main-area-wrapper">
           <div class="operation-bar">
             <div class="tool-group">
+              <!-- 回退 -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
                 viewBox="0 0 24 24"
                 width="18"
                 height="18"
+                :style="
+                  isBackwardEnable ? '' : 'cursor: not-allowed !important;'
+                "
+                @click="handleBackwardClicked()"
               >
                 <defs data-reactroot=""></defs>
                 <g>
                   <path
                     d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                    :fill="isBackwardEnable ? '#3380f3' : '#6c6c6c'"
                   ></path>
                 </g>
               </svg>
+              <!-- 前进 -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 cOCwig svg-icon-path-icon fill"
                 viewBox="0 0 24 24"
                 width="18"
                 height="18"
+                :style="
+                  isForwardEnable ? '' : 'cursor: not-allowed !important;'
+                "
+                @click="handleForwardClicked()"
               >
                 <defs data-reactroot=""></defs>
                 <g>
                   <path
                     d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                    :fill="isForwardEnable ? '#3380f3' : '#6c6c6c'"
                   ></path>
                 </g>
               </svg>
+              <!-- 下拉 -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
@@ -112,18 +125,21 @@
                   <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
                 </g>
               </svg>
+              <!-- 上一层 -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
                 viewBox="0 0 24 24"
                 width="18"
                 height="18"
+                :style="isBackEnable ? '' : 'cursor: not-allowed !important;'"
                 @click="handleBackClicked()"
               >
                 <defs data-reactroot=""></defs>
                 <g>
                   <path
                     d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
+                    :fill="isBackEnable ? '#3380f3' : '#6c6c6c'"
                   ></path>
                 </g>
               </svg>
@@ -207,7 +223,10 @@
             </a-modal>
             <div
               v-show="showDropDown"
-              class="select-box-wrapper"
+              :class="{
+                'select-box-wrapper': true,
+                'select-box-transform': fileList.length !== 0,
+              }"
               @blur="showDropDown = false"
             >
               <div
@@ -229,9 +248,7 @@
                   :multiple="true"
                   @change="showDropDown = false"
                 >
-                  <a-button style="background: transparent; border: none"
-                    >选择文件
-                  </a-button>
+                  <a-button class="upload-select-btn">上传文件 </a-button>
                 </a-upload>
               </div>
               <div class="select-box-item" @click="deleteFiles()">
@@ -413,7 +430,11 @@ export default Vue.extend({
       selectedRowKeys: [],
       defaultTopParent: '我的文件',
       breadcrumb: ['我的文件'],
+      popBreadCrumb: [],
       openedImg: '',
+      isBackwardEnable: false,
+      isForwardEnable: false,
+      isBackEnable: false,
     }
   },
   computed: {
@@ -594,8 +615,9 @@ export default Vue.extend({
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
-    handleFileClicked(filename, record) {
-      const isDir = record.is_dir
+    handleFileClicked(filename) {
+      // handleFileClicked(filename, record) {
+      // const isDir = record.is_dir
       const vm = this
       // 在enter之前发送检查请求
       checkFile(filename).then((res) => {
@@ -676,6 +698,18 @@ export default Vue.extend({
         vm.displayData = res.data.data
         vm.breadcrumb.pop()
       })
+    },
+    handleBackwardClicked() {
+      const vm = this
+      back().then((res) => {
+        vm.displayData = res.data.data
+        const pop = vm.breadcrumb.pop()
+        vm.popBreadCrumb.push(pop)
+      })
+    },
+    handleForwardClicked() {
+      const vm = this
+      this.handleFileClicked(vm.popBreadCrumb.pop())
     },
   },
 })
@@ -770,6 +804,14 @@ export default Vue.extend({
       svg {
         width: 1.4em !important;
         height: 1.4em !important;
+        border-radius: 5px;
+        transition: background-color ease-in-out 0.15s;
+        pointer-events: auto;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #bbbbbb;
+        }
       }
 
       &:last-child {
@@ -791,7 +833,20 @@ export default Vue.extend({
     .renew {
       flex: 0.8;
       padding-top: 0.8em;
-      margin-left: 0.5em;
+      margin-left: 0.7em;
+
+      svg {
+        width: 1.4em !important;
+        height: 1.4em !important;
+        border-radius: 5px;
+        transition: background-color ease-in-out 0.15s;
+        pointer-events: auto;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #bbbbbb;
+        }
+      }
     }
 
     .search-wrapper {
@@ -832,7 +887,7 @@ export default Vue.extend({
   .select-box-wrapper {
     position: absolute;
     top: 40px;
-    right: 85px;
+    right: 8.9%;
     z-index: 9999;
     width: 105px;
 
@@ -851,5 +906,17 @@ export default Vue.extend({
       }
     }
   }
+
+  .select-box-transform {
+    transform: translate(-6.1em, 0);
+  }
+}
+
+.upload-select-btn {
+  color: #595959;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  height: auto;
 }
 </style>
