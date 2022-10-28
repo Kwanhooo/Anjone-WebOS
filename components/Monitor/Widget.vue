@@ -51,14 +51,14 @@
         <div style="margin-top: 1em">
           <span style="padding-left: 1em">CPU使用率</span>
           <span style="float: right; padding-right: 2em; color: #3380f3"
-            >{{ cpu_q[0] }} %</span
+            >{{ cpu_q[cpu_q.length - 1] }} %</span
           >
         </div>
         <div id="cpu-usage-wrapper"></div>
         <div>
           <span style="padding-left: 1em">内存使用率</span>
           <span style="float: right; padding-right: 2em; color: #3380f3"
-            >{{ men_q[0] }} %</span
+            >{{ men_q[men_q.length - 1] }} %</span
           >
         </div>
         <div id="mem-usage-wrapper"></div>
@@ -67,10 +67,14 @@
           <span style="float: right; padding-right: 2em">
             <img src="@/assets/svg/circle-dark.svg" />
             接收
-            <span style="color: #3380f3">{{ recv_q[0] }} KB/s</span>
+            <span style="color: #3380f3"
+              >{{ recv_q[recv_q.length - 1] }} MB/s</span
+            >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <img src="@/assets/svg/circle-light.svg" />发送
-            <span style="color: #3380f3">{{ send_q[0] }}KB/s</span></span
+            <span style="color: #3380f3"
+              >{{ send_q[send_q.length - 1] }} MB/s</span
+            ></span
           >
         </div>
         <div id="net-usage-wrapper"></div>
@@ -242,19 +246,49 @@ export default {
             '13',
             '14',
           ],
+          axisPointer: {
+            label: {
+              formatter(params) {
+                return '使用率'
+              },
+            },
+          },
         },
         yAxis: {
           type: 'value',
           max: 100,
           min: 0,
           interval: 20,
+          splitLine: {
+            lineStyle: {
+              // 使用深浅的间隔色
+              color: ['#737576'],
+              width: 1,
+              type: [1, 2],
+            },
+          },
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+            shadowStyle: {
+              color: 'rgba(20,50,95, 0.1)',
+            },
+          },
+        },
+        grid: {
+          top: 25,
+          bottom: 25,
         },
         series: [
           {
+            name: 'CPU',
             data: this.cpu_q,
             type: 'line',
             stack: 'x',
-            areaStyle: {},
+            smooth: true,
+            areaStyle: { opacity: 0.3 },
             color: '#6c6c6c',
           },
         ],
@@ -283,6 +317,26 @@ export default {
             '13',
             '14',
           ],
+          axisPointer: {
+            label: {
+              formatter(params) {
+                return '使用率'
+              },
+            },
+          },
+        },
+        grid: {
+          top: 25,
+          bottom: 25,
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+            shadowStyle: {
+              color: 'rgba(20,50,95, 0.1)',
+            },
+          },
         },
         yAxis: {
           type: 'value',
@@ -306,16 +360,20 @@ export default {
           },
           splitLine: {
             lineStyle: {
-              type: 'dashed',
+              color: ['#737576'],
+              width: 1,
+              type: [1, 2],
             },
           },
         },
         series: [
           {
+            name: '内存',
             data: this.men_q,
             type: 'line',
             stack: 'x',
-            areaStyle: {},
+            smooth: true,
+            areaStyle: { opacity: 0.3 },
             color: '#6c6c6c',
           },
         ],
@@ -344,16 +402,46 @@ export default {
             '13',
             '14',
           ],
+          axisPointer: {
+            label: {
+              formatter(params) {
+                return '网络占用'
+              },
+            },
+          },
         },
-        yAxis: {},
+        yAxis: {
+          splitLine: {
+            lineStyle: {
+              color: ['#737576'],
+              width: 1,
+              type: [1, 2],
+            },
+          },
+        },
+        grid: {
+          top: 25,
+          bottom: 25,
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+            shadowStyle: {
+              color: 'rgba(20,50,95, 0.1)',
+            },
+          },
+        },
         series: [
           {
+            name: '发送',
             data: this.send_q,
             type: 'line',
             smooth: true,
             color: '#a8aeb6',
           },
           {
+            name: '接收',
             data: this.recv_q,
             type: 'line',
             smooth: true,
@@ -392,11 +480,11 @@ export default {
           vm.recv_q = data.recv_q
 
           data.recv_q.forEach((item, index) => {
-            vm.recv_q[index] = (item / 1024).toFixed(0)
+            vm.recv_q[index] = (item / 1024 / 1024).toFixed(2)
           })
 
           data.send_q.forEach((item, index) => {
-            vm.send_q[index] = (item / 1024).toFixed(0)
+            vm.send_q[index] = (item / 1024 / 1024).toFixed(2)
           })
 
           vm.echartsInit()
@@ -535,11 +623,12 @@ export default {
 
       #cpu-usage-wrapper {
         width: 28em;
-        height: 200px;
+        height: calc((100vh - 300px - 6em) / 3);
         margin-left: auto;
         margin-right: auto;
         position: relative;
         left: 0.5em;
+        margin-bottom: 1em;
       }
 
       #mem-usage-wrapper {

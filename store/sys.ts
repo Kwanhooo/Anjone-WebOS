@@ -47,7 +47,7 @@ export const mutations = {
   },
   SET_IS_MONITOR_ACTIVE(state: any, isMonitorActive: boolean) {
     state.isMonitorActive = isMonitorActive
-    if (!state.isMonitorActive && state.monitorWS) {
+    if (!state.isMonitorActive && state.monitorWS !== null) {
       state.monitorWS.close()
       state.monitorWS = null
     }
