@@ -211,7 +211,8 @@ export default Vue.extend({
 @CHECK_UPDATE_BTN_COLOR: @STRONG_THEME_COLOR_LIGHT;
 
 #device-info-wrapper {
-  margin: 4% 0 0 0;
+  padding: 4% 0 0 0;
+  min-width: 49em;
 
   .basic-info-wrapper {
     display: flex;

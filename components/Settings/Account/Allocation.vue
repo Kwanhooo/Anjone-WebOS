@@ -40,8 +40,8 @@
         key="id"
         title="序号"
         data-index="id"
-        :width="80"
-        :ellipsis="false"
+        :width="70"
+        :ellipsis="true"
       >
         <template slot-scope="text, record, index">
           <span>{{ index + 1 }}</span>
@@ -52,7 +52,7 @@
         title="帐号昵称"
         data-index="username"
         class-name="td-username"
-        :width="150"
+        :ellipsis="false"
       >
       </a-table-column>
       <a-table-column
@@ -66,15 +66,15 @@
         key="create_time"
         title="创建时间"
         data-index="create_time"
-        :width="180"
-        :ellipsis="false"
+        :ellipsis="true"
       >
       </a-table-column>
       <a-table-column
         key="status"
         title="状态"
         data-index="status"
-        :ellipsis="true"
+        :ellipsis="false"
+        :width="80"
       >
         <template slot-scope="text, record">
           <span
@@ -385,26 +385,6 @@ export default Vue.extend({
 
   &:hover {
     background: #4f98fd !important;
-  }
-}
-
-td:not(.td-username) {
-  text-align: center !important;
-  height: auto;
-}
-
-th {
-  text-align: center !important;
-
-  background: #e6f7ff !important;
-  color: @STRONG_THEME_COLOR_LIGHT !important;
-}
-
-tr {
-  background-color: white !important;
-
-  &:nth-child(2n) {
-    background-color: #f2f2f2 !important;
   }
 }
 

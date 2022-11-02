@@ -106,10 +106,10 @@ export default Vue.extend({
       bind(el, binding) {
         el.onmousedown = (e) => {
           const minWidth = (
-            Number(document.documentElement.clientWidth) * 0.5
+            Number(document.documentElement.clientWidth) * 0.3
           ).toFixed(0)
           const minHeight = (
-            Number(document.documentElement.clientHeight) * 0.7
+            Number(document.documentElement.clientHeight) * 0.5
           ).toFixed(0)
 
           const disX = e.clientX - el.offsetLeft
@@ -249,10 +249,10 @@ export default Vue.extend({
   z-index: 999999;
   font-size: 16px;
   position: absolute;
-  left: calc(50% - 500px);
-  top: calc(50% - 350px);
-  width: 1000px;
-  height: 700px;
+  left: 25vw;
+  top: 10vh;
+  width: 50vw;
+  height: 70vh;
   background: @DIALOG_BODY_COLOR_LIGHT;
   display: flex;
   flex-direction: column;
@@ -271,6 +271,8 @@ export default Vue.extend({
     .body-wrapper {
       flex: 3;
       background: @DIALOG_BODY_COLOR_LIGHT;
+      overflow-y: auto;
+      overflow-x: auto;
     }
   }
 }

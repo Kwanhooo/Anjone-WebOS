@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       vm: this,
-      isShowStart: false,
+      // isShowStart: false,
       isExpandStart: false,
       opacityGoing: false,
     }
@@ -118,6 +118,7 @@ export default {
       registry: (state) => state.dock.registry,
       extraRegistry: (state) => state.dock.extraRegistry,
       pending: (state) => state.dock.pending,
+      isShowStart: (state) => state.dock.isShowStart,
     }),
   },
   methods: {
@@ -126,11 +127,13 @@ export default {
       if (this.isShowStart) {
         this.opacityGoing = true
         setTimeout(() => {
-          vm.isShowStart = false
+          // vm.isShowStart = false
+          $nuxt.$store.commit('dock/SET_IS_SHOW_START', false)
           vm.opacityGoing = false
         }, 150)
       } else {
-        vm.isShowStart = true
+        // vm.isShowStart = true
+        $nuxt.$store.commit('dock/SET_IS_SHOW_START', true)
         this.opacityGoing = true
         setTimeout(() => {
           vm.opacityGoing = false
@@ -247,15 +250,25 @@ export default {
       background-color: @START_SIDE_COLOR;
 
       #start-side-slogan {
-        position: relative;
-        top: 240px;
-        left: -165px;
+        //position: relative;
+        //top: 240px;
+        //left: -165px;
+        //margin: auto;
+        //rotate: 270deg;
+        //width: 400px;
+        //font-size: 18px;
+        //letter-spacing: 2px;
+        //color: @START_SIDE_FONT_COLOR;
+
+        position: fixed;
+        bottom: calc(50px + 7.5em);
+        left: -88px;
         margin: auto;
         rotate: 270deg;
-        width: 400px;
+        /* width: 400px; */
         font-size: 18px;
         letter-spacing: 2px;
-        color: @START_SIDE_FONT_COLOR;
+        color: #4f4f4f;
       }
     }
 

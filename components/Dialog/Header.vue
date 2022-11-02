@@ -58,6 +58,9 @@ export default Vue.extend({
     left: @DISTANCE_TO_BORDER;
     padding-top: 0.35em;
     font-size: 1em;
+    max-width: calc(100% - 10em);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .dialog-op {

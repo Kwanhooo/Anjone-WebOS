@@ -1,4 +1,5 @@
 export const state = () => ({
+  isShowStart: false,
   uid: 1000,
   registry: [
     {
@@ -92,6 +93,9 @@ export const mutations = {
   },
   RESET_UID(state: any) {
     state.uid = 1000
+  },
+  SET_IS_SHOW_START(state: any, isShowStart: boolean) {
+    state.isShowStart = isShowStart
   },
 }
 

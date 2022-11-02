@@ -35,19 +35,30 @@ export default Vue.extend({
       }
     })
     window.addEventListener('click', (evt) => {
-      if (document.querySelector('.__closable__') === null) return
+      if (
+        document.querySelector('.__closable__') === null &&
+        document.getElementById('start-wrapper') === null
+      )
+        return
       const path = evt.path.slice(0, -4)
       let isClosableClicked = false
+      let isStartClicked = false
       path.forEach((item) => {
         if (
           (item.id && item.id === 'top-bar-wrapper') ||
           (item.id && item.id === 'task-bar-wrapper') ||
-          (item.classList && item.classList.contains('__closable__'))
+          (item.classList && item.classList.contains('__closable__')) ||
+          (item.id && item.id === 'start-wrapper')
         ) {
           isClosableClicked = true
+          isStartClicked = true
         }
       })
-      if (isClosableClicked) return
+      if (!isStartClicked) {
+        this.$store.commit('dock/SET_IS_SHOW_START', false)
+      }
+      if (document.querySelector('.__closable__') === null || isClosableClicked)
+        return
       document.querySelector('.__closable__').remove()
       this.$store.commit('sys/SET_IS_MONITOR_ACTIVE', false)
       this.$store.commit('sys/SET_IS_TODOLIST_ACTIVE', false)

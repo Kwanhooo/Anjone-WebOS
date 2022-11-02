@@ -523,6 +523,8 @@ export default {
   background: rgba(@CONTENT_COLOR_C, 80%);
   transition: all ease-in-out 0.15s;
   opacity: 0;
+  z-index: 999999;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
 
   .op-bar {
     position: relative;

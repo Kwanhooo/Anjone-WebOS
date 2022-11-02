@@ -303,7 +303,8 @@ export default Vue.extend({
 @INPUT_BORDER_COLOR: #c4c4c4;
 
 .wrapper {
-  margin: 4% 0 0 5%;
+  padding: 2em 0 0 3em;
+  min-width: 31em;
 
   .avatar-wrapper {
     display: inline-flex;

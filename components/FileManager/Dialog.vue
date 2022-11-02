@@ -298,6 +298,7 @@
                   style="max-width: 150px"
                   accept="*/*"
                   :multiple="true"
+                  :show-upload-list="false"
                   @change="showDropDown = false"
                 >
                   <a-button class="upload-select-btn">上传文件</a-button>
@@ -309,13 +310,7 @@
               <div class="select-box-item" @click="showFileInfo()">
                 <span>文件详情</span>
               </div>
-              <div
-                class="select-box-item"
-                @click="
-                  isShowRenameModal = true
-                  showDropDown = false
-                "
-              >
+              <div class="select-box-item" @click="handleOpenRenameModal()">
                 <span>重命名</span>
               </div>
               <div class="select-box-item">
@@ -420,22 +415,27 @@ const columns = [
     title: '名称',
     dataIndex: 'filename',
     scopedSlots: { customRender: 'filename' },
+    ellipsis: true,
   },
   {
     title: '修改日期',
     dataIndex: 'create_time',
+    ellipsis: false,
   },
   {
     title: '最近访问',
     dataIndex: 'last_access_time',
+    ellipsis: false,
   },
   {
     title: '最近写入',
     dataIndex: 'last_write_time',
+    ellipsis: false,
   },
   {
     title: '大小',
     dataIndex: 'file_size',
+    ellipsis: true,
   },
   {
     title: '类型',
@@ -443,6 +443,8 @@ const columns = [
     customRender: (text, record) => {
       return text === true ? '文件夹' : '文件'
     },
+    ellipsis: true,
+    width: '80px',
   },
   {
     title: '只读',
@@ -450,6 +452,8 @@ const columns = [
     customRender: (text, record) => {
       return text === true ? '是' : '否'
     },
+    ellipsis: true,
+    width: '60px',
   },
 ]
 
@@ -499,6 +503,11 @@ export default Vue.extend({
     this.startSMB()
   },
   methods: {
+    handleOpenRenameModal() {
+      this.newDirName = this.displayData.at(this.selectedRowKeys[0]).filename
+      this.isShowRenameModal = true
+      this.showDropDown = false
+    },
     isBackwardEnable() {
       return this.breadcrumb.length >= 2
     },
@@ -580,8 +589,10 @@ export default Vue.extend({
         this.selectedRowKeys.length === 0
       )
         return
-      const filename = this.displayData.at(this.selectedRowKeys[0])
-      fileInfo(filename).then((res) => {})
+      const filename = this.displayData.at(this.selectedRowKeys[0]).filename
+      fileInfo(filename).then((res) => {
+        // console.log(res.data.data)
+      })
     },
     deleteFiles() {
       this.showDropDown = false
@@ -592,7 +603,7 @@ export default Vue.extend({
           content: '删除文件后将无法恢复，是否继续？',
           okText: '确认',
           cancelText: '取消',
-          zIndex: '999999',
+          zIndex: 9999999,
           onOk: () => {
             let files = ''
             this.selectedRowKeys.forEach((item) => {

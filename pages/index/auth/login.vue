@@ -35,7 +35,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$message.info('Mock用户：手机号：18888888888    密码：000000', 10)
+    // this.$message.info('Mock用户：手机号：18888888888    密码：000000', 10)
     window.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
         this.handleLogin()

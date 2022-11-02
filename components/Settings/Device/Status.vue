@@ -323,7 +323,8 @@ export default Vue.extend({
 @import '@/assets/style/global';
 
 .root-wrapper {
-  width: 100%;
+  min-width: 43em;
+  //width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;

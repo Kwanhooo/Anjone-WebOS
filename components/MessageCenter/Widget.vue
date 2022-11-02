@@ -56,7 +56,6 @@
 
 <script>
 import Vue from 'vue'
-import { messageCenterWSHost, monitorWSHost } from '@/config/api-host.config'
 import { deleteAll, GetNotice } from '@/api/notice'
 
 export default Vue.extend({
@@ -126,6 +125,8 @@ export default Vue.extend({
   background: rgba(@CONTENT_COLOR_C, 80%);
   transition: all ease-in-out 0.15s;
   opacity: 0;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  z-index: 999999;
 
   .op-bar {
     position: relative;
