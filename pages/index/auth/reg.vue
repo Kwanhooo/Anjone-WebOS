@@ -37,7 +37,7 @@ export default Vue.extend({
       captcha: '',
       captchaTips: '获取验证码',
       timer: null,
-      countDown: 10,
+      countDown: 60,
     }
   },
   mounted() {
@@ -68,7 +68,7 @@ export default Vue.extend({
               clearInterval(vm.timer)
               vm.timer = null
               vm.captchaTips = '重新获取'
-              vm.countDown = 10
+              vm.countDown = 60
             }
           }, 1000)
         })

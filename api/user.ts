@@ -16,6 +16,8 @@ export const authAPI = {
   ResetInfo: '/user/reset_info',
   GetCode: '/user/get_code',
   LoginLog: '/user/login_log',
+  CreateUser: '/user/new_user',
+  GetUsers: '/user/get_users',
 }
 
 /**
@@ -135,5 +137,23 @@ export function loginLog() {
   return axiosInstance({
     url: authAPI.LoginLog,
     method: 'get',
+  })
+}
+
+export function getUsers() {
+  return axiosInstance({
+    url: authAPI.GetUsers,
+    method: 'get',
+  })
+}
+
+export function createUser(parameter: any) {
+  return axiosInstance({
+    url: authAPI.CreateUser,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: fmtToForm(parameter),
   })
 }

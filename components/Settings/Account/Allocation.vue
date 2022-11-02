@@ -40,9 +40,12 @@
         key="id"
         title="序号"
         data-index="id"
-        :width="100"
+        :width="80"
         :ellipsis="false"
       >
+        <template slot-scope="text, record, index">
+          <span>{{ index + 1 }}</span>
+        </template>
       </a-table-column>
       <a-table-column
         key="username"
@@ -108,6 +111,8 @@
 
 <script>
 import Vue from 'vue'
+import { createUser, getUsers } from '@/api/user'
+import { Status } from '@/utils/magic-numbers'
 
 export default Vue.extend({
   name: 'Allocation',
@@ -118,41 +123,72 @@ export default Vue.extend({
       newPhone: '',
       newPassword: '',
       data: [
-        {
-          id: '1',
-          username: 'John Appleseed',
-          phone: 18888888888,
-          create_time: '2022-09-22 12:00:00',
-          status: '正常',
-          operation: '',
-        },
-        {
-          id: '2',
-          username: 'Kenn',
-          phone: 17777777777,
-          create_time: '2021-09-12 12:00:00',
-          status: '禁用',
-          operation: '',
-        },
-        {
-          id: '3',
-          username: 'aa',
-          phone: 17772323777,
-          create_time: '2021-01-12 12:00:00',
-          status: '未激活',
-          operation: '',
-        },
+        // {
+        //   id: '',
+        //   username: 'John Appleseed',
+        //   phone: 18888888888,
+        //   create_time: '2022-09-22 12:00:00',
+        //   status: '正常',
+        //   operation: '',
+        // },
+        // {
+        //   id: '',
+        //   username: 'Kenn',
+        //   phone: 17777777777,
+        //   create_time: '2021-09-12 12:00:00',
+        //   status: '禁用',
+        //   operation: '',
+        // },
+        // {
+        //   id: '',
+        //   username: 'aa',
+        //   phone: 17772323777,
+        //   create_time: '2021-01-12 12:00:00',
+        //   status: '未激活',
+        //   operation: '',
+        // },
       ],
       filteredInfo: null,
       sortedInfo: null,
     }
   },
   mounted() {
+    this.refreshUserList()
     let { sortedInfo, filteredInfo } = this
     sortedInfo = sortedInfo || {}
     filteredInfo = filteredInfo || {}
   },
   methods: {
+    refreshUserList() {
+      this.data = []
+      const vm = this
+      getUsers()
+        .then((res) => {
+          if (res.data.code === Status.OK) {
+            const userList = res.data.data
+            // "username": "eric",
+            //   "phone": "18874940892",
+            //   "avatar": "http://192.168.2.213:5000/file/avatar/default.jpg",
+            //   "role": "user",
+            //   "create_time": "2022-11-02 05:52:31"
+            userList.forEach((user) => {
+              vm.data.push({
+                id: '',
+                username: user.username,
+                phone: user.phone,
+                create_time: user.create_time,
+                status: '正常',
+                operation: '',
+              })
+            })
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err)
+        })
+    },
     handleChange(pagination, filters, sorter) {
       this.filteredInfo = filters
       this.sortedInfo = sorter
@@ -177,13 +213,25 @@ export default Vue.extend({
       })
     },
     handleConfirmAddClicked() {
-      // TODO: API接入
-      this.$message.success('已成功创建用户：' + this.newUsername)
+      const obj = {
+        phone: this.newPhone,
+        username: this.newUsername,
+        password: this.newPassword,
+      }
+      const vm = this
+      createUser(obj).then((res) => {
+        if (res.data.code === Status.OK) {
+          this.$message.success('已成功创建用户：' + this.newUsername)
+          const newUser = res.data.data
+          vm.refreshUserList()
+        } else {
+          this.$message.error('创建用户失败！')
+        }
+      })
       this.addUserModalVisible = false
       this.newUsername = ''
       this.newPhone = ''
       this.newPassword = ''
-      // TODO:更新用户列表
     },
   },
 })
