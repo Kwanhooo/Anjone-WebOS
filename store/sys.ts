@@ -1,4 +1,5 @@
 import { storage } from '~/api/system'
+import { stopService } from '~/api/samb'
 import { Status } from '~/utils/magic-numbers'
 
 export const state = () => ({
@@ -14,6 +15,7 @@ export const state = () => ({
     free: 0,
     total: 0,
   },
+  isSambaConnected: false,
 })
 
 export const getters = {
@@ -65,6 +67,9 @@ export const mutations = {
   SET_DIALOG_Z_INDEX(state: any) {
     state.dialogZIndex = state.dialogZIndex + 1
   },
+  SET_IS_SAMBA_CONNECTED(state: any, value: boolean) {
+    state.isSambaConnected = value
+  },
 }
 
 export const actions = {
@@ -77,5 +82,13 @@ export const actions = {
       commit('SET_STORAGE', data.data.free, data.data.total)
     }
     return data
+  },
+  DestroySysResource({ commit, rootState }: any) {
+    // 关闭samba连接
+    if (rootState.sys.isSambaConnected) {
+      stopService().then((res: any) => {
+        commit('SET_IS_SAMBA_CONNECTED', false)
+      })
+    }
   },
 }

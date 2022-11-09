@@ -80,19 +80,25 @@ export default {
       closable !== null && closable.remove()
     },
     onExitClicked() {
-      this.clearUserState()
-      $nuxt.$router.push('/auth')
-      this.$message.success('您已安全退出！')
+      $nuxt.$store.dispatch('sys/DestroySysResource').then(() => {
+        this.clearUserState()
+        $nuxt.$router.push('/auth')
+        this.$message.success('您已安全退出！')
+      })
     },
     onShutdownConfirm() {
-      this.$message.warn('设备正在关闭！即将断开连接...')
-      this.clearUserState()
-      $nuxt.$router.push('/auth')
+      $nuxt.$store.dispatch('sys/DestroySysResource').then(() => {
+        this.clearUserState()
+        $nuxt.$router.push('/auth')
+        this.$message.warn('设备正在关闭！即将断开连接...')
+      })
     },
     onRebootConfirm() {
-      this.$message.warn('设备正在重启！即将断开连接...')
-      this.clearUserState()
-      $nuxt.$router.push('/auth')
+      $nuxt.$store.dispatch('sys/DestroySysResource').then(() => {
+        this.clearUserState()
+        $nuxt.$router.push('/auth')
+        this.$message.warn('设备正在重启！即将断开连接...')
+      })
     },
     clearUserState() {
       $nuxt.$store.dispatch('dock/ClearUserState')
@@ -104,6 +110,7 @@ export default {
 
 <style lang="less">
 #user-option-wrapper {
+  z-index: 999999;
   font-size: 14px;
   background: white;
   box-shadow: rgb(0 0 0 / 5%) 0px 9px 28px 8px, rgb(0 0 0 / 8%) 0px 6px 16px,

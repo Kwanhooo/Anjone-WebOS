@@ -21,6 +21,8 @@ export default {
 
 <style lang="less">
 #device-selector-wrapper {
+  z-index: 999999;
+
   .select-box-item {
     padding: 0.8em 3.1em;
   }

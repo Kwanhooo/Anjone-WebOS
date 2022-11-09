@@ -676,6 +676,7 @@ export default Vue.extend({
       const vm = this
       this.currentLoc = this.defaultTopParent
       startService().then((res) => {
+        $nuxt.$store.commit('sys/SET_IS_SAMBA_CONNECTED', true)
         vm.rootDir = res.data.data
       })
     },
