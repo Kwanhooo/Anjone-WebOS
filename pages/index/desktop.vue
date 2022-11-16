@@ -84,7 +84,7 @@ export default Vue.extend({
   },
   methods: {
     preLoadImages() {
-      new Image().src = require('@/static/device-image.png')
+      new Image().src = require('@/assets/image/device-image.png')
       new Image().src =
         this.$store.state.user.avatar ||
         JSON.parse(sessionStorage.getItem('USER_STATE')).avatar
@@ -99,7 +99,8 @@ export default Vue.extend({
 #desktop-wrapper {
   width: 100vw;
   height: 100vh;
-  background: url('static/background-desktop.jpg') no-repeat center center fixed;
+  background: url('assets/image/background-desktop.jpg') no-repeat center center
+    fixed;
   background-size: cover;
 
   overflow-x: hidden;

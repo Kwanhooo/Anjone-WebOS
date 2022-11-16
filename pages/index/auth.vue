@@ -28,7 +28,7 @@ export default Vue.extend({
 .wrapper {
   width: 100vw;
   height: 100vh;
-  background: url('static/background.png') no-repeat center center fixed;
+  background: url('assets/image/background.png') no-repeat center center fixed;
   background-size: cover;
 
   .content-wrapper {

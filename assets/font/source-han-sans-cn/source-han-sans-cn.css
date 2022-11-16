@@ -1,8 +1,78 @@
 /* source-han-sans-cn-normal */
+/*@font-face {*/
+/*  font-family: SourceHanSansCN;*/
+/*  font-style: normal;*/
+/*  font-weight: 400;*/
+/*  src: local('Source Han Sans CN Normal'), local('SourceHanSansCN-Normal'),*/
+/*  url(source-han-sans-cn-normal.woff2) format('woff2');*/
+/*}*/
+
 @font-face {
   font-family: SourceHanSansCN;
-  font-style: normal;
+  font-weight: 250;
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/fe6z93izEAxTP0hH8U_6z.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/N8Kk1G6AnBAVQPBOeHeQz.woff')
+      format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceHanSansCN;
+  font-weight: 300;
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/ix4JAGVPJ-y9bgRufG5pO.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/UoVNtwtLEnmjWPqL3jPw6.woff')
+      format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceHanSansCN;
+  font-weight: 350;
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/nKX2du1Rq_fDkExd27wxT.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/4Z9rssJJ6mxltpxGNNNjM.woff')
+      format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceHanSansCN;
   font-weight: 400;
-  src: local('Source Han Sans CN Normal'), local('SourceHanSansCN-Normal'),
-    url(source-han-sans-cn-normal.woff2) format('woff2');
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/NpLUUwUhO4nVIOP41KXeL.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/iURV2ag3hP-N1fEBHI545.woff')
+      format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceHanSansCN;
+  font-weight: 500;
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/oYYuvla15SSFJ1iw4-ciY.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/QQwcpKDtFHJExLfhSGsoA.woff')
+      format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceHanSansCN;
+  font-weight: 700;
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/zZiurNnGBeMs9-IwQG_vC.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/hLNnX6pfKHGBFwGHseUEU.woff')
+      format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SourceHanSansCN;
+  font-weight: 900;
+  src: url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/nIjpbGRr13yxtaqL5mUXG.woff2')
+      format('woff2'),
+    url('//at.alicdn.com/wf/webfont/ZglBQnoSXGCb/GzGbG3Pcr9NaWDRECMBHT.woff')
+      format('woff');
+  font-display: swap;
 }

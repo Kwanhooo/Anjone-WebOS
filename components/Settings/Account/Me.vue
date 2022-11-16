@@ -17,7 +17,10 @@
             accept="image/*"
             @change="handleUpload"
           >
-            <a-button> <a-icon type="upload" />更改头像</a-button>
+            <a-button>
+              <a-icon type="upload" />
+              更改头像
+            </a-button>
           </a-upload>
           <a-button
             v-show="fileList.length !== 0"
@@ -152,7 +155,7 @@ export default Vue.extend({
       isShowPassword: false,
       captchaTips: '获取验证码',
       timer: null,
-      countDown: 10,
+      countDown: 60,
     }
   },
   mounted() {
@@ -238,7 +241,7 @@ export default Vue.extend({
                   clearInterval(vm.timer)
                   vm.timer = null
                   vm.captchaTips = '重新获取'
-                  vm.countDown = 10
+                  vm.countDown = 60
                 }
               }, 1000)
             })
@@ -359,6 +362,7 @@ export default Vue.extend({
     .info-editor-value {
       cursor: not-allowed !important;
       margin-left: 2.5em;
+      width: 14em;
 
       &:not(input) {
         font-family: @GLOBAL_FONT_FAMILY;

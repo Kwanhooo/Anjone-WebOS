@@ -2,7 +2,7 @@
   <div id="device-info-wrapper">
     <div class="basic-info-wrapper">
       <div class="device-image">
-        <img alt="device-image" src="@/static/device-image.png" />
+        <img alt="device-image" src="@/assets/image/device-image.png" />
       </div>
       <div class="info-column-wrapper">
         <div class="info-item">
