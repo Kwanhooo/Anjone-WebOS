@@ -2,6 +2,7 @@ FROM nginx
 
 MAINTAINER Anjone co.ltd
 
+
 RUN rm /etc/nginx/conf.d/default.conf
 
 RUN mkdir "/usr/share/nginx/log/"

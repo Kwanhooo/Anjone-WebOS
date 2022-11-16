@@ -79,7 +79,13 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    extend (config, ctx) {
+      if (ctx && ctx.isClient) {
+        config.optimization.splitChunks.maxSize = 51200
+      }
+    }
+  },
 
   // 局域网访问
   server: {
