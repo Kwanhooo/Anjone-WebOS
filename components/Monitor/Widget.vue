@@ -573,6 +573,8 @@ export default {
   .main {
     height: calc(100% - 2.5em);
     width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     #monitor-overview-wrapper {
       height: 130px;
@@ -592,7 +594,6 @@ export default {
 
       .info-wrapper {
         flex: 5;
-        //background-color: yellow;
         color: @TITLE_FONT_COLOR_LIGHT;
         padding-left: 0.6em;
 
@@ -625,7 +626,8 @@ export default {
 
       #cpu-usage-wrapper {
         width: 28em;
-        height: calc((100vh - 300px - 6em) / 3);
+        height: calc((100vh - 300px - 7em) / 3);
+        min-height: 10rem;
         margin-left: auto;
         margin-right: auto;
         position: relative;

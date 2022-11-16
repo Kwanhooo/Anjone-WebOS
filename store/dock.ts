@@ -27,19 +27,19 @@ export const state = () => ({
     },
   ],
   extraRegistry: [
-    {
-      icon: require('@/assets/image/help.png'),
-      name: '使用帮助',
-      component: require('@/components/Settings/Dialog.vue'),
-      meta: {
-        activeIndex: 5,
-        categoryShow: {
-          0: false,
-          1: false,
-          2: true,
-        },
-      },
-    },
+    // {
+    //   icon: require('@/assets/image/help.png'),
+    //   name: '使用帮助',
+    //   component: require('@/components/Settings/Dialog.vue'),
+    //   meta: {
+    //     activeIndex: 5,
+    //     categoryShow: {
+    //       0: false,
+    //       1: false,
+    //       2: true,
+    //     },
+    //   },
+    // },
   ],
   pending: [],
   pendingBeforeGotoDesktop: [],

@@ -30,6 +30,14 @@ export default Vue.extend({
       sessionStorage.setItem(tempStoreKey, JSON.stringify(this.$store.state))
     })
   },
+  mounted() {
+    this.$nextTick(() => {
+      // 禁用右键
+      document.oncontextmenu = (ev) => {
+        return false
+      }
+    })
+  },
 })
 </script>
 

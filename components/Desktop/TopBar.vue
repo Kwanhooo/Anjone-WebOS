@@ -13,7 +13,7 @@
       <span class="env-key">PM2.5：</span><span class="env-value">10</span>
       <span class="env-key">VOC：</span><span class="env-value">10</span>
       <span class="env-key">甲醛：</span><span class="env-value">0.1</span>
-      <span class="env-key">CO2：</span><span class="env-value">低</span>
+      <span class="env-key">CO2：</span><span class="env-value">20</span>
       <img
         alt="separator"
         src="@/assets/svg/separator.svg"

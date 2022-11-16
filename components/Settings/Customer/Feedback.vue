@@ -73,6 +73,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   padding: 2em;
+  overflow: auto;
 
   .row {
     height: 100px;

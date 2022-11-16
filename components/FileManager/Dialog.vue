@@ -80,31 +80,45 @@
             <div class="main">
               <div class="row">
                 <div class="key"><span>名称</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.filename }}</span>
+                </div>
               </div>
               <div class="row">
-                <div class="key"><span>修改日期</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="key"><span>创建时间</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.create_time }}</span>
+                </div>
               </div>
               <div class="row">
                 <div class="key"><span>最近访问</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.last_access_time }}</span>
+                </div>
               </div>
               <div class="row">
                 <div class="key"><span>最近写入</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.last_write_time }}</span>
+                </div>
               </div>
               <div class="row">
                 <div class="key"><span>大小</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.file_size }}</span>
+                </div>
               </div>
               <div class="row">
                 <div class="key"><span>类型</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.is_dir ? '文件夹' : '文件' }}</span>
+                </div>
               </div>
               <div class="row">
                 <div class="key"><span>只读</span></div>
-                <div class="val"><span>{{}}</span></div>
+                <div class="val">
+                  <span>{{ fileInfoToShow.read_only ? '是' : '否' }}</span>
+                </div>
               </div>
               <div class="row">
                 <button
@@ -277,7 +291,7 @@
               v-show="showDropDown"
               :class="{
                 'select-box-wrapper': true,
-                'select-box-transform': fileList.length !== 0,
+                // 'select-box-transform': fileList.length !== 0,
               }"
               @blur="showDropDown = false"
             >
@@ -299,7 +313,7 @@
                   accept="*/*"
                   :multiple="true"
                   :show-upload-list="false"
-                  @change="showDropDown = false"
+                  @change="handleUpload()"
                 >
                   <a-button class="upload-select-btn">上传文件</a-button>
                 </a-upload>
@@ -313,24 +327,24 @@
               <div class="select-box-item" @click="handleOpenRenameModal()">
                 <span>重命名</span>
               </div>
-              <div class="select-box-item">
-                <span>文件分享</span>
-              </div>
+              <!--              <div class="select-box-item">-->
+              <!--                <span>文件分享</span>-->
+              <!--              </div>-->
               <div class="select-box-item">
                 <span>下载到本地</span>
               </div>
-              <div class="select-box-item">
-                <span>取消分享</span>
-              </div>
+              <!--              <div class="select-box-item">-->
+              <!--                <span>取消分享</span>-->
+              <!--              </div>-->
             </div>
-            <a-button
-              v-if="fileList.length !== 0"
-              style="margin-top: 6px; margin-right: 8px"
-              @click="handleUpload()"
-            >
-              <span>确认上传</span>
-            </a-button>
-            <div class="tool-group">
+            <!--            <a-button-->
+            <!--              v-if="fileList.length !== 0"-->
+            <!--              style="margin-top: 6px; margin-right: 8px"-->
+            <!--              @click="handleUpload()"-->
+            <!--            >-->
+            <!--              <span>确认上传</span>-->
+            <!--            </a-button>-->
+            <div class="tool-group-right">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="styles__StyledSVGIconPathComponent-sc-16fsqc8-0 gtbmXY svg-icon-path-icon fill"
@@ -468,7 +482,15 @@ export default Vue.extend({
   data() {
     return {
       fileInfoModalVisible: false,
-      fileInfoToShow: {},
+      fileInfoToShow: {
+        filename: '',
+        file_size: 0,
+        read_only: false,
+        is_dir: false,
+        create_time: '',
+        last_access_time: '',
+        last_write_time: '',
+      },
       isShowRenameModal: false,
       isShowCreateDirModal: false,
       newDirName: '',
@@ -578,21 +600,31 @@ export default Vue.extend({
       createDir(param).then((res) => {
         if (res.data.code === Status.OK) {
           vm.displayData = res.data.data
+          vm.$message.success('文件夹 ' + this.newDirName + ' 已创建')
         } else {
           this.$message.error('创建错误')
         }
       })
     },
     showFileInfo() {
+      this.showDropDown = false
+      const vm = this
       if (
         this.selectedRowKeys === undefined ||
         this.selectedRowKeys.length === 0
-      )
+      ) {
+        this.$message.error('请选择文件后再查看信息')
         return
+      }
       const filename = this.displayData.at(this.selectedRowKeys[0]).filename
-      fileInfo(filename).then((res) => {
-        // console.log(res.data.data)
-      })
+      fileInfo(filename)
+        .then((res) => {
+          vm.fileInfoToShow = res.data.data
+          vm.fileInfoModalVisible = true
+        })
+        .catch((err) => {
+          vm.$message.error(err)
+        })
     },
     deleteFiles() {
       this.showDropDown = false
@@ -643,11 +675,14 @@ export default Vue.extend({
       return false
     },
     handleUpload() {
+      this.showDropDown = false
       const vm = this
       const { fileList } = this
       const fileFormData = new FormData()
+      let filename
       fileList.forEach((file) => {
         fileFormData.append('file', file)
+        filename = file.name
       })
       this.uploading = true
       uploadFile(fileFormData)
@@ -655,16 +690,18 @@ export default Vue.extend({
           if (res.data.code === Status.OK) {
             vm.fileList = []
             vm.uploading = false
-            this.$message.success('文件上传成功！')
+            this.$message.success('文件 ' + filename + ' 上传成功！')
             vm.displayData = res.data.data
           } else {
             this.uploading = false
-            this.$message.error('文件上传失败！')
+            this.$message.error('文件 ' + filename + ' 上传失败S！')
           }
         })
         .catch(() => {
           this.uploading = false
-          this.$message.error('文件上传失败，请检查网络后再试！')
+          this.$message.error(
+            '文件 ' + filename + ' 上传失败，请检查网络后再试！'
+          )
         })
     },
     handleDestroyResource() {
@@ -678,6 +715,15 @@ export default Vue.extend({
       startService().then((res) => {
         $nuxt.$store.commit('sys/SET_IS_SAMBA_CONNECTED', true)
         vm.rootDir = res.data.data
+        refresh()
+          .then((res) => {
+            if (res.data.code === Status.OK) {
+              this.displayData = res.data.data
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err)
+          })
       })
     },
     stopSMB() {
@@ -911,8 +957,9 @@ export default Vue.extend({
     }
 
     .tool-group {
-      flex: 6;
+      //flex: 6;
       padding-top: 0.7em;
+      min-width: calc(1.4em * 5);
 
       svg {
         width: 1.4em !important;
@@ -932,6 +979,12 @@ export default Vue.extend({
       }
     }
 
+    .tool-group-right {
+      .tool-group;
+      min-width: calc(1.6em * 2) !important;
+      max-width: calc(1.6em * 2) !important;
+    }
+
     .breadcrumb {
       background-color: #ffffff;
       flex: 12;
@@ -941,10 +994,18 @@ export default Vue.extend({
       margin-top: 0.4em;
       padding-left: 0.5em;
       padding-top: 0.18em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      span {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     .renew {
-      flex: 0.8;
+      min-width: 1.4em;
       padding-top: 0.8em;
       margin-left: 0.7em;
 
@@ -963,7 +1024,7 @@ export default Vue.extend({
     }
 
     .search-wrapper {
-      flex: 10;
+      flex: 8;
       margin: 0.4em 0.8em;
     }
 
@@ -1000,7 +1061,7 @@ export default Vue.extend({
   .select-box-wrapper {
     position: absolute;
     top: 40px;
-    right: 8.9%;
+    right: 5.5em;
     z-index: 9999;
     width: 105px;
 
@@ -1020,9 +1081,9 @@ export default Vue.extend({
     }
   }
 
-  .select-box-transform {
-    transform: translate(-6.1em, 0);
-  }
+  //.select-box-transform {
+  //  transform: translate(-6.1em, 0);
+  //}
 }
 
 .upload-select-btn {

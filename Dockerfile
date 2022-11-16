@@ -18,4 +18,9 @@ COPY dist/ /usr/share/nginx/html/
 # --name anjone-frontend \
 # -d anjone-frontend
 
+#docker run -p 3000:80 \
+#-v /home/firefly/project/anjone-frontend/:/usr/share/nginx/log/ \
+#--name anjone-frontend \
+#-d anjone-frontend
+
 ######################################

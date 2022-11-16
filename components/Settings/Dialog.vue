@@ -183,16 +183,16 @@
           >
             <span>问题反馈</span>
           </div>
-          <div
-            :class="{
-              'item-child': true,
-              item: true,
-              'active-item-child': activeIndex === 6,
-            }"
-            @click="setActive(6)"
-          >
-            <span>帮助文档</span>
-          </div>
+          <!--          <div-->
+          <!--            :class="{-->
+          <!--              'item-child': true,-->
+          <!--              item: true,-->
+          <!--              'active-item-child': activeIndex === 6,-->
+          <!--            }"-->
+          <!--            @click="setActive(6)"-->
+          <!--          >-->
+          <!--            <span>帮助文档</span>-->
+          <!--          </div>-->
         </div>
       </div>
     </template>

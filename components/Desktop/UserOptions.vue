@@ -58,8 +58,8 @@ export default {
       $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
         const pendingObj = {
           uid: res,
-          icon: require('@/assets/image/file-manager.png'),
-          name: '我的文件',
+          icon: require('@/assets/image/settings.png'),
+          name: '系统设置',
           isActive: true,
         }
         // extend一个要打开的组件

@@ -8,26 +8,28 @@
             <img alt="close" src="@/assets/svg/close.svg" />
           </div>
         </div>
-        <div class="main">
-          <div class="row">
-            <div class="key"><span>账户昵称</span></div>
-            <div class="val"><input v-model="newUsername" type="text" /></div>
-          </div>
-          <div class="row">
-            <div class="key"><span>注册手机</span></div>
-            <div class="val"><input v-model="newPhone" type="text" /></div>
-          </div>
-          <div class="row">
-            <div class="key"><span>初始密码</span></div>
-            <div class="val"><input v-model="newPassword" type="text" /></div>
-          </div>
-          <div class="row">
-            <button class="copy-info-btn" @click="handleCopyClicked()">
-              复制信息
-            </button>
-            <button class="confirm-btn" @click="handleConfirmAddClicked()">
-              确认添加
-            </button>
+        <div class="main-wrapper">
+          <div class="main">
+            <div class="row">
+              <div class="key"><span>账户昵称</span></div>
+              <div class="val"><input v-model="newUsername" type="text" /></div>
+            </div>
+            <div class="row">
+              <div class="key"><span>注册手机</span></div>
+              <div class="val"><input v-model="newPhone" type="text" /></div>
+            </div>
+            <div class="row">
+              <div class="key"><span>初始密码</span></div>
+              <div class="val"><input v-model="newPassword" type="text" /></div>
+            </div>
+            <div class="row">
+              <button class="copy-info-btn" @click="handleCopyClicked()">
+                复制信息
+              </button>
+              <button class="confirm-btn" @click="handleConfirmAddClicked()">
+                确认添加
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -263,6 +265,7 @@ export default Vue.extend({
       flex-direction: column;
 
       .title {
+        //min-width: 360px;
         min-height: 3em;
         max-height: 3em;
         background-color: #ebebeb;
@@ -277,6 +280,7 @@ export default Vue.extend({
       }
 
       .modal-close-btn {
+        //min-width: 360px;
         width: 1.5em;
         height: 1.5em;
         display: inline-flex;
@@ -292,74 +296,79 @@ export default Vue.extend({
         }
       }
 
-      .main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;
+      .main-wrapper {
+        overflow: auto;
 
-        .row {
+        .main {
+          min-width: 360px;
+          flex: 1;
           display: flex;
-          flex-direction: row;
-          margin-top: 1.5em;
+          flex-direction: column;
+          align-content: center;
+          align-items: center;
 
-          .key {
-            margin-right: 3em;
-            padding: 0.2em 0;
-          }
+          .row {
+            display: flex;
+            flex-direction: row;
+            margin-top: 1.5em;
 
-          .val {
-            input {
-              outline: none;
-              border: 1px solid #bbbbbb;
+            .key {
+              margin-right: 3em;
+              padding: 0.2em 0;
+            }
+
+            .val {
+              input {
+                outline: none;
+                border: 1px solid #bbbbbb;
+                border-radius: 8px;
+                padding: 0.2em 0.5em;
+              }
+            }
+
+            .copy-info-btn {
+              background: white;
+              margin: 0.5em;
+              padding: 0.5em 1.2em;
+              border: 2px solid #3380f3;
+              color: #3380f3;
               border-radius: 8px;
-              padding: 0.2em 0.5em;
+              transition: all ease-in-out 0.15s;
+              cursor: pointer;
+              pointer-events: auto;
+              font-family: @GLOBAL_FONT_FAMILY;
+              outline: none;
+              font-weight: 500;
+              font-size: 0.8rem;
+
+              &:hover {
+                background: #4f98fd !important;
+                color: white;
+              }
+
+              &:first-child {
+                margin-right: 7em;
+              }
             }
-          }
 
-          .copy-info-btn {
-            background: white;
-            margin: 0.5em;
-            padding: 0.5em 1.2em;
-            border: 2px solid #3380f3;
-            color: #3380f3;
-            border-radius: 8px;
-            transition: all ease-in-out 0.15s;
-            cursor: pointer;
-            pointer-events: auto;
-            font-family: @GLOBAL_FONT_FAMILY;
-            outline: none;
-            font-weight: 500;
-            font-size: 0.8rem;
-
-            &:hover {
-              background: #4f98fd !important;
+            .confirm-btn {
+              background: @STRONG_THEME_COLOR_LIGHT;
+              margin: 0.5em;
+              padding: 0.5em 1.2em;
+              border: none;
               color: white;
-            }
+              border-radius: 8px;
+              transition: all ease-in-out 0.15s;
+              cursor: pointer;
+              pointer-events: auto;
+              font-family: @GLOBAL_FONT_FAMILY;
+              outline: none;
+              font-weight: 500;
+              font-size: 0.8rem;
 
-            &:first-child {
-              margin-right: 7em;
-            }
-          }
-
-          .confirm-btn {
-            background: @STRONG_THEME_COLOR_LIGHT;
-            margin: 0.5em;
-            padding: 0.5em 1.2em;
-            border: none;
-            color: white;
-            border-radius: 8px;
-            transition: all ease-in-out 0.15s;
-            cursor: pointer;
-            pointer-events: auto;
-            font-family: @GLOBAL_FONT_FAMILY;
-            outline: none;
-            font-weight: 500;
-            font-size: 0.8rem;
-
-            &:hover {
-              background: #4f98fd !important;
+              &:hover {
+                background: #4f98fd !important;
+              }
             }
           }
         }
