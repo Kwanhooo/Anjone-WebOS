@@ -6,16 +6,20 @@ export const state = () => ({
       icon: require('@/assets/image/file-manager.png'),
       name: '我的文件',
       component: require('@/components/FileManager/Dialog.vue'),
+      singleton: true,
     },
     {
       icon: require('@/assets/image/settings.png'),
       name: '系统设置',
       component: require('@/components/Settings/Dialog.vue'),
+      singleton: false,
     },
     {
       icon: require('@/assets/image/help.png'),
       name: '使用帮助',
-      component: require('@/components/Settings/Dialog.vue'),
+      // component: require('@/components/Settings/Dialog.vue'),
+      component: null,
+      singleton: false,
       meta: {
         activeIndex: 5,
         categoryShow: {

@@ -155,8 +155,24 @@ export default {
       }
     },
     onInstanceClicked(instance) {
+      if (instance.component === null) return
+      let existInstance = null
+      // 遍历pending，如果有相同的，就激活它
+      if (instance.singleton) {
+        $nuxt.$store.state.dock.pending.forEach((app) => {
+          if (app.name === instance.name) {
+            existInstance = app
+          }
+        })
+      }
       // 关闭开始菜单
       this.onStartClicked()
+      if (existInstance !== null) {
+        if (!existInstance.isActive) {
+          $nuxt.$store.commit('dock/TOGGLE_MINIMIZE', existInstance.uid)
+        }
+        return
+      }
       // 生成uid
       this.$store.dispatch('dock/GetNewUid').then((res) => {
         const pendingObj = {
@@ -264,7 +280,7 @@ export default {
         bottom: calc(50px + 7.5em);
         left: -88px;
         margin: auto;
-        rotate: 270deg;
+        transform: rotate(270deg);
         /* width: 400px; */
         font-size: 18px;
         letter-spacing: 2px;

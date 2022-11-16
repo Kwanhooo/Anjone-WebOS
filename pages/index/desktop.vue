@@ -35,6 +35,22 @@ export default Vue.extend({
       }
     })
     window.addEventListener('click', (evt) => {
+      if (this.$store.state.sys.showDropDown) {
+        const path = evt.path
+        let hasSelf = false
+        path.forEach((item) => {
+          if (
+            item.id === '__fileDropdown__' ||
+            item.id === '__fileDropdownBtn__'
+          ) {
+            hasSelf = true
+          }
+        })
+        if (!hasSelf) {
+          this.$store.commit('sys/SET_SHOW_DROP_DOWN', false)
+        }
+      }
+
       if (
         document.querySelector('.__closable__') === null &&
         document.getElementById('start-wrapper') === null

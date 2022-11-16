@@ -77,56 +77,58 @@
                 <img alt="close" src="@/assets/svg/close.svg" />
               </div>
             </div>
-            <div class="main">
-              <div class="row">
-                <div class="key"><span>名称</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.filename }}</span>
+            <div class="main-wrapper">
+              <div class="main">
+                <div class="row">
+                  <div class="key"><span>名称</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.filename }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="key"><span>创建时间</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.create_time }}</span>
+                <div class="row">
+                  <div class="key"><span>创建时间</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.create_time }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="key"><span>最近访问</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.last_access_time }}</span>
+                <div class="row">
+                  <div class="key"><span>最近访问</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.last_access_time }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="key"><span>最近写入</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.last_write_time }}</span>
+                <div class="row">
+                  <div class="key"><span>最近写入</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.last_write_time }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="key"><span>大小</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.file_size }}</span>
+                <div class="row">
+                  <div class="key"><span>大小</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.file_size }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="key"><span>类型</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.is_dir ? '文件夹' : '文件' }}</span>
+                <div class="row">
+                  <div class="key"><span>类型</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.is_dir ? '文件夹' : '文件' }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="key"><span>只读</span></div>
-                <div class="val">
-                  <span>{{ fileInfoToShow.read_only ? '是' : '否' }}</span>
+                <div class="row">
+                  <div class="key"><span>只读</span></div>
+                  <div class="val">
+                    <span>{{ fileInfoToShow.read_only ? '是' : '否' }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <button
-                  class="confirm-btn"
-                  @click="fileInfoModalVisible = false"
-                >
-                  好
-                </button>
+                <div class="row">
+                  <button
+                    class="confirm-btn"
+                    @click="fileInfoModalVisible = false"
+                  >
+                    好
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -237,6 +239,7 @@
             </div>
             <div>
               <a-button
+                id="__fileDropdownBtn__"
                 style="margin-top: 6px; margin-right: 8px"
                 @click="toggleShowMoreOp()"
               >
@@ -288,23 +291,28 @@
               />
             </a-modal>
             <div
-              v-show="showDropDown"
+              v-show="$nuxt.$store.state.sys.showDropDown"
+              id="__fileDropdown__"
               :class="{
                 'select-box-wrapper': true,
                 // 'select-box-transform': fileList.length !== 0,
               }"
-              @blur="showDropDown = false"
+              @blur="setShowDropDown(false)"
             >
               <div
                 class="select-box-item"
                 @click="
                   isShowCreateDirModal = true
-                  showDropDown = false
+                  setShowDropDown(false)
                 "
               >
                 <span>新建文件夹</span>
               </div>
-              <div class="select-box-item" style="padding: 0.5em 0">
+              <div
+                v-if="isAllowUpload"
+                class="select-box-item"
+                style="padding: 0.5em 0"
+              >
                 <a-upload
                   :file-list="fileList"
                   :remove="handleRemove"
@@ -315,8 +323,27 @@
                   :show-upload-list="false"
                   @change="handleUpload()"
                 >
-                  <a-button class="upload-select-btn">上传文件</a-button>
+                  <button
+                    class="upload-select-btn"
+                    @click="
+                      $nuxt.$store.commit('sys/SET_IS_UPLOAD_TIPS_SHOW', true)
+                    "
+                  >
+                    上传文件
+                  </button>
                 </a-upload>
+              </div>
+              <div
+                v-if="!isAllowUpload"
+                class="select-box-item"
+                style="padding: 0.5em 0"
+              >
+                <button
+                  class="not-allow-upload-select-btn"
+                  @click.prevent="handleNotAllowUpload"
+                >
+                  上传文件
+                </button>
               </div>
               <div class="select-box-item" @click="deleteFiles()">
                 <span>删除文件</span>
@@ -330,7 +357,7 @@
               <!--              <div class="select-box-item">-->
               <!--                <span>文件分享</span>-->
               <!--              </div>-->
-              <div class="select-box-item">
+              <div class="select-box-item" @click="handleFileDownload()">
                 <span>下载到本地</span>
               </div>
               <!--              <div class="select-box-item">-->
@@ -375,6 +402,7 @@
           </div>
           <div class="body">
             <a-table
+              style="padding-bottom: 4em"
               :row-selection="{
                 selectedRowKeys: selectedRowKeys,
                 onChange: onSelectChange,
@@ -401,6 +429,7 @@
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import {
   back,
   checkFile,
@@ -481,6 +510,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isAllowUpload: false,
       fileInfoModalVisible: false,
       fileInfoToShow: {
         filename: '',
@@ -494,7 +524,6 @@ export default Vue.extend({
       isShowRenameModal: false,
       isShowCreateDirModal: false,
       newDirName: '',
-      showDropDown: false,
       fileList: [],
       imgData:
         'https://i.picsum.photos/id/132/300/200.jpg?hmac=2N8jz1dK3-iM_g-_Bl-cJdFysVCuyHtyJ7H0TmAxGVk',
@@ -521,14 +550,51 @@ export default Vue.extend({
       return this.selectedRowKeys.length > 0
     },
   },
+  watch: {
+    breadcrumb(val) {
+      this.isAllowUpload = val.at(val.length - 1) !== '我的文件'
+    },
+  },
   created() {
     this.startSMB()
   },
   methods: {
+    handleNotAllowUpload() {
+      this.$message.error('不能在根目录上传文件')
+    },
+    setShowDropDown(value) {
+      $nuxt.$store.commit('sys/SET_SHOW_DROP_DOWN', value)
+    },
+    handleFileDownload() {
+      this.handleOneFileDownload(0)
+    },
+    handleOneFileDownload(item) {
+      const vm = this
+      const filename = this.displayData[item].filename
+      checkFile(filename).then((res) => {
+        const type = res.data.data
+        const link =
+          xhrHost +
+          sysAPI.Enter +
+          '/' +
+          `${filename}` +
+          '?type=' +
+          type +
+          '&token=' +
+          sessionStorage.getItem('TOKEN')
+        const a = document.createElement('a')
+        a.href = link
+        a.download = filename
+        a.click()
+        setTimeout(() => {
+          vm.handleOneFileDownload(item + 1)
+        }, 1000)
+      })
+    },
     handleOpenRenameModal() {
       this.newDirName = this.displayData.at(this.selectedRowKeys[0]).filename
       this.isShowRenameModal = true
-      this.showDropDown = false
+      this.setShowDropDown(false)
     },
     isBackwardEnable() {
       return this.breadcrumb.length >= 2
@@ -607,7 +673,7 @@ export default Vue.extend({
       })
     },
     showFileInfo() {
-      this.showDropDown = false
+      this.setShowDropDown(false)
       const vm = this
       if (
         this.selectedRowKeys === undefined ||
@@ -627,7 +693,7 @@ export default Vue.extend({
         })
     },
     deleteFiles() {
-      this.showDropDown = false
+      this.setShowDropDown(false)
       const vm = this
       if (this.hasSelected) {
         this.$confirm({
@@ -662,7 +728,10 @@ export default Vue.extend({
       }
     },
     toggleShowMoreOp() {
-      this.showDropDown = !this.showDropDown
+      const isShowNow = $nuxt.$store.state.sys.showDropDown
+      // console.log('isShowNow', isShowNow)
+      this.setShowDropDown(!isShowNow)
+      // this.showDropDown = !this.showDropDown
     },
     handleRemove(file) {
       const index = this.fileList.indexOf(file)
@@ -671,11 +740,15 @@ export default Vue.extend({
       this.fileList = newFileList
     },
     beforeUpload(file) {
+      if ($nuxt.$store.state.sys.isUploadTipsShow) {
+        this.$message.info('文件上传中，请勿关闭页面')
+        $nuxt.$store.commit('sys/SET_IS_UPLOAD_TIPS_SHOW', false)
+      }
       this.fileList = [...this.fileList, file]
       return false
     },
     handleUpload() {
-      this.showDropDown = false
+      this.setShowDropDown(false)
       const vm = this
       const { fileList } = this
       const fileFormData = new FormData()
@@ -694,7 +767,7 @@ export default Vue.extend({
             vm.displayData = res.data.data
           } else {
             this.uploading = false
-            this.$message.error('文件 ' + filename + ' 上传失败S！')
+            this.$message.error('文件 ' + filename + ' 上传失败！')
           }
         })
         .catch(() => {
@@ -787,8 +860,8 @@ export default Vue.extend({
           } else if (type === 'audio') {
             this.previewAudio(fileLink, filename)
           } else if (type === 'other') {
-            this.previewText(fileLink, filename)
-            this.$copyText(fileLink)
+            // this.previewText(fileLink, filename)
+            // this.$copyText(fileLink)
             this.$message.error('未知文件类型，文件链接已复制，请下载后浏览！')
           }
         } else {
@@ -1006,7 +1079,7 @@ export default Vue.extend({
 
     .renew {
       min-width: 1.4em;
-      padding-top: 0.8em;
+      padding-top: 0.7em;
       margin-left: 0.7em;
 
       svg {
@@ -1087,11 +1160,20 @@ export default Vue.extend({
 }
 
 .upload-select-btn {
-  color: #595959;
+  color: #000000a6;
+  padding-left: 14px;
   background: transparent;
   border: none;
   box-shadow: none;
   height: auto;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.not-allow-upload-select-btn {
+  .upload-select-btn;
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
 }
 
 .mask {
@@ -1103,7 +1185,7 @@ export default Vue.extend({
 
   .file-info-modal {
     width: 50%;
-    height: 60%;
+    height: 65%;
     position: absolute;
     top: 15%;
     left: 25%;
@@ -1143,74 +1225,85 @@ export default Vue.extend({
       }
     }
 
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-content: center;
-      align-items: center;
+    .main-wrapper {
+      overflow: auto;
 
-      .row {
+      .main {
+        min-width: 360px;
+        flex: 1;
         display: flex;
-        flex-direction: row;
-        margin-top: 0.5em;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
 
-        .key {
-          margin-right: 3em;
-          padding: 0.2em 0;
-        }
+        .row {
+          //display: flex;
+          //flex-direction: row;
+          margin-top: 2em;
 
-        .val {
-          input {
-            outline: none;
-            border: 1px solid #bbbbbb;
+          .key {
+            font-weight: bold;
+            position: absolute;
+            left: 3em;
+            //margin-right: 3em;
+            padding: 0.2em 0;
+          }
+
+          .val {
+            position: absolute;
+            right: 3em;
+
+            input {
+              outline: none;
+              border: 1px solid #bbbbbb;
+              border-radius: 8px;
+              padding: 0.2em 0.5em;
+            }
+          }
+
+          .copy-info-btn {
+            background: white;
+            margin: 0.5em;
+            padding: 0.5em 1.2em;
+            border: 2px solid #3380f3;
+            color: #3380f3;
             border-radius: 8px;
-            padding: 0.2em 0.5em;
+            transition: all ease-in-out 0.15s;
+            cursor: pointer;
+            pointer-events: auto;
+            font-family: @GLOBAL_FONT_FAMILY;
+            outline: none;
+            font-weight: 500;
+            font-size: 0.8rem;
+
+            &:hover {
+              background: #4f98fd !important;
+              color: white;
+            }
+
+            &:first-child {
+              margin-right: 7em;
+            }
           }
-        }
 
-        .copy-info-btn {
-          background: white;
-          margin: 0.5em;
-          padding: 0.5em 1.2em;
-          border: 2px solid #3380f3;
-          color: #3380f3;
-          border-radius: 8px;
-          transition: all ease-in-out 0.15s;
-          cursor: pointer;
-          pointer-events: auto;
-          font-family: @GLOBAL_FONT_FAMILY;
-          outline: none;
-          font-weight: 500;
-          font-size: 0.8rem;
-
-          &:hover {
-            background: #4f98fd !important;
+          .confirm-btn {
+            background: @STRONG_THEME_COLOR_LIGHT;
+            margin: 0.5em;
+            padding: 0.5em 1.2em;
+            border: none;
             color: white;
-          }
+            border-radius: 8px;
+            transition: all ease-in-out 0.15s;
+            cursor: pointer;
+            pointer-events: auto;
+            font-family: @GLOBAL_FONT_FAMILY;
+            outline: none;
+            font-weight: 500;
+            font-size: 0.8rem;
 
-          &:first-child {
-            margin-right: 7em;
-          }
-        }
-
-        .confirm-btn {
-          background: @STRONG_THEME_COLOR_LIGHT;
-          margin: 0.5em;
-          padding: 0.5em 1.2em;
-          border: none;
-          color: white;
-          border-radius: 8px;
-          transition: all ease-in-out 0.15s;
-          cursor: pointer;
-          pointer-events: auto;
-          font-family: @GLOBAL_FONT_FAMILY;
-          outline: none;
-          font-weight: 500;
-          font-size: 0.8rem;
-
-          &:hover {
-            background: #4f98fd !important;
+            &:hover {
+              background: #4f98fd !important;
+            }
           }
         }
       }

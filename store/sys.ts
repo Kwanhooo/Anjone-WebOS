@@ -16,6 +16,8 @@ export const state = () => ({
     total: 0,
   },
   isSambaConnected: false,
+  showDropDown: false,
+  isUploadTipsShow: false,
 })
 
 export const getters = {
@@ -69,6 +71,13 @@ export const mutations = {
   },
   SET_IS_SAMBA_CONNECTED(state: any, value: boolean) {
     state.isSambaConnected = value
+  },
+  SET_SHOW_DROP_DOWN(state: any, value: boolean) {
+    // console.log("vuex => " + value)
+    state.showDropDown = value
+  },
+  SET_IS_UPLOAD_TIPS_SHOW(state: any, value: boolean) {
+    state.isUploadTipsShow = value
   },
 }
 
