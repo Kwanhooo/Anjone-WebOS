@@ -1,12 +1,12 @@
 <template>
   <div>
-    <VDPhoto
-      v-if="imgData !== ''"
-      ref="VDPhoto"
-      :img-data="imgData"
-      :title="title"
-      @publish="publish"
-    />
+    <!--    <VDPhoto-->
+    <!--      v-if="imgData !== ''"-->
+    <!--      ref="VDPhoto"-->
+    <!--      :img-data="imgData"-->
+    <!--      :title="title"-->
+    <!--      @publish="publish"-->
+    <!--    />-->
     <DialogBody
       :uid="uid"
       class="dialog-file-manager"
@@ -459,26 +459,43 @@ const columns = [
     dataIndex: 'filename',
     scopedSlots: { customRender: 'filename' },
     ellipsis: true,
+    sorter: (a, b) => a.filename.localeCompare(b.filename),
   },
   {
-    title: '修改日期',
+    title: '创建日期',
     dataIndex: 'create_time',
     ellipsis: false,
+    sorter: (a, b) => {
+      const aTime = new Date(a.create_time).getTime()
+      const bTime = new Date(b.create_time).getTime()
+      return aTime - bTime
+    },
   },
   {
     title: '最近访问',
     dataIndex: 'last_access_time',
     ellipsis: false,
+    sorter: (a, b) => {
+      const aTime = new Date(a.create_time).getTime()
+      const bTime = new Date(b.create_time).getTime()
+      return aTime - bTime
+    },
   },
   {
     title: '最近写入',
     dataIndex: 'last_write_time',
     ellipsis: false,
+    sorter: (a, b) => {
+      const aTime = new Date(a.create_time).getTime()
+      const bTime = new Date(b.create_time).getTime()
+      return aTime - bTime
+    },
   },
   {
     title: '大小',
     dataIndex: 'file_size',
     ellipsis: true,
+    sorter: (a, b) => a.file_size - b.file_size,
   },
   {
     title: '类型',
@@ -487,7 +504,21 @@ const columns = [
       return text === true ? '文件夹' : '文件'
     },
     ellipsis: true,
-    width: '80px',
+    width: '100px',
+    filters: [
+      {
+        text: '文件夹',
+        value: true,
+      },
+      {
+        text: '文件',
+        value: false,
+      },
+    ],
+    onFilter: (value, record) => {
+      return record.is_dir === value
+    },
+    sorter: (a, b) => a.is_dir,
   },
   {
     title: '只读',
@@ -496,7 +527,21 @@ const columns = [
       return text === true ? '是' : '否'
     },
     ellipsis: true,
-    width: '60px',
+    width: '100px',
+    sorter: (a, b) => a.read_only,
+    filters: [
+      {
+        text: '是',
+        value: true,
+      },
+      {
+        text: '否',
+        value: false,
+      },
+    ],
+    onFilter: (value, record) => {
+      return record.read_only === value
+    },
   },
 ]
 
@@ -525,8 +570,7 @@ export default Vue.extend({
       isShowCreateDirModal: false,
       newDirName: '',
       fileList: [],
-      imgData:
-        'https://i.picsum.photos/id/132/300/200.jpg?hmac=2N8jz1dK3-iM_g-_Bl-cJdFysVCuyHtyJ7H0TmAxGVk',
+      imgData: '',
       title: 'Ohayo',
       activeIndex: 0,
       categoryShow: {
@@ -714,6 +758,7 @@ export default Vue.extend({
                 if (res.data.code === Status.OK) {
                   vm.displayData = res.data.data
                   vm.$message.success('删除成功')
+                  vm.selectedRowKeys = []
                 } else {
                   vm.$message.error('删除失败')
                 }
@@ -870,41 +915,98 @@ export default Vue.extend({
       })
     },
     previewImage(image, fileName) {
-      const ImageOpenerVueComponent = Vue.extend(ImageOpener)
-      const imageOpenerWrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(imageOpenerWrapper)
-      const comp = new ImageOpenerVueComponent({
-        el: imageOpenerWrapper,
-        propsData: {
-          image,
-          fileName,
-        },
+      // 生成uid
+      this.$message.info('图片 ' + fileName + ' 正在加载中...', 2)
+      $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
+        const pendingObj = {
+          uid: res,
+          icon: require('@/assets/image/file-manager.png'),
+          name: '图片预览',
+          isActive: true,
+        }
+        // extend一个要打开的组件
+        const ImageOpenerVueComponent = Vue.extend(ImageOpener)
+        const imageOpenerWrapper = document.createElement('div')
+        document
+          .getElementById('desktop-wrapper')
+          .appendChild(imageOpenerWrapper)
+        const comp = new ImageOpenerVueComponent({
+          el: imageOpenerWrapper,
+          propsData: {
+            uid: pendingObj.uid,
+            image,
+            fileName,
+          },
+        })
+        // 在pending表中添加打开的组件
+        $nuxt.$store.commit('dock/NEW_PENDING', pendingObj)
       })
+      // 关闭所有可关闭的小组件(__closable__)
+      const closable = document.querySelector('.__closable__')
+      closable !== null && closable.remove()
     },
     previewAudio(audio, fileName) {
-      const AudioOpenerVueComponent = Vue.extend(AudioOpener)
-      const audioOpenerWrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(audioOpenerWrapper)
-      const comp = new AudioOpenerVueComponent({
-        el: audioOpenerWrapper,
-        propsData: {
-          audio,
-          fileName,
-        },
+      this.$message.info('音频 ' + fileName + ' 正在加载中...', 2)
+      // 生成uid
+      $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
+        const pendingObj = {
+          uid: res,
+          icon: require('@/assets/image/file-manager.png'),
+          name: '音频预览',
+          isActive: true,
+        }
+        // extend一个要打开的组件
+        const AudioOpenerVueComponent = Vue.extend(AudioOpener)
+        const audioOpenerWrapper = document.createElement('div')
+        document
+          .getElementById('desktop-wrapper')
+          .appendChild(audioOpenerWrapper)
+        const comp = new AudioOpenerVueComponent({
+          el: audioOpenerWrapper,
+          propsData: {
+            uid: pendingObj.uid,
+            audio,
+            fileName,
+          },
+        })
+        // 在pending表中添加打开的组件
+        $nuxt.$store.commit('dock/NEW_PENDING', pendingObj)
       })
+      // 关闭所有可关闭的小组件(__closable__)
+      const closable = document.querySelector('.__closable__')
+      closable !== null && closable.remove()
     },
     previewVideo(video, fileName, videoType) {
-      const VideoOpenerVueComponent = Vue.extend(VideoOpener)
-      const videoOpenerWrapper = document.createElement('div')
-      document.getElementById('desktop-wrapper').appendChild(videoOpenerWrapper)
-      const comp = new VideoOpenerVueComponent({
-        el: videoOpenerWrapper,
-        propsData: {
-          video,
-          fileName,
-          videoType,
-        },
+      this.$message.info('视频 ' + fileName + ' 正在加载中...', 2)
+      // 生成uid
+      $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
+        const pendingObj = {
+          uid: res,
+          icon: require('@/assets/image/file-manager.png'),
+          name: '视频预览',
+          isActive: true,
+        }
+        // extend一个要打开的组件
+        const VideoOpenerVueComponent = Vue.extend(VideoOpener)
+        const videoOpenerWrapper = document.createElement('div')
+        document
+          .getElementById('desktop-wrapper')
+          .appendChild(videoOpenerWrapper)
+        const comp = new VideoOpenerVueComponent({
+          el: videoOpenerWrapper,
+          propsData: {
+            uid: pendingObj.uid,
+            video,
+            fileName,
+            videoType,
+          },
+        })
+        // 在pending表中添加打开的组件
+        $nuxt.$store.commit('dock/NEW_PENDING', pendingObj)
       })
+      // 关闭所有可关闭的小组件(__closable__)
+      const closable = document.querySelector('.__closable__')
+      closable !== null && closable.remove()
     },
     previewText(text, fileName) {
       const TextOpenerVueComponent = Vue.extend(TextOpener)

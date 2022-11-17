@@ -1,5 +1,6 @@
 <template>
   <DialogBody
+    :uid="uid"
     style="
       top: 10% !important;
       left: 25% !important;
@@ -23,6 +24,10 @@
 export default {
   name: 'VideoOpener',
   props: {
+    uid: {
+      type: Number,
+      required: true,
+    },
     video: {
       type: String,
       required: true,

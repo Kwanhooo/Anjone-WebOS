@@ -2,6 +2,7 @@
   <div
     v-if="!isClose"
     v-show="setIsShow() === null ? isShow : isShow"
+    ref="dialog"
     v-drag="vm"
     v-index
     :class="{ 'dialog-wrapper': true }"
@@ -71,6 +72,7 @@ export default Vue.extend({
             const bottom =
               document.documentElement.clientHeight - top - oDiv.offsetHeight
             if (top >= 50 && bottom >= 50) oDiv.style.top = top + 'px'
+            oDiv.style.top = top + 'px'
           }
           document.onmouseup = () => {
             document.onmousemove = null
@@ -160,6 +162,7 @@ export default Vue.extend({
       // isMinimize: false,
       isFullscreen: false,
       extraStyle: '',
+      lastStyle: '',
       zIndexStyle: '',
       el: null,
       isShow: true,
@@ -225,8 +228,20 @@ export default Vue.extend({
     handleFullscreen() {
       if (this.isFullscreen) {
         this.extraStyle = ''
+        this.extraStyle = this.lastStyle
         this.isFullscreen = false
       } else {
+        // 保存当前的宽高和位置
+        this.lastStyle =
+          '{ margin:0;width: ' +
+          this.$refs.dialog.offsetWidth +
+          'px; height: ' +
+          this.$refs.dialog.offsetHeight +
+          'px; left: ' +
+          this.$refs.dialog.offsetLeft +
+          'px; top: ' +
+          this.$refs.dialog.offsetTop +
+          'px; }'
         // 获得viewport高度
         const height = document.documentElement.clientHeight - 100
         this.extraStyle =
@@ -251,6 +266,8 @@ export default Vue.extend({
   position: absolute;
   left: 25vw;
   top: 10vh;
+  //left: 0;
+  //top: 0;
   width: 50vw;
   height: 70vh;
   background: @DIALOG_BODY_COLOR_LIGHT;

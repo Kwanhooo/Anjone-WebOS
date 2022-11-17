@@ -1,5 +1,5 @@
 <template>
-  <DialogBody>
+  <DialogBody v-show="isLoadFinish" :uid="uid">
     <template #title>
       <span>{{ fileName }}</span>
     </template>
@@ -17,6 +17,7 @@ export default {
       inserted(el, binding) {},
       bind(el, binding) {
         el.onload = (e) => {
+          binding.value.isLoadFinish = true
           // 获得图片的原始宽度和高度
           const originWidth = el.naturalWidth
           const originHeight = el.naturalHeight
@@ -38,6 +39,10 @@ export default {
     },
   },
   props: {
+    uid: {
+      type: Number,
+      required: true,
+    },
     image: {
       type: String,
       required: true,
@@ -50,6 +55,7 @@ export default {
   data() {
     return {
       vm: this,
+      isLoadFinish: false,
     }
   },
 }

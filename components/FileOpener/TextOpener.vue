@@ -1,5 +1,6 @@
 <template>
   <DialogBody
+    :uid="uid"
     style="
       top: 25% !important;
       left: 25% !important;
@@ -19,8 +20,12 @@
 
 <script>
 export default {
-  name: 'AudioOpener',
+  name: 'TextOpener',
   props: {
+    uid: {
+      type: Number,
+      required: true,
+    },
     text: {
       type: String,
       required: true,

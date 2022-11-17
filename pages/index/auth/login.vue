@@ -1,5 +1,5 @@
 <template>
-  <div class="login-wrapper">
+  <div ref="loginWrapper" class="login-wrapper">
     <input
       v-model="phone"
       type="text"
@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   mounted() {
     // this.$message.info('Mock用户：手机号：18888888888    密码：000000', 10)
-    window.addEventListener('keydown', (e) => {
+    this.$refs.loginWrapper.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
         this.handleLogin()
       }
