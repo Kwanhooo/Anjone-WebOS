@@ -54,14 +54,14 @@
         title="帐号昵称"
         data-index="username"
         class-name="td-username"
-        :ellipsis="false"
+        :ellipsis="true"
       >
       </a-table-column>
       <a-table-column
         key="phone"
         title="手机号码"
         data-index="phone"
-        :ellipsis="false"
+        :ellipsis="true"
       >
       </a-table-column>
       <a-table-column
@@ -75,7 +75,7 @@
         key="status"
         title="状态"
         data-index="status"
-        :ellipsis="false"
+        :ellipsis="true"
         :width="80"
       >
         <template slot-scope="text, record">
@@ -246,6 +246,14 @@ export default Vue.extend({
   width: 100%;
   height: 100%;
 
+  th {
+    height: 36px;
+  }
+
+  td {
+    height: 36px;
+  }
+
   .mask {
     background-color: rgba(#9d9d9d, 50%);
     z-index: 999;
@@ -379,8 +387,8 @@ export default Vue.extend({
 
 .add-user {
   background: @STRONG_THEME_COLOR_LIGHT;
-  margin: 0.5em;
-  padding: 0.5em 1.2em;
+  margin: 0.2em 0.5em;
+  padding: 0.25em 0.9em;
   border: none;
   color: white;
   border-radius: 8px;

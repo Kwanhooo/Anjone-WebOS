@@ -1,5 +1,5 @@
 <template>
-  <DialogBody v-show="isLoadFinish" :uid="uid">
+  <DialogBody v-show="isLoadFinish" :uid="uid" :min-width="80" :min-height="30">
     <template #title>
       <span>{{ fileName }}</span>
     </template>
@@ -21,7 +21,7 @@ export default {
           // 获得图片的原始宽度和高度
           const originWidth = el.naturalWidth
           const originHeight = el.naturalHeight
-          const scale = 0.3
+          const scale = 0.6
           el.parentNode.parentNode.parentNode.style.width =
             (window.innerWidth * scale).toFixed(0).toString() + 'px'
           el.parentNode.parentNode.parentNode.style.height = 'auto'

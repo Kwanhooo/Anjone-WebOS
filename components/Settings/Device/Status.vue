@@ -180,6 +180,7 @@ export default Vue.extend({
   name: 'Status',
   data() {
     return {
+      storageChart: null,
       storage: {
         total: 0,
         free: 0,
@@ -206,6 +207,7 @@ export default Vue.extend({
   },
   beforeMount() {},
   mounted() {
+    const vm = this
     this.initStorageChart()
     this.initData()
   },
@@ -238,6 +240,7 @@ export default Vue.extend({
       const storageUsage = this.$echarts.init(
         document.getElementById('status-storage-chart')
       )
+      this.storageChart = storageUsage
       const option = {
         title: [
           {
@@ -265,6 +268,10 @@ export default Vue.extend({
             },
           },
         ],
+        grid: {
+          top: 0,
+          bottom: 0,
+        },
         tooltip: {
           trigger: 'item',
           formatter: '{d}%   ({c}GB)',
@@ -323,7 +330,7 @@ export default Vue.extend({
 @import '@/assets/style/global';
 
 .root-wrapper {
-  min-width: 43em;
+  min-width: 48em;
   //width: 100%;
   height: 100%;
   display: flex;
@@ -335,9 +342,12 @@ export default Vue.extend({
     width: 100%;
     display: flex;
     flex-direction: row;
+    margin-right: 2em;
 
     .storage {
       flex: 1.5;
+      min-width: 150px;
+      min-height: 150px;
       width: 100%;
       height: 100%;
 
@@ -356,7 +366,7 @@ export default Vue.extend({
       display: inline-flex;
       flex-direction: row;
       font-family: @GLOBAL_FONT_FAMILY;
-      font-weight: 650;
+      //font-weight: 650;
 
       .key {
         flex: 1;

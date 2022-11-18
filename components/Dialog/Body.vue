@@ -4,13 +4,14 @@
     v-show="setIsShow() === null ? isShow : isShow"
     ref="dialog"
     v-drag="vm"
-    v-index
+    v-index="vm"
     :class="{ 'dialog-wrapper': true }"
     :style="extraStyle"
   >
     <div class="dialog-header">
       <DialogHeader
         v-dClick="vm"
+        :is-active="getIsActive()"
         @close="handleClose()"
         @minimize="handleMinimize()"
         @fullscreen="handleFullscreen()"
@@ -49,6 +50,7 @@ export default Vue.extend({
         oDiv.onmousedown = (e) => {
           if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
             $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+            $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', binding.value.uid)
             el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
           }
           // 算出鼠标相对元素的位置
@@ -82,14 +84,17 @@ export default Vue.extend({
       },
     },
     index: {
-      bind(el) {
+      inserted(el, binding) {},
+      bind(el, binding) {
         el.onload = () => {
           $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+          $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', binding.value.uid)
           el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
         }
         el.onclick = () => {
           if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
             $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+            $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', binding.value.uid)
             el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
           }
         }
@@ -107,12 +112,24 @@ export default Vue.extend({
       inserted(el, binding) {},
       bind(el, binding) {
         el.onmousedown = (e) => {
-          const minWidth = (
-            Number(document.documentElement.clientWidth) * 0.3
-          ).toFixed(0)
-          const minHeight = (
-            Number(document.documentElement.clientHeight) * 0.5
-          ).toFixed(0)
+          let minWidth
+          let minHeight
+
+          if (binding.value.minWidth) {
+            minWidth = binding.value.minWidth
+          } else {
+            minWidth = (
+              Number(document.documentElement.clientWidth) * 0.2
+            ).toFixed(0)
+          }
+
+          if (binding.value.minHeight) {
+            minHeight = binding.value.minHeight
+          } else {
+            minHeight = (
+              Number(document.documentElement.clientHeight) * 0.4
+            ).toFixed(0)
+          }
 
           const disX = e.clientX - el.offsetLeft
           const disY = e.clientY - el.offsetTop
@@ -150,6 +167,16 @@ export default Vue.extend({
     },
   },
   props: {
+    minWidth: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    minHeight: {
+      type: Number,
+      required: false,
+      default: null,
+    },
     uid: {
       type: Number,
       required: true,
@@ -173,6 +200,7 @@ export default Vue.extend({
     //   this.el.add('opacity-visible')
     // }, 10)
     const zIndex = $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+    $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', this.uid)
     this.zIndexStyle = '{ z-index: ' + zIndex + ' }'
   },
   methods: {
@@ -199,6 +227,12 @@ export default Vue.extend({
           }, 150)
         }
       })
+    },
+    setIsActive() {
+      return new Promise((resolve, reject) => {})
+    },
+    getIsActive() {
+      return $nuxt.$store.state.dock.activeAppUid === this.uid
     },
     setIsShow() {
       const vm = this
@@ -264,11 +298,11 @@ export default Vue.extend({
   z-index: 999999;
   font-size: 16px;
   position: absolute;
-  left: 25vw;
+  left: 20vw;
   top: 10vh;
   //left: 0;
   //top: 0;
-  width: 50vw;
+  width: 60vw;
   height: 70vh;
   background: @DIALOG_BODY_COLOR_LIGHT;
   display: flex;

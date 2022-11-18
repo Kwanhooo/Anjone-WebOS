@@ -1,6 +1,6 @@
 <template>
   <div class="login-log-wrapper">
-    <a-table :data-source="logData" bordered>
+    <a-table :data-source="logData" bordered page-size="20">
       <a-table-column
         key="id"
         title="序号"
@@ -91,7 +91,15 @@ export default Vue.extend({
 
 <style lang="less">
 .login-log-wrapper {
+  th {
+    height: 36px;
+  }
+
+  td {
+    height: 36px;
+  }
 }
+
 .ant-table-pagination.ant-pagination {
   float: none !important;
   position: absolute;

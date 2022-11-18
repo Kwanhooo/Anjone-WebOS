@@ -334,7 +334,7 @@ export default {
         .app-name {
           text-align: center;
           font-size: 0.8rem;
-          font-weight: 600;
+          //font-weight: 600;
         }
       }
 

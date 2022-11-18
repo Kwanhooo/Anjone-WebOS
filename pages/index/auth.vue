@@ -28,15 +28,22 @@ export default Vue.extend({
 .wrapper {
   width: 100vw;
   height: 100vh;
-  background: url('assets/image/background.png') no-repeat center center fixed;
+  background: url('assets/image/background.jpg') no-repeat center center fixed;
   background-size: cover;
 
+  display: flex;
+  justify-content: center;
+
   .content-wrapper {
+    //height: 50vh;
     display: flex;
     flex-direction: column;
-    position: fixed;
-    right: 13%;
-    top: 20%;
+    //margin: auto;
+    margin-top: 27vh;
+    //width: 100%;
+    //position: fixed;
+    //right: 13%;
+    //top: 20%;
 
     .brand-wrapper {
       display: flex;
@@ -53,7 +60,7 @@ export default Vue.extend({
       .slogan {
         display: block;
         font-size: 1.3rem;
-        color: @CONTENT_COLOR_A;
+        color: white;
         margin: 1rem auto;
       }
     }

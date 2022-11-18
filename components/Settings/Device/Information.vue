@@ -53,104 +53,98 @@
       <div class="hardware-info">
         <table>
           <tr>
-            <td colspan="2">硬件信息</td>
+            <td colspan="4">硬件信息</td>
           </tr>
           <tr>
             <td>CPU</td>
             <td>{{ hardware.cpu }}</td>
-          </tr>
-          <tr>
-            <td>内存</td>
-            <td>{{ hardware.memory }}</td>
-          </tr>
-          <tr>
-            <td>盘位数量</td>
-            <td>{{ hardware.diskNumber }}</td>
-          </tr>
-          <tr>
             <td>SATA接口</td>
             <td>{{ hardware.sata }}</td>
           </tr>
           <tr>
+            <td>内存</td>
+            <td>{{ hardware.memory }}</td>
             <td>蓝牙接口</td>
             <td>{{ hardware.bluetooth }}</td>
           </tr>
           <tr>
+            <td>闪存</td>
+            <td>{{ hardware.memory }}</td>
             <td>WIFI接口</td>
             <td>{{ hardware.wifi }}</td>
           </tr>
           <tr>
+            <td>盘位数量</td>
+            <td>{{ hardware.diskNumber }}</td>
             <td>网线接口</td>
             <td>{{ hardware.ethernet }}</td>
           </tr>
           <tr>
+            <td>触摸屏幕</td>
+            <td>{{ hardware.touchScreen }}</td>
             <td>USB接口</td>
             <td>{{ hardware.usb }}</td>
           </tr>
           <tr>
+            <td>扬声器</td>
+            <td>{{ hardware.speakers }}</td>
             <td>HDMI</td>
             <td>{{ hardware.hdmi }}</td>
           </tr>
           <tr>
             <td>ZigBee接口</td>
             <td>{{ hardware.zigbee }}</td>
-          </tr>
-          <tr>
-            <td>触摸屏幕</td>
-            <td>{{ hardware.touchScreen }}</td>
-          </tr>
-          <tr>
-            <td>扬声器</td>
-            <td>{{ hardware.speakers }}</td>
+            <td></td>
+            <td></td>
           </tr>
         </table>
       </div>
-      <div class="network-info">
-        <table>
-          <tr>
-            <td colspan="2">
-              <div>网络信息</div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div></div>
-            </td>
-            <td>
-              <div></div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div></div>
-            </td>
-            <td>
-              <div></div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div></div>
-            </td>
-            <td>
-              <div></div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div></div>
-            </td>
-            <td>
-              <div></div>
-            </td>
-          </tr>
-        </table>
-        <div class="btn-wrapper">
-          <button class="btn" @click="handleModifyNetworkSettings()">
-            修改网络设置
-          </button>
-        </div>
-      </div>
+      <!--      <div class="network-info">-->
+      <!--        <table>-->
+      <!--          <tr>-->
+      <!--            <td colspan="2">-->
+      <!--              <div>网络信息</div>-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--          <tr>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--          <tr>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--          <tr>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--          <tr>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--            <td>-->
+      <!--              <div></div>-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--        </table>-->
+      <!--        <div class="btn-wrapper">-->
+      <!--          <button class="btn" @click="handleModifyNetworkSettings()">-->
+      <!--            修改网络设置-->
+      <!--          </button>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -240,7 +234,7 @@ export default Vue.extend({
         display: inline-flex;
         flex-direction: row;
         font-family: @GLOBAL_FONT_FAMILY;
-        font-weight: 650;
+        //font-weight: 650;
 
         .key {
           flex: 1;
@@ -329,7 +323,7 @@ export default Vue.extend({
       border-radius: 8px;
       color: white;
       font-size: 0.8rem;
-      font-weight: 550;
+      //font-weight: 550;
       font-family: @GLOBAL_FONT_FAMILY;
       cursor: pointer;
       pointer-events: auto;

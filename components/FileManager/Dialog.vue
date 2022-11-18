@@ -464,7 +464,7 @@ const columns = [
   {
     title: '创建日期',
     dataIndex: 'create_time',
-    ellipsis: false,
+    ellipsis: true,
     sorter: (a, b) => {
       const aTime = new Date(a.create_time).getTime()
       const bTime = new Date(b.create_time).getTime()
@@ -474,7 +474,7 @@ const columns = [
   {
     title: '最近访问',
     dataIndex: 'last_access_time',
-    ellipsis: false,
+    ellipsis: true,
     sorter: (a, b) => {
       const aTime = new Date(a.create_time).getTime()
       const bTime = new Date(b.create_time).getTime()
@@ -484,7 +484,7 @@ const columns = [
   {
     title: '最近写入',
     dataIndex: 'last_write_time',
-    ellipsis: false,
+    ellipsis: true,
     sorter: (a, b) => {
       const aTime = new Date(a.create_time).getTime()
       const bTime = new Date(b.create_time).getTime()
@@ -920,7 +920,7 @@ export default Vue.extend({
       $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
         const pendingObj = {
           uid: res,
-          icon: require('@/assets/image/file-manager.png'),
+          icon: require('@/assets/image/image-preview.png'),
           name: '图片预览',
           isActive: true,
         }
@@ -951,7 +951,7 @@ export default Vue.extend({
       $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
         const pendingObj = {
           uid: res,
-          icon: require('@/assets/image/file-manager.png'),
+          icon: require('@/assets/image/audio-preview.png'),
           name: '音频预览',
           isActive: true,
         }
@@ -982,7 +982,7 @@ export default Vue.extend({
       $nuxt.$store.dispatch('dock/GetNewUid').then((res) => {
         const pendingObj = {
           uid: res,
-          icon: require('@/assets/image/file-manager.png'),
+          icon: require('@/assets/image/video-preview.png'),
           name: '视频预览',
           isActive: true,
         }

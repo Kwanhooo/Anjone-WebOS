@@ -17,7 +17,7 @@
     </button>
     <div class="more-op-wrapper">
       <span>忘记密码</span>
-      <span @click="goToReg()">注册</span>
+      <span @click="goToReg()">&nbsp;注&nbsp;册&nbsp;</span>
     </div>
   </div>
 </template>
@@ -139,10 +139,10 @@ export default Vue.extend({
     justify-content: space-between;
 
     span {
-      border-bottom: 1px solid @LINK_COLOR;
+      border-bottom: 1px solid white;
       padding-bottom: 1px;
       margin: 0 5px;
-      color: @LINK_COLOR;
+      color: white;
       cursor: pointer;
       pointer-events: auto;
       transition: border-bottom-color ease-in-out 0.3s;
@@ -150,8 +150,8 @@ export default Vue.extend({
     }
 
     span:hover {
-      color: black;
-      border-bottom: 1px solid black;
+      color: @LINK_COLOR;
+      border-bottom: 1px solid @LINK_COLOR;
     }
   }
 }

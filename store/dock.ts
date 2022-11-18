@@ -12,7 +12,7 @@ export const state = () => ({
       icon: require('@/assets/image/settings.png'),
       name: '系统设置',
       component: require('@/components/Settings/Dialog.vue'),
-      singleton: false,
+      singleton: true,
     },
     {
       icon: require('@/assets/image/help.png'),
@@ -48,6 +48,7 @@ export const state = () => ({
   pending: [],
   pendingBeforeGotoDesktop: [],
   isOnGotoDesktop: false,
+  activeAppUid: 0,
 })
 
 export const getters = {}
@@ -100,6 +101,9 @@ export const mutations = {
   },
   SET_IS_SHOW_START(state: any, isShowStart: boolean) {
     state.isShowStart = isShowStart
+  },
+  SET_ACTIVE_APP_UID(state: any, uid: Number) {
+    state.activeAppUid = uid
   },
 }
 

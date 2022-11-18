@@ -356,7 +356,7 @@ export default Vue.extend({
 
     .info-editor-key {
       font-family: @GLOBAL_FONT_FAMILY;
-      font-weight: 600;
+      //font-weight: 600;
     }
 
     .info-editor-value {
@@ -366,7 +366,7 @@ export default Vue.extend({
 
       &:not(input) {
         font-family: @GLOBAL_FONT_FAMILY;
-        font-weight: 600;
+        //font-weight: 600;
       }
 
       &:not(span) {
