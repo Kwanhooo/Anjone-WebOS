@@ -2,6 +2,7 @@
   <div id="desktop-wrapper">
     <DesktopTopBar />
     <DesktopBottomBar />
+    <DesktopInstanceGrid />
   </div>
 </template>
 

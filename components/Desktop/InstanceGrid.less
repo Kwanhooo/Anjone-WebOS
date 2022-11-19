@@ -1,0 +1,50 @@
+#instance-grid-wrapper {
+  position: absolute;
+  height: calc(100vh - 100px);
+  width: 100vw;
+  top: 50px;
+  bottom: 50px;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+
+  .column {
+    //background: green;
+    display: grid;
+    grid-template-rows: repeat(8, 1fr);
+
+    .instance {
+      // 内部元素居中
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 6rem;
+      height: 6rem;
+      margin: 0.5rem;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.2s ease-in-out;
+
+      &:hover,
+      &.active {
+        background: rgba(255, 255, 255, 0.3);
+        color: black;
+      }
+
+      .instance-icon {
+        width: 3.2rem;
+        height: auto;
+        margin: 0 auto;
+      }
+
+      .instance-name {
+        padding-top: 0.3rem;
+        font-size: 0.8rem;
+        text-align: center;
+        color: inherit;
+      }
+    }
+  }
+}
