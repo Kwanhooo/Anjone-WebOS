@@ -12,7 +12,7 @@
 
 // 阿里云 测试服务器 SSL
 export const xhrHost = 'https://api.anjone.0xffff.我爱你'
-export const monitorWSHost = 'wss://api.anjone.0xffff.我爱你'
+export const monitorWSHost = 'wss://ws.anjone.0xffff.我爱你'
 
 // 本地
 // export const xhrHost = 'http://localhost:5000'
