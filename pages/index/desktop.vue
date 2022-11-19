@@ -27,7 +27,7 @@ export default Vue.extend({
     })
     window.addEventListener('click', (evt) => {
       if (this.$store.state.sys.showDropDown) {
-        const path = evt.path
+        const path = evt.path || (evt.composedPath && evt.composedPath())
         let hasSelf = false
         path.forEach((item) => {
           if (
@@ -47,7 +47,10 @@ export default Vue.extend({
         document.getElementById('start-wrapper') === null
       )
         return
-      const path = evt.path.slice(0, -4)
+      const path = (evt.path || (evt.composedPath && evt.composedPath())).slice(
+        0,
+        -4
+      )
       let isClosableClicked = false
       let isStartClicked = false
       path.forEach((item) => {
