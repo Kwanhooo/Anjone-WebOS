@@ -70,6 +70,7 @@ export const mutations = {
     })
   },
   TOGGLE_MINIMIZE(state: any, uid: any) {
+    state.activeAppUid = uid
     state.isOnGotoDesktop = false
     state.pending.forEach((item: any) => {
       if (item.uid === uid) {

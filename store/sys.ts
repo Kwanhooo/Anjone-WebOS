@@ -73,7 +73,6 @@ export const mutations = {
     state.isSambaConnected = value
   },
   SET_SHOW_DROP_DOWN(state: any, value: boolean) {
-    // console.log("vuex => " + value)
     state.showDropDown = value
   },
   SET_IS_UPLOAD_TIPS_SHOW(state: any, value: boolean) {

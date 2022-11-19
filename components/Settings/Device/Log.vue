@@ -7,6 +7,7 @@
         data-index="id"
         :width="70"
         :ellipsis="false"
+        :sorter="(a, b) => a.id - b.id"
       >
       </a-table-column>
       <a-table-column
@@ -14,7 +15,8 @@
         title="手机号码"
         data-index="phone"
         :width="100"
-        :ellipsis="false"
+        :ellipsis="true"
+        :sorter="(a, b) => a.phone - b.phone"
       >
       </a-table-column>
       <a-table-column
@@ -22,7 +24,8 @@
         title="登录终端"
         data-index="dev"
         :width="130"
-        :ellipsis="false"
+        :ellipsis="true"
+        :sorter="(a, b) => a.dev.localeCompare(b.dev)"
       >
       </a-table-column>
       <a-table-column
@@ -30,7 +33,14 @@
         title="登录时间"
         data-index="login_time"
         :width="130"
-        :ellipsis="false"
+        :ellipsis="true"
+        :sorter="
+          (a, b) => {
+            const aTime = new Date(a.login_time).getTime()
+            const bTime = new Date(b.login_time).getTime()
+            return aTime - bTime
+          }
+        "
       >
       </a-table-column>
       <a-table-column
@@ -39,14 +49,16 @@
         data-index="ip_addr"
         :width="130"
         :ellipsis="false"
+        :sorter="(a, b) => a.ip_addr.localeCompare(b.ip_addr)"
       >
       </a-table-column>
       <a-table-column
         key="access_way"
         title="访问方式"
         data-index="access_way"
-        :ellipsis="false"
+        :ellipsis="true"
         :width="100"
+        :sorter="(a, b) => a.access_way.localeCompare(b.access_way)"
       >
       </a-table-column>
     </a-table>
@@ -93,6 +105,7 @@ export default Vue.extend({
 .login-log-wrapper {
   th {
     height: 36px;
+    text-align: center !important;
   }
 
   td {

@@ -203,6 +203,7 @@ export default Vue.extend({
     $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', this.uid)
     this.zIndexStyle = '{ z-index: ' + zIndex + ' }'
   },
+  created() {},
   methods: {
     getIsShow() {
       return new Promise((resolve, reject) => {
@@ -298,11 +299,11 @@ export default Vue.extend({
   z-index: 999999;
   font-size: 16px;
   position: absolute;
-  left: 20vw;
+  left: 15vw;
   top: 10vh;
   //left: 0;
   //top: 0;
-  width: 60vw;
+  width: 70vw;
   height: 70vh;
   background: @DIALOG_BODY_COLOR_LIGHT;
   display: flex;

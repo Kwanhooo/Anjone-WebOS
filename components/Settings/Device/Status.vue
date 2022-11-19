@@ -70,7 +70,7 @@
     <div class="network-wrapper">
       <table>
         <tr>
-          <td colspan="4">网络状态</td>
+          <td colspan="4" style="text-align: center !important">网络状态</td>
         </tr>
         <tr>
           <td>网络情况</td>
@@ -138,35 +138,13 @@
           <td></td>
           <td></td>
         </tr>
-        <tr>
-          <td>
-            <div></div>
-          </td>
-          <td>
-            <div></div>
-          </td>
-          <td>
-            <div></div>
-          </td>
-          <td>
-            <div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div></div>
-          </td>
-          <td>
-            <div></div>
-          </td>
-          <td>
-            <div></div>
-          </td>
-          <td>
-            <div></div>
-          </td>
-        </tr>
       </table>
+    </div>
+    <div class="button-group-wrapper">
+      <button>修改设备名称</button>
+      <button>设置WLAN</button>
+      <button>设置蓝牙</button>
+      <button>设置ZigBee</button>
     </div>
   </div>
 </template>
@@ -210,6 +188,10 @@ export default Vue.extend({
     const vm = this
     this.initStorageChart()
     this.initData()
+    setInterval(() => {
+      // TODO: 可能导致性能问题
+      this.storageChart.resize()
+    }, 100)
   },
   methods: {
     preloadData() {
@@ -285,7 +267,7 @@ export default Vue.extend({
         series: {
           name: '',
           type: 'pie',
-          radius: ['65%', '75%'],
+          radius: ['75%', '85%'],
           avoidLabelOverlap: true,
           hoverAnimation: false,
           label: {
@@ -330,7 +312,7 @@ export default Vue.extend({
 @import '@/assets/style/global';
 
 .root-wrapper {
-  min-width: 48em;
+  min-width: 52em;
   //width: 100%;
   height: 100%;
   display: flex;
@@ -338,7 +320,8 @@ export default Vue.extend({
   padding-top: 1em;
 
   .overview-wrapper {
-    flex: 1;
+    flex: 4;
+    flex-grow: 2;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -346,8 +329,8 @@ export default Vue.extend({
 
     .storage {
       flex: 1.5;
-      min-width: 150px;
-      min-height: 150px;
+      min-width: 120px;
+      min-height: 160px;
       width: 100%;
       height: 100%;
 
@@ -387,7 +370,7 @@ export default Vue.extend({
     }
 
     .info-column-l {
-      flex: 3;
+      flex: 2.5;
       width: 100%;
       height: 100%;
       //background-color: orange;
@@ -398,9 +381,14 @@ export default Vue.extend({
       padding-top: 0.7em;
     }
 
+    .ant-divider,
+    .ant-divider-vertical {
+      margin: 0 !important;
+    }
+
     .info-column-divider {
       padding: 1.2em 0 1em 0;
-      margin: 0 0.5em;
+      margin-right: 1em;
     }
 
     .info-column-r {
@@ -417,10 +405,12 @@ export default Vue.extend({
   }
 
   .network-wrapper {
-    flex: 3;
+    flex: 8;
+    flex-grow: 4;
     width: 100%;
     //background-color: #4f98fd;
-    padding-top: 2.5em !important;
+    padding-top: 1.5em !important;
+    //padding-bottom: 2em;
 
     table {
       width: 94%;
@@ -442,13 +432,42 @@ export default Vue.extend({
       }
 
       td {
-        text-align: center;
+        padding: 0.1em 0.5em;
+        text-align: left !important;
         border: 1px solid #dddddd;
         font-family: @GLOBAL_FONT_FAMILY;
 
         div {
           min-height: 1.7em;
         }
+      }
+    }
+  }
+
+  .button-group-wrapper {
+    flex: 1;
+    margin-top: 1em;
+    margin-left: 3%;
+    padding-bottom: 1em;
+
+    button {
+      background: @STRONG_THEME_COLOR_LIGHT;
+      margin-right: 1em;
+      width: 8em;
+      padding: 0.5em 0;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      transition: all ease-in-out 0.15s;
+      cursor: pointer;
+      pointer-events: auto;
+      font-family: @GLOBAL_FONT_FAMILY;
+      outline: none;
+      font-weight: 500;
+      font-size: 0.8rem;
+
+      &:hover {
+        background: #4f98fd !important;
       }
     }
   }

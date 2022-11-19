@@ -21,7 +21,8 @@
             :class="{
               'item-parent': true,
               item: true,
-              'active-item-parent': activeIndex >= 0 && activeIndex <= 1,
+              'active-item-parent':
+                activeIndex >= 0 && activeIndex <= rootDir.length - 1,
             }"
             @click="toggleCategoryShow(0)"
           >
@@ -34,7 +35,7 @@
                 d="M5.333 22.293v6.151h21.333v-6.151l-5.736-2.738h-9.862l-5.736 2.738zM4.568 20.689l5.736-2.738c0.224-0.109 0.487-0.173 0.766-0.173 0 0 0 0 0 0h9.862c0.265 0 0.527 0.059 0.766 0.173l5.736 2.738c0.603 0.293 1.012 0.901 1.012 1.604v0 6.151c0 0.982-0.796 1.778-1.778 1.778h-21.333c-0.982 0-1.778-0.796-1.778-1.778v-6.151c0-0.703 0.409-1.312 1.001-1.6l0.011-0.005zM16 14.222c2.945 0 5.333-2.388 5.333-5.333s-2.388-5.333-5.333-5.333-5.333 2.388-5.333 5.333 2.388 5.333 5.333 5.333zM16 16c-3.927 0-7.111-3.184-7.111-7.111s3.184-7.111 7.111-7.111 7.111 3.184 7.111 7.111-3.184 7.111-7.111 7.111zM18.667 23.111h3.556c0.491 0 0.889 0.398 0.889 0.889s-0.398 0.889-0.889 0.889h-3.556c-0.491 0-0.889-0.398-0.889-0.889s0.398-0.889 0.889-0.889z"
               ></path>
             </svg>
-            <span>我的文件</span>
+            <span>{{ defaultTopParent }}</span>
             <svg
               t="1664882277620"
               class="icon-list"
@@ -232,8 +233,10 @@
             </div>
             <div class="search-wrapper">
               <a-input-search
+                v-model="searchKeywords"
                 :placeholder="'在 ' + currentLoc + ' 中搜索'"
                 size="default"
+                @change="onSearch"
                 @search="onSearch"
               />
             </div>
@@ -402,6 +405,7 @@
           </div>
           <div class="body">
             <a-table
+              :custom-row="handleRowClicked"
               style="padding-bottom: 4em"
               :row-selection="{
                 selectedRowKeys: selectedRowKeys,
@@ -452,6 +456,7 @@ import { xhrHost } from '@/config/api-host.config'
 import VideoOpener from '@/components/FileOpener/VideoOpener'
 import { resetAvatar } from '@/api/file'
 import TextOpener from '~/components/FileOpener/TextOpener'
+import { prettyBytes } from '@/utils/pretty'
 
 const columns = [
   {
@@ -496,6 +501,9 @@ const columns = [
     dataIndex: 'file_size',
     ellipsis: true,
     sorter: (a, b) => a.file_size - b.file_size,
+    customRender: (text, record) => {
+      return prettyBytes(text)
+    },
   },
   {
     title: '类型',
@@ -582,6 +590,9 @@ export default Vue.extend({
       currentLoc: '',
       columns,
       displayData: [],
+      displayDataBackup: [],
+      searchData: [],
+      searchKeywords: '',
       selectedRowKeys: [],
       defaultTopParent: '我的文件',
       breadcrumb: ['我的文件'],
@@ -603,6 +614,25 @@ export default Vue.extend({
     this.startSMB()
   },
   methods: {
+    handleRowClicked(record, index) {
+      const vm = this
+      return {
+        on: {
+          click: () => {},
+          dblclick: () => {
+            if (
+              vm.selectedRowKeys.length === 1 &&
+              vm.selectedRowKeys[0] === index
+            ) {
+              vm.selectedRowKeys = []
+              return
+            }
+            vm.selectedRowKeys = []
+            vm.selectedRowKeys.push(index)
+          },
+        },
+      }
+    },
     handleNotAllowUpload() {
       this.$message.error('不能在根目录上传文件')
     },
@@ -847,9 +877,25 @@ export default Vue.extend({
     stopSMB() {
       stopService()
     },
+    // TODO: 临时解决方案(退到根目录)
+    gotoRootDir() {
+      const vm = this
+      enterAbs({ filepath: '/' + this.rootDir[0].filename }).then(() => {
+        back().then((res) => {
+          vm.displayData = res.data.data
+          vm.breadcrumb = []
+          vm.breadcrumb.push(vm.defaultTopParent)
+          vm.activeIndex = null
+        })
+      })
+    },
     toggleCategoryShow(index) {
-      if (index === 0) this.currentLoc = this.defaultTopParent
-      this.categoryShow[index] = !this.categoryShow[index]
+      if (this.activeIndex !== null) {
+        this.gotoRootDir()
+      } else {
+        if (index === 0) this.currentLoc = this.defaultTopParent
+        this.categoryShow[index] = !this.categoryShow[index]
+      }
     },
     getIsShow(index) {
       return this.categoryShow[index]
@@ -860,7 +906,21 @@ export default Vue.extend({
       this.currentLoc = this.rootDir[active].filename
     },
     onSearch() {
-      this.$message.info('搜索功能暂未开放')
+      if (this.searchKeywords === '') {
+        this.displayData = this.displayDataBackup
+        this.displayDataBackup = []
+      } else {
+        if (this.displayDataBackup.length === 0) {
+          this.displayDataBackup = this.displayData
+        }
+        this.searchData = []
+        this.displayDataBackup.forEach((data) => {
+          if (data.filename.includes(this.searchKeywords)) {
+            this.searchData.push(data)
+          }
+        })
+        this.displayData = this.searchData
+      }
     },
     onActiveChange(active) {
       const vm = this
@@ -868,6 +928,7 @@ export default Vue.extend({
         (res) => {
           vm.displayData = res.data.data
           vm.breadcrumb = []
+          vm.breadcrumb.push(vm.defaultTopParent)
           vm.breadcrumb.push(vm.rootDir[active].filename)
         }
       )
@@ -895,6 +956,14 @@ export default Vue.extend({
             sessionStorage.getItem('TOKEN')
           if (type === 'dir') {
             enter(filename, type).then((res) => {
+              if (vm.breadcrumb.length === 1) {
+                // console.log(vm.rootDir)
+                for (let i = 0; i < vm.rootDir.length; i++) {
+                  if (vm.rootDir[i].filename === filename) {
+                    vm.activeIndex = '' + i
+                  }
+                }
+              }
               vm.displayData = res.data.data
               vm.breadcrumb.push(filename)
             })
@@ -906,8 +975,8 @@ export default Vue.extend({
             this.previewAudio(fileLink, filename)
           } else if (type === 'other') {
             // this.previewText(fileLink, filename)
-            // this.$copyText(fileLink)
-            this.$message.error('未知文件类型，文件链接已复制，请下载后浏览！')
+            this.$copyText(fileLink)
+            this.$message.info('未知文件类型，文件链接已复制，请下载后浏览！')
           }
         } else {
           vm.$message.error('您访问的文件不存在！')
@@ -1057,6 +1126,10 @@ export default Vue.extend({
 @ACTIVE_BACKGROUND: #e8e8e8;
 @TAB_FONT_COLOR: #415058;
 @ITEM_FONT_SIZE: 0.8rem;
+
+th {
+  text-align: center !important;
+}
 
 .file-catalog {
   min-width: 12em;

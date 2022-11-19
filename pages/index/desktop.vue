@@ -20,19 +20,10 @@ export default Vue.extend({
     document.title = '桌面 - 安居佑'
   },
   mounted() {
+    this.hideOverflow()
     // 如果窗口宽度小于1200px，那么将#env-monitor-wrapper隐藏
     window.addEventListener('resize', () => {
-      if (window.innerWidth < 1200) {
-        document.getElementById('env-monitor-wrapper').style.display = 'none'
-        // 如果窗口宽度小于650px，那么将#inet-monitor-wrapper显示
-        if (window.innerWidth < 650) {
-          document.getElementById('inet-monitor-wrapper').style.display = 'none'
-        } else {
-          document.getElementById('inet-monitor-wrapper').style.display = ''
-        }
-      } else {
-        document.getElementById('env-monitor-wrapper').style.display = ''
-      }
+      this.hideOverflow()
     })
     window.addEventListener('click', (evt) => {
       if (this.$store.state.sys.showDropDown) {
@@ -83,6 +74,19 @@ export default Vue.extend({
     this.preLoadImages()
   },
   methods: {
+    hideOverflow() {
+      if (window.innerWidth < 1200) {
+        document.getElementById('env-monitor-wrapper').style.display = 'none'
+        // 如果窗口宽度小于650px，那么将#inet-monitor-wrapper显示
+        if (window.innerWidth < 650) {
+          document.getElementById('inet-monitor-wrapper').style.display = 'none'
+        } else {
+          document.getElementById('inet-monitor-wrapper').style.display = ''
+        }
+      } else {
+        document.getElementById('env-monitor-wrapper').style.display = ''
+      }
+    },
     preLoadImages() {
       new Image().src = require('@/assets/image/device-image.png')
       new Image().src =

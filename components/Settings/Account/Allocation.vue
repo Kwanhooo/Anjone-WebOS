@@ -53,13 +53,14 @@
         key="username"
         title="帐号昵称"
         data-index="username"
-        class-name="td-username"
+        class-name="td-not-center"
         :ellipsis="true"
       >
       </a-table-column>
       <a-table-column
         key="phone"
         title="手机号码"
+        class-name="td-not-center"
         data-index="phone"
         :ellipsis="true"
       >
