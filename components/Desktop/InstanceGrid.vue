@@ -5,11 +5,17 @@
         v-for="(instance, index) in registry"
         :key="index"
         :class="{ instance: true, active: activeIndex === index }"
+        draggable="true"
         @dblclick="onInstanceClicked(instance, index)"
         @click="activateInstance(index)"
       >
-        <img class="instance-icon" :alt="instance.name" :src="instance.icon" />
-        <div class="instance-name">{{ instance.name }}</div>
+        <img
+          class="instance-icon"
+          :alt="instance.name"
+          :src="instance.icon"
+          draggable="false"
+        />
+        <div class="instance-name" draggable="false">{{ instance.name }}</div>
       </div>
     </div>
   </div>
