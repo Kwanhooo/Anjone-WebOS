@@ -151,7 +151,7 @@ export default {
             y: 'center', // 通过x,y将标题(进度)定位在圆环中心
             textStyle: {
               fontSize: '15',
-              color: '#bbbbbb',
+              color: '#666',
               fontWeight: '400',
               fontFamily: 'sans-serif',
             },

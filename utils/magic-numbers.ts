@@ -10,3 +10,8 @@ export const DiskStatus = {
   Unmounted: 100,
   Disconnect: -1,
 }
+
+export const FileOrder = {
+  ASC: 'asc',
+  DESC: 'desc',
+}

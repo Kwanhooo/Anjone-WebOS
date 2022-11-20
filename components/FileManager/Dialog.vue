@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!--    <VDPhoto-->
-    <!--      v-if="imgData !== ''"-->
-    <!--      ref="VDPhoto"-->
-    <!--      :img-data="imgData"-->
-    <!--      :title="title"-->
-    <!--      @publish="publish"-->
-    <!--    />-->
     <DialogBody
       :uid="uid"
       class="dialog-file-manager"
@@ -415,6 +408,7 @@
               :data-source="displayData"
               size="middle"
               :locale="{ emptyText: '这个文件夹是空的哦！' }"
+              @change="handleTableChange"
             >
               <a
                 slot="filename"
@@ -442,6 +436,7 @@ import {
   enter,
   enterAbs,
   fileInfo,
+  orderFiles,
   refresh,
   rename,
   startService,
@@ -464,43 +459,31 @@ const columns = [
     dataIndex: 'filename',
     scopedSlots: { customRender: 'filename' },
     ellipsis: true,
-    sorter: (a, b) => a.filename.localeCompare(b.filename),
+    sorter: true,
   },
   {
     title: '创建日期',
     dataIndex: 'create_time',
     ellipsis: true,
-    sorter: (a, b) => {
-      const aTime = new Date(a.create_time).getTime()
-      const bTime = new Date(b.create_time).getTime()
-      return aTime - bTime
-    },
+    sorter: true,
   },
   {
     title: '最近访问',
     dataIndex: 'last_access_time',
     ellipsis: true,
-    sorter: (a, b) => {
-      const aTime = new Date(a.create_time).getTime()
-      const bTime = new Date(b.create_time).getTime()
-      return aTime - bTime
-    },
+    sorter: true,
   },
   {
     title: '最近写入',
     dataIndex: 'last_write_time',
     ellipsis: true,
-    sorter: (a, b) => {
-      const aTime = new Date(a.create_time).getTime()
-      const bTime = new Date(b.create_time).getTime()
-      return aTime - bTime
-    },
+    sorter: true,
   },
   {
     title: '大小',
     dataIndex: 'file_size',
     ellipsis: true,
-    sorter: (a, b) => a.file_size - b.file_size,
+    sorter: true,
     customRender: (text, record) => {
       return prettyBytes(text)
     },
@@ -614,6 +597,14 @@ export default Vue.extend({
     this.startSMB()
   },
   methods: {
+    handleTableChange(pagination, filters, sorter) {
+      const vm = this
+      let order = ''
+      if (sorter.order) order = sorter.order
+      orderFiles(sorter.field, order).then((res) => {
+        vm.displayData = res.data.data
+      })
+    },
     handleRowClicked(record, index) {
       const vm = this
       return {
@@ -1146,6 +1137,7 @@ th {
     display: flex;
     align-items: center;
     padding-left: 1.9em !important;
+    height: 2.3rem;
 
     svg {
       margin-right: 0.5em;
@@ -1172,7 +1164,10 @@ th {
 
   .children-wrapper {
     .item-child {
+      height: 2.53rem;
       background: @INACTIVE_BACKGROUND;
+      display: flex;
+      align-items: center;
     }
 
     .active-item-child {
@@ -1190,7 +1185,7 @@ th {
   flex-direction: column;
 
   .operation-bar {
-    height: 2.7em;
+    height: 2.3rem;
     //background-color: green;
     display: flex;
     flex-direction: row;

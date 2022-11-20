@@ -18,6 +18,7 @@ export const sysAPI = {
   FileInfo: '/samb/file_info/',
   Rename: '/samb/rename',
   Refresh: '/samb/refresh',
+  OrderFiles: '/samb/order',
 }
 
 /**
@@ -174,6 +175,18 @@ export function rename(parameter: any) {
 export function refresh() {
   return axiosInstance({
     url: sysAPI.Refresh,
+    method: 'get',
+  })
+}
+
+/**
+ * 排序
+ * @param by 排序字段
+ * @param seq 排序顺序
+ */
+export function orderFiles(by: string, seq: string) {
+  return axiosInstance({
+    url: sysAPI.OrderFiles + '?order_by=' + by + '&seq=' + seq,
     method: 'get',
   })
 }

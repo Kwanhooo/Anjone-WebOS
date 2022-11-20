@@ -105,11 +105,12 @@ export default Vue.extend({
   }
 
   .input-username {
-    background: rgba(@CONTENT_COLOR_C, 40%);
-    color: @CONTENT_COLOR_B;
+    background: rgba(@CONTENT_COLOR_C, 80%);
+    color: @CONTENT_COLOR_A;
     font-size: @LOGIN_FONT_SIZE;
     text-align: center;
     border: 1px solid @CONTENT_COLOR_A;
+    outline-style: none;
   }
 
   .input-password {

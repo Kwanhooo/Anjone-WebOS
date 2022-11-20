@@ -21,7 +21,6 @@ export default Vue.extend({
     document.title = '桌面 - 安居佑'
   },
   mounted() {
-    this.hideOverflow()
     // 如果窗口宽度小于1200px，那么将#env-monitor-wrapper隐藏
     window.addEventListener('resize', () => {
       this.hideOverflow()
@@ -75,6 +74,7 @@ export default Vue.extend({
       this.$store.commit('sys/SET_IS_TODOLIST_ACTIVE', false)
       this.$store.commit('sys/SET_IS_MESSAGE_CENTER_ACTIVE', false)
     })
+    this.hideOverflow()
     this.preLoadImages()
   },
   methods: {
