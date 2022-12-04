@@ -1,3 +1,6 @@
+/*
+ * 通用
+ */
 import { storage } from '~/api/system'
 import { stopService } from '~/api/samb'
 import { Status } from '~/utils/magic-numbers'

@@ -1,3 +1,4 @@
+<!-- 桌面页 -->
 <template>
   <div id="desktop-wrapper">
     <DesktopTopBar />

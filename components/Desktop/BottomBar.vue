@@ -1,3 +1,4 @@
+<!-- 任务栏组件 -->
 <template>
   <div id="bottom-bar-wrapper">
     <div
@@ -7,7 +8,7 @@
     >
       <div id="start-side">
         <div id="start-side-slogan">
-          <span>Anjone家庭数据中心 2022</span>
+          <img src="@/assets/image/logo.png" alt="logo" class="logo" />
         </div>
       </div>
       <div id="start-main">
@@ -250,7 +251,8 @@ export default {
     z-index: 9999999;
     min-width: 424px;
     width: 20vw;
-    height: 50vh;
+    height: 52vh;
+    min-height: 480px;
     position: fixed;
     left: 0;
     bottom: 50px;
@@ -266,19 +268,13 @@ export default {
       background-color: @START_SIDE_COLOR;
 
       #start-side-slogan {
-        //position: relative;
-        //top: 240px;
-        //left: -165px;
-        //margin: auto;
-        //rotate: 270deg;
-        //width: 400px;
-        //font-size: 18px;
-        //letter-spacing: 2px;
-        //color: @START_SIDE_FONT_COLOR;
+        .logo {
+          width: 190px;
+        }
 
         position: fixed;
-        bottom: calc(50px + 7.5em);
-        left: -88px;
+        bottom: calc(170px);
+        left: -60px;
         margin: auto;
         transform: rotate(270deg);
         /* width: 400px; */
@@ -311,7 +307,7 @@ export default {
     #start-main {
       min-width: calc(100vw - 84px);
       display: flex;
-      padding: 1em 0;
+      padding: 1em 0.75em;
 
       .start-instance {
         display: inline-block;
@@ -345,9 +341,9 @@ export default {
         max-width: 340px;
 
         .start-instance {
-          width: 28%;
+          width: 27%;
           padding: 0.5em 0.1em 0.5em 0.1em;
-          margin: 0 2% 2em 2%;
+          margin: 0 2% 0.5em 2%;
         }
       }
 

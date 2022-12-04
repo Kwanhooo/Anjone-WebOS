@@ -1,0 +1,144 @@
+@import 'assets/style/global.less';
+
+@TITLE_COLOR_LIGHT: #cecece;
+@TITLE_FONT_COLOR_LIGHT: #6c6c6c;
+@DISTANCE_TO_BORDER: 1em;
+@HOVER_COLOR: #a4a4a4;
+
+.widget-visible {
+  opacity: 0;
+}
+
+#monitor-widget-wrapper {
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  width: 29em;
+  border-radius: 10px;
+  height: calc(100vh - 120px);
+  background: rgba(@CONTENT_COLOR_C, 90%);
+  transition: all ease-in-out 0.15s;
+  opacity: 0;
+  z-index: 999999;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+
+  .op-bar {
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 2.5em;
+    width: 100%;
+    background-color: @STRONG_THEME_COLOR_LIGHT;
+    display: flex;
+    justify-content: space-between;
+
+    .title-wrapper {
+      color: white;
+      height: 100%;
+      position: relative;
+      left: @DISTANCE_TO_BORDER;
+      padding-top: 0.4em;
+      font-size: 1.15em;
+    }
+
+    .op-wrapper {
+      position: relative;
+      right: @DISTANCE_TO_BORDER;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+
+      .op-item {
+        width: 1.5em;
+        height: 1.5em;
+        padding: 1em;
+        margin: 0.2em @DISTANCE_TO_BORDER 0 0.2em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        transition: all ease-in-out 0.1s;
+
+        &:hover {
+          background: @HOVER_COLOR;
+        }
+      }
+    }
+  }
+
+  .main {
+    height: calc(100% - 2.5em);
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    #monitor-overview-wrapper {
+      height: 130px;
+      //background-color: white;
+      display: flex;
+      flex-direction: row;
+
+      #storage-chart-wrapper {
+        flex: 3;
+        position: relative;
+        left: 0;
+        top: 0;
+        padding-top: 0.2em;
+        height: 100%;
+        max-width: 150px;
+      }
+
+      .info-wrapper {
+        flex: 5;
+        color: @TITLE_FONT_COLOR_LIGHT;
+        padding-left: 0.6em;
+
+        #device-info-wrapper {
+          font-family: @GLOBAL_FONT_FAMILY;
+          font-size: 14px;
+
+          .device-name {
+            padding-top: 0.8em;
+            font-size: 1.3em;
+          }
+
+          .reg-time {
+            padding-bottom: 0.8em;
+            font-size: 1em;
+          }
+        }
+
+        #storage-detail-wrapper {
+          font-size: 1em;
+        }
+      }
+    }
+
+    #monitor-charts-wrapper {
+      font-size: 14px;
+      font-weight: bold;
+      color: #6c6c6c;
+      font-family: @GLOBAL_FONT_FAMILY;
+
+      #cpu-usage-wrapper {
+        width: 28em;
+        height: calc((100vh - 300px - 7em) / 3);
+        min-height: 10rem;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        left: 0.5em;
+        margin-bottom: 1em;
+      }
+
+      #mem-usage-wrapper {
+        #cpu-usage-wrapper;
+      }
+
+      #net-usage-wrapper {
+        #cpu-usage-wrapper;
+      }
+    }
+  }
+}

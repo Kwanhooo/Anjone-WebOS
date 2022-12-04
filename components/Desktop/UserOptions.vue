@@ -1,3 +1,4 @@
+<!-- 点击用户名时出现的用户选项DropDown -->
 <template>
   <div id="user-option-wrapper" class="select-box-wrapper __closable__">
     <div class="select-box-item" @click="loadAccountSettings()">

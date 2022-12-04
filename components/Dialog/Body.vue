@@ -1,3 +1,4 @@
+<!-- 对话框组件的主体部分 -->
 <template>
   <div
     v-if="!isClose"
@@ -10,7 +11,8 @@
   >
     <div class="dialog-header">
       <DialogHeader
-        v-dClick="vm"
+        ref="dialogHeader"
+        v-dbClick="vm"
         :is-active="getIsActive()"
         @close="handleClose()"
         @minimize="handleMinimize()"
@@ -92,15 +94,17 @@ export default Vue.extend({
           el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
         }
         el.onclick = () => {
-          if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
-            $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
-            $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', binding.value.uid)
-            el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
-          }
+          // if (el.style.zIndex < $nuxt.$store.state.sys.dialogZIndex) {
+          $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+          $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', binding.value.uid)
+          // el.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+          binding.value.$refs.dialog.style.zIndex =
+            $nuxt.$store.state.sys.dialogZIndex
+          // }
         }
       },
     },
-    dClick: {
+    dbClick: {
       inserted(el, binding) {},
       bind(el, binding) {
         el.ondblclick = (e) => {
@@ -239,6 +243,11 @@ export default Vue.extend({
       const vm = this
       this.getIsShow().then((res) => {
         vm.isShow = res
+        if (res === true) {
+          $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+          this.$refs.dialog.style.zIndex =
+            $nuxt.$store.state.sys.dialogZIndex + ''
+        }
       })
       return null
     },

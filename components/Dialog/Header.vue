@@ -1,3 +1,4 @@
+<!-- 对话框组件的标题栏 -->
 <template>
   <div :class="{ 'header-wrapper': true, 'active-header-wrapper': isActive }">
     <div class="dialog-title">

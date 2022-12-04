@@ -1,3 +1,4 @@
+<!-- 密码重设页 -->
 <template>
   <div class="pwd-wrapper">
     <input

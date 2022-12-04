@@ -1,3 +1,4 @@
+<!-- 左上角空间选择器 -->
 <template>
   <div id="device-selector-wrapper" class="__closable__">
     <GeneralSelectBox :options="options" />

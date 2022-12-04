@@ -1,111 +1,3 @@
-<!-- 通知中心 -->
-<template>
-  <div id="message-center-widget-wrapper" class="desktop-widget __closable__">
-    <div class="op-bar">
-      <div class="title-wrapper">通知中心</div>
-      <div class="op-wrapper">
-        <div class="op-item">
-          <img
-            alt="minimize"
-            src="@/assets/svg/delete.svg"
-            style="margin-top: 2px"
-            @click="onClearClicked()"
-          />
-        </div>
-        <div
-          class="op-item"
-          style="margin-top: 0.3em; margin-right: 0.5em"
-          @click="onCloseClicked()"
-        >
-          <img alt="minimize" src="@/assets/svg/monitor-close.svg" />
-        </div>
-      </div>
-    </div>
-    <div class="main">
-      <div v-if="messages.length === 0" class="hint">
-        <span>目前无系统消息！</span>
-      </div>
-      <div
-        v-for="(msg, index) in messages"
-        :key="index"
-        class="msg-item-wrapper"
-      >
-        <div class="title">
-          <span
-            :class="{
-              type: true,
-              warn: msg.type === 'Warn',
-              error: msg.type === 'Error',
-            }"
-          >
-            {{ msg.title }}
-          </span>
-          <span class="time">
-            {{ msg.create_time }}
-          </span>
-        </div>
-        <hr style="height: 2px; background-color: #cecece; border: none" />
-        <div class="content">
-          <span>
-            {{ msg.content }}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-import Vue from 'vue'
-import { deleteAll, GetNotice } from '@/api/notice'
-
-export default Vue.extend({
-  name: 'MessageCenterWidget',
-  data() {
-    return {
-      messages: [],
-    }
-  },
-  mounted() {
-    this.startPolling()
-    setTimeout(() => {
-      document.getElementById('message-center-widget-wrapper').style.opacity =
-        '1'
-    }, 150)
-  },
-  methods: {
-    onClearClicked() {
-      if (this.messages.length === 0) {
-        return
-      }
-      deleteAll().then(() => {
-        this.messages = []
-      })
-    },
-    onCloseClicked() {
-      $nuxt.$store.commit('sys/SET_IS_MESSAGE_CENTER_ACTIVE', false)
-      const vm = this
-      document.getElementById('message-center-widget-wrapper').style.opacity =
-        '0'
-      setTimeout(() => {
-        vm.opacityGoing = false
-        document.getElementById('message-center-widget-wrapper').remove()
-      }, 150)
-    },
-    startPolling() {
-      const vm = this
-      GetNotice().then((res) => {
-        vm.messages = res.data.data
-        setTimeout(() => {
-          vm.startPolling()
-        }, 30000)
-      })
-    },
-  },
-})
-</script>
-
-<style lang="less" scoped>
 @import 'assets/style/global.less';
 
 @TITLE_COLOR_LIGHT: #cecece;
@@ -117,18 +9,18 @@ export default Vue.extend({
   opacity: 0;
 }
 
-#message-center-widget-wrapper {
+#task-manager-widget-wrapper {
   position: absolute;
   right: 10px;
   top: 60px;
   width: 29em;
+  border-radius: 10px;
   height: calc(100vh - 120px);
   background: rgba(@CONTENT_COLOR_C, 90%);
   transition: all ease-in-out 0.15s;
   opacity: 0;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   z-index: 999999;
-  border-radius: 10px;
 
   .op-bar {
     border-radius: 10px 10px 0 0;
@@ -207,7 +99,7 @@ export default Vue.extend({
       color: #6c6c6c;
     }
 
-    .msg-item-wrapper {
+    .task-item-wrapper {
       border: 2px solid @TITLE_COLOR_LIGHT;
       border-radius: 8px;
       margin: 0.4em 1.5em;
@@ -253,4 +145,3 @@ export default Vue.extend({
     }
   }
 }
-</style>

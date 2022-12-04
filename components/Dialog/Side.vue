@@ -1,3 +1,4 @@
+<!-- 对话框组件边栏 -->
 <template>
   <div class="side-wrapper">
     <slot name="options" />

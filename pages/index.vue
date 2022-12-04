@@ -1,3 +1,4 @@
+<!-- 根组件 -->
 <template>
   <NuxtChild />
 </template>
@@ -20,7 +21,7 @@ export default Vue.extend({
       // 将窗口打开记录表清空
       target.dock.uid = 1000
       target.dock.pending = []
-      // registry注册表涉及到对象引用，务必保留
+      // registry注册表需要保留
       target.dock.registry = this.$store.state.dock.registry
       target.dock.extraRegistry = this.$store.state.dock.extraRegistry
       target.desktop.registry = this.$store.state.desktop.registry

@@ -1,6 +1,6 @@
 # 安居佑 ![visitors](https://visitor-badge.glitch.me/badge?page_id=Kwanhooo.Anjone-WebOS)
 
-### —— Anjone
+### —— Anjone WebOS
 
 _本项目的开发工作起始于：2022 年 9 月 28 日 星期五_
 
@@ -8,9 +8,9 @@ _本项目的开发工作起始于：2022 年 9 月 28 日 星期五_
 
 > 2022 © [安居佑 - 家庭数据中心](https://anjone.0xCAFEBABE.cn)
 >
-> Powered by [©Anjone Co.Ltd](https://gitee.com/hixs/kunpeng_front)
+> Powered by [©Anjone Co.Ltd](https://github.com/Kwanhooo/Anjone-WebOS)
 
-## 💻 开发技术
+## 💻 开发
 
 ### 基本
 
@@ -35,11 +35,11 @@ _本项目的开发工作起始于：2022 年 9 月 28 日 星期五_
 
 ### 其它开发依赖
 
-- lodash.clonedeep (深拷贝)
-- spacejs (测量工具)
-- mockjs (模拟数据)
+- lodash.clonedeep
+- spacejs (测量)
+- mockjs
 
-## 🦾 源码构建
+## 🦾 源码
 
 ### 1. 安装依赖
 
@@ -69,16 +69,14 @@ npm run lintfix
 ```shell
 # 提交代码
 
-# 1.添加到暂存区
+# 1.添加暂存区
 git add .
 
 # 2.提交代码
   # `type`的允许值详见 commitlint.config.js
-  # 示例：git commit -m "feat: 新增动态路由功能"
-  # 此时会触发先前注册的钩子，执行代码格式化、代码检查、代码提交等操作
 git commit -m <type>[optional scope]: <description>
 
-# 3.推送至远端
+# 3.推送
 git push
 ```
 
@@ -88,13 +86,13 @@ git push
 
 - 主机：_vercel.com_
 - 访问方式：*https://anjone.0xCAFEBABE.cn*
-- 方案：透过**Github Action**进行检查；透过**Vercel**部署；通过 Nginx 反向代理到**Vercel**主机
+- 方式：透过**Vercel**部署；通过 Nginx 反向代理**Vercel**
 
 2. ### 生产环境 (env.prod)
 
 - 主机：Anjone 硬件 以及 云端
 - 访问方式：本地局域网内访问 或 云端访问
-- 方案：未知
+- 方式：未知
 
 ## 🏃 状态
 
@@ -104,7 +102,7 @@ git push
 
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/Kwanhooo/Anjone-WebOS/vue?style=for-the-badge)
 
-![Website](https://img.shields.io/website?label=prod-services&style=for-the-badge&url=http%3A%2F%2Fanjone.0xcafebabe.cn%2F)
+![Website](https://img.shields.io/website?label=prod-services&style=for-the-badge&url=http%3A%2F%2F47.98.34.218:3000%2F)
 
 ---
 

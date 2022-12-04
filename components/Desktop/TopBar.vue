@@ -1,3 +1,4 @@
+<!-- 顶栏 -->
 <template>
   <div id="top-bar-wrapper">
     <div id="center-switch-wrapper">
@@ -56,6 +57,7 @@
               : require('@/assets/svg/todo.svg')
           "
           style="margin-right: 2em"
+          @click="openTaskManager()"
         />
         <img
           alt="message"
@@ -86,6 +88,7 @@
 import Vue from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
 import MonitorWidget from '@/components/Monitor/Widget'
+import TaskManager from '@/components/TaskManager/Widget.vue'
 import UserOptions from '@/components/Desktop/UserOptions'
 import DeviceSelector from '@/components/Desktop/DeviceSelector'
 import MessageCenter from '@/components/MessageCenter/Widget'
@@ -129,6 +132,12 @@ export default Vue.extend({
         this.setMonitorActive(false)
         return
       }
+      if (document.getElementById('task-manager-widget-wrapper') !== null) {
+        setTimeout(() => {
+          document.getElementById('task-manager-widget-wrapper').remove()
+        }, 150)
+        this.setTodoListActive(false)
+      }
       if (document.getElementById('message-center-widget-wrapper') !== null) {
         setTimeout(() => {
           document.getElementById('message-center-widget-wrapper').remove()
@@ -140,6 +149,36 @@ export default Vue.extend({
       const settingsWrapper = document.createElement('div')
       document.getElementById('desktop-wrapper').appendChild(settingsWrapper)
       this.widget = new MonitorWidgetVueComponent().$mount(settingsWrapper)
+    },
+    openTaskManager() {
+      const vm = this
+      if (document.getElementById('task-manager-widget-wrapper') !== null) {
+        setTimeout(() => {
+          document.getElementById('task-manager-widget-wrapper').remove()
+        }, 150)
+        this.setTodoListActive(false)
+        return
+      }
+      if (document.getElementById('monitor-widget-wrapper') !== null) {
+        document.getElementById('monitor-widget-wrapper').style.opacity = '0'
+        setTimeout(() => {
+          document.getElementById('monitor-widget-wrapper').remove()
+          vm.setMonitorActive(false)
+        }, 150)
+      }
+      if (document.getElementById('message-center-widget-wrapper') !== null) {
+        setTimeout(() => {
+          document.getElementById('message-center-widget-wrapper').remove()
+        }, 150)
+        this.setMessageCenterActive(false)
+      }
+      this.setTodoListActive(true)
+      const TaskManagerWidgetVueComponent = Vue.extend(TaskManager)
+      const taskManagerWrapper = document.createElement('div')
+      document.getElementById('desktop-wrapper').appendChild(taskManagerWrapper)
+      this.widget = new TaskManagerWidgetVueComponent().$mount(
+        taskManagerWrapper
+      )
     },
     openMessageCenter() {
       const vm = this
@@ -156,6 +195,12 @@ export default Vue.extend({
           document.getElementById('monitor-widget-wrapper').remove()
           vm.setMonitorActive(false)
         }, 150)
+      }
+      if (document.getElementById('task-manager-widget-wrapper') !== null) {
+        setTimeout(() => {
+          document.getElementById('task-manager-widget-wrapper').remove()
+        }, 150)
+        this.setTodoListActive(false)
       }
       this.setMessageCenterActive(true)
       const MessageCenterWidgetVueComponent = Vue.extend(MessageCenter)

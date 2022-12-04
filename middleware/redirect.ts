@@ -1,3 +1,5 @@
+import { NuxtApp } from '@nuxt/types/app'
+
 export default function ({
   isHMR,
   app,
@@ -7,13 +9,13 @@ export default function ({
   error,
   redirect,
 }: {
-  isHMR: any
-  app: any
+  isHMR: boolean
+  app: NuxtApp
   store: any
-  route: any
-  params: any
-  error: any
-  redirect: any
+  route: { fullPath: string }
+  params: Object
+  error: Error
+  redirect: Function
 }) {
   if (isHMR) return
   if (route.fullPath === '/') return redirect('/desktop')

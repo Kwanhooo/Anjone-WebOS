@@ -1,3 +1,6 @@
+/**
+ * 设备系统信息
+ */
 import { add } from 'husky'
 import { getAddress, getDevInfo, getVersion, storage } from '~/api/system'
 

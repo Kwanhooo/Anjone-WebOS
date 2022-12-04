@@ -1,3 +1,4 @@
+<!-- 设备绑定页 -->
 <template>
   <div class="bind-wrapper">
     <input

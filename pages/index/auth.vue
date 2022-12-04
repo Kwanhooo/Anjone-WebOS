@@ -1,3 +1,4 @@
+<!-- 认证页 -->
 <template>
   <div class="wrapper">
     <div class="content-wrapper">

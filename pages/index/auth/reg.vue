@@ -1,3 +1,4 @@
+<!-- 注册页 -->
 <template>
   <div class="reg-wrapper">
     <input

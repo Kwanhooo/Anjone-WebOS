@@ -7,7 +7,8 @@ cd /root/anjone-frontend/ 2>>/dev/null || mkdir -p /root/anjone-frontend/log/ &&
 rm -rf ./Anjone-WebOS/
 
 # clone the repo
-git clone https://github.com/Kwanhooo/Anjone-WebOS.git # Kwanhooo  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
+git clone https://github.com/Kwanhooo/Anjone-WebOS.git # 需要token
+git clone git@github.com:Kwanhooo/Anjone-WebOS.git # SSH
 
 # cd to src directory
 cd ./Anjone-WebOS/ 2>>/dev/null || (echo 'Failed when Clone the Repository, By the way, the Password you input should be your personal github token (readable permission)' ; exit)

@@ -1,21 +1,34 @@
+<!-- 桌面图标组件 -->
 <template>
   <div id="instance-grid-wrapper" ref="grid">
-    <div class="column">
+    <div v-for="col in slicedRegistry.length" :key="col" class="column">
       <div
-        v-for="(instance, index) in registry"
+        v-for="(instance, index) in slicedRegistry[col - 1]"
         :key="index"
-        :class="{ instance: true, active: activeIndex === index }"
+        :class="{
+          instance: true,
+        }"
         draggable="true"
-        @dblclick="onInstanceClicked(instance, index)"
-        @click="activateInstance(index)"
+        @click="
+          onInstanceClicked(instance, col, index)
+          activateInstance(col, index)
+        "
       >
-        <img
-          class="instance-icon"
-          :alt="instance.name"
-          :src="instance.icon"
-          draggable="false"
-        />
-        <div class="instance-name" draggable="false">{{ instance.name }}</div>
+        <div
+          :class="{
+            inner: true,
+            active:
+              activePosition.col === col && activePosition.index === index,
+          }"
+        >
+          <img
+            class="instance-icon"
+            :alt="instance.name"
+            :src="instance.icon"
+            draggable="false"
+          />
+          <div class="instance-name" draggable="false">{{ instance.name }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -29,13 +42,17 @@ export default Vue.extend({
   name: 'InstanceGrid',
   data() {
     return {
-      activeIndex: null,
+      activePosition: { col: null, index: null },
+      amountInColumn: 6,
     }
   },
   computed: {
     ...mapState({
-      registry: (state) => state.desktop.registry,
+      slicedRegistry: (state) => state.desktop.slicedRegistry,
     }),
+  },
+  created() {
+    this.getSlicedRegistry()
   },
   mounted() {
     this.$nextTick(() => {
@@ -48,16 +65,20 @@ export default Vue.extend({
           }
         })
         if (!flag) {
-          this.activeIndex = null
+          this.activePosition = { col: null, index: null }
         }
       })
     })
   },
   methods: {
-    activateInstance(index) {
-      this.activeIndex = index
+    getSlicedRegistry() {
+      this.$store.dispatch('desktop/GetSlicedRegistry', this.amountInColumn)
     },
-    onInstanceClicked(instance, index) {
+    activateInstance(col, index) {
+      this.activePosition.col = col
+      this.activePosition.index = index
+    },
+    onInstanceClicked(instance, col, index) {
       if (instance.component === null) return
       let existInstance = null
       // 遍历pending，如果有相同的，就激活它
