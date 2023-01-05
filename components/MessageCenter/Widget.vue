@@ -233,7 +233,7 @@ export default Vue.extend({
       }
 
       .title {
-        font-size: 1.2em;
+        font-size: 1.05em;
         display: flex;
         flex-direction: row;
 
@@ -259,7 +259,7 @@ export default Vue.extend({
       }
 
       .content {
-        font-size: 1.1em;
+        font-size: 0.95em;
       }
     }
   }
