@@ -135,7 +135,7 @@ export default Vue.extend({
     position: relative;
     top: 0;
     left: 0;
-    height: 2.5em;
+    height: 30px;
     width: 100%;
     background-color: @STRONG_THEME_COLOR_LIGHT;
     display: flex;
@@ -146,8 +146,8 @@ export default Vue.extend({
       height: 100%;
       position: relative;
       left: @DISTANCE_TO_BORDER;
-      padding-top: 0.4em;
-      font-size: 1.15em;
+      padding-top: 0.25em;
+      font-size: 1.02em;
     }
 
     .op-wrapper {
@@ -158,15 +158,23 @@ export default Vue.extend({
       flex-direction: row;
 
       .op-item {
-        width: 1.5em;
-        height: 1.5em;
-        padding: 1em;
+        width: 24px;
+        height: 24px;
+        //padding: 1px;
         margin: 0.2em @DISTANCE_TO_BORDER 0 0.2em;
-        display: inline-flex;
+        display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 10px;
+        border-radius: 5px;
         transition: all ease-in-out 0.1s;
+        cursor: pointer;
+
+        img {
+          width: 16px;
+          height: 16px;
+          //padding-right: 1px;
+          //padding-bottom: 2px;
+        }
 
         &:hover {
           background: @HOVER_COLOR;
@@ -176,7 +184,7 @@ export default Vue.extend({
   }
 
   .main {
-    height: calc(100% - 2.5em);
+    height: calc(100% - 30px);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -202,7 +210,7 @@ export default Vue.extend({
     }
 
     .hint {
-      margin: 2.5em auto 0 auto;
+      margin: 30px auto 0 auto;
       font-size: 1rem;
       color: #6c6c6c;
     }

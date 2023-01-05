@@ -347,7 +347,7 @@ export default Vue.extend({
     position: relative;
     left: 0;
     top: 0;
-    height: calc(100% - 2em);
+    height: calc(100% - 30px);
     display: flex;
     flex-direction: row;
 
@@ -401,7 +401,7 @@ export default Vue.extend({
   top: 0;
   left: 0;
   width: 100%;
-  height: 2em;
+  height: 30px;
   background: @HEADER_COLOR_LIGHT;
   display: flex;
   justify-content: space-between;
