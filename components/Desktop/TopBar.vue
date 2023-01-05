@@ -225,8 +225,10 @@ export default Vue.extend({
       userOptions.style.position = 'absolute'
       userOptions.style.top = '45px'
       userOptions.style.left =
-        document.getElementById('user-op-wrapper').getBoundingClientRect()
-          .left + 'px'
+        Number(
+          document.getElementById('user-op-wrapper').getBoundingClientRect()
+            .left - 8
+        ) + 'px'
     },
     onDeviceSelectorClicked() {
       if (document.getElementById('device-selector-wrapper') !== null) {

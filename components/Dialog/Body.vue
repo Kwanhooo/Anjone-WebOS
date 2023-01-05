@@ -341,9 +341,11 @@ export default Vue.extend({
   background: @DIALOG_BODY_COLOR_LIGHT;
   display: flex;
   flex-direction: column;
-  box-shadow: #6c6c6c 0 0 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   transition: opacity 0.15s ease-in-out;
   opacity: 0;
+  border-radius: 10px;
+  overflow: hidden;
 
   .dialog-main {
     position: relative;
@@ -415,8 +417,8 @@ export default Vue.extend({
   .dialog-title {
     position: relative;
     left: @DISTANCE_TO_BORDER;
-    padding-top: 0.25em;
-    font-size: 1em;
+    padding-top: 0.23em;
+    font-size: 0.95em;
     max-width: calc(100% - 10em);
     overflow: hidden;
     text-overflow: ellipsis;

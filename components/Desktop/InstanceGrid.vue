@@ -68,9 +68,24 @@ export default Vue.extend({
           this.activePosition = { col: null, index: null }
         }
       })
+      window.addEventListener('resize', this.handleResize)
     })
   },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
+  },
   methods: {
+    handleResize() {
+      // 获取当前窗口的高度
+      const height = document.documentElement.clientHeight
+      // 如果高度小于 950，每90个像素this.amountInColumn减少一个
+      if (height < 1000) {
+        this.amountInColumn = Math.floor((height - 100) / 140)
+      } else {
+        this.amountInColumn = 6
+      }
+      this.getSlicedRegistry()
+    },
     getSlicedRegistry() {
       this.$store.dispatch('desktop/GetSlicedRegistry', this.amountInColumn)
     },

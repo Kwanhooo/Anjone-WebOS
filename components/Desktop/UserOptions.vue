@@ -255,11 +255,12 @@ export default {
   background: white;
   box-shadow: rgb(0 0 0 / 5%) 0px 9px 28px 8px, rgb(0 0 0 / 8%) 0px 6px 16px,
     rgb(0 0 0 / 12%) 0px 3px 6px -4px;
+  padding: 3px 0;
 
   .select-box-item {
     cursor: pointer;
     height: 30px;
-    transition: all 0.3s;
+    transition: all ease-in-out 0.3s;
     padding: 0.3em 1.2em;
     display: flex;
     flex-direction: row;
@@ -268,9 +269,8 @@ export default {
 
     &:hover {
       background: #f5f5f5;
-      fill: #337ff3 !important;
 
-      * {
+      svg * {
         fill: #337ff3 !important;
       }
     }
