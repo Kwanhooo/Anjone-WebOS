@@ -4,7 +4,25 @@
       <span>影音中心</span>
     </template>
     <template #body>
-      <div class="movies-center-body">
+      <div v-if="videoToPlay !== null" class="player-wrapper">
+        <div class="go-back">
+          <img
+            src="@/assets/svg/go-back.svg"
+            alt="go-back"
+            draggable="false"
+            @click="handleGoBack()"
+          />
+        </div>
+        <video
+          id="embedded-player"
+          :src="`${videoToPlay}`"
+          controls="controls"
+          preload="auto"
+          autoplay="autoplay"
+          loop="loop"
+        ></video>
+      </div>
+      <div v-else class="movies-center-body">
         <div class="top-bar"></div>
         <div class="tool-kits-wrapper">
           <div class="tool-item">
@@ -26,23 +44,20 @@
           </div>
         </div>
         <div class="display-area">
-          <div v-for="i in 1" :key="'movie-' + i" class="movie-item">
-            <div
-              class="cover"
-              :style="
-                setBackground(
-                  'https://demo.jellyfin.org/stable/Items/5e6e8380563c5211106652362c5c6843/Images/Backdrop?fillHeight=216&fillWidth=384&quality=96&tag=eabf7d2d855a27dd529bb34a028fe758'
-                )
-              "
-            >
-              <div class="play-btn" @click="handlePlay()">
+          <div
+            v-for="(movie, index) in movies"
+            :key="'movie-' + index"
+            class="movie-item"
+          >
+            <div class="cover" :style="setBackground(`${movie.cover}`)">
+              <div class="play-btn" @click="handlePlay(`${movie.url}`)">
                 <img src="@/assets/svg/play.svg" alt="play" draggable="false" />
               </div>
               <div class="btn-group"></div>
             </div>
             <div class="infos">
-              <div class="title">Night of the Living Dead</div>
-              <div class="desc">1968</div>
+              <div class="title">{{ movie.name }}</div>
+              <div class="desc">{{ movie.desc }}</div>
             </div>
           </div>
           <div
@@ -67,8 +82,17 @@ export default {
   },
   data() {
     return {
-      dialogWidth: null,
-      dialogHeight: null,
+      videoToPlay: null,
+      movies: [
+        {
+          id: 1,
+          name: 'Night of the Living Dead',
+          desc: 1968,
+          cover:
+            'https://demo.jellyfin.org/stable/Items/5e6e8380563c5211106652362c5c6843/Images/Backdrop?fillHeight=216&fillWidth=384&quality=96&tag=eabf7d2d855a27dd529bb34a028fe758',
+          url: 'https://vjs.zencdn.net/v/oceans.mp4',
+        },
+      ],
     }
   },
   methods: {
@@ -79,7 +103,12 @@ export default {
         ') no-repeat; background-size: cover; font-size: 1rem;'
       )
     },
-    handlePlay() {},
+    handlePlay(url) {
+      this.videoToPlay = url
+    },
+    handleGoBack() {
+      this.videoToPlay = null
+    },
   },
 }
 </script>

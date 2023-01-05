@@ -6,6 +6,49 @@
   transition: all 0.25s ease;
 }
 
+.player-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #101010;
+
+  .go-back {
+    position: absolute;
+    width: 7rem;
+    height: 7rem;
+    padding: 0.8rem 1rem;
+    top: 0;
+    left: 0;
+    //background: #4f98fd;
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+      z-index: 9999;
+      padding: 0.5rem;
+      border-radius: 50%;
+      opacity: 0.85;
+      cursor: pointer;
+
+      &:hover {
+        background: #6b6b6bee;
+      }
+    }
+  }
+
+  #embedded-player {
+    width: 100%;
+    height: auto;
+  }
+}
+
 .movies-center-body {
   width: 100%;
   height: 100%;
