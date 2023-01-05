@@ -93,7 +93,18 @@
         />
       </div>
     </div>
-
+    <div id="datetime-area-wrapper">
+      <a-divider type="vertical" class="divider" />
+      <div id="date-area-wrapper">
+        <div>{{ day }}</div>
+        <div>{{ lunarDate }}</div>
+      </div>
+      <a-divider type="vertical" class="divider" />
+      <div id="time-area-wrapper">
+        <div>{{ time }}</div>
+        <div>{{ date }}</div>
+      </div>
+    </div>
     <div id="go-to-desktop" @click="handleGoToDesktop()"></div>
   </div>
 </template>
@@ -101,6 +112,7 @@
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { getLunar } from 'chinese-lunar-calendar'
 import SettingsDialog from '@/components/Settings/Dialog'
 import FileManager from '@/components/FileManager/Dialog'
 
@@ -112,6 +124,10 @@ export default {
       // isShowStart: false,
       isExpandStart: false,
       opacityGoing: false,
+      day: '',
+      lunarDate: '',
+      time: '',
+      date: '',
     }
   },
   computed: {
@@ -122,7 +138,40 @@ export default {
       isShowStart: (state) => state.dock.isShowStart,
     }),
   },
+  mounted() {
+    this.updateTimeInfo()
+    this.updateHMS()
+    setInterval(() => {
+      this.updateHMS()
+    }, 1000)
+  },
   methods: {
+    updateHMS() {
+      const time = new Date()
+      const hour = time.getHours()
+      const minute = time.getMinutes()
+      const second = time.getSeconds()
+      this.time = `${hour < 10 ? '0' + hour : hour}:${
+        minute < 10 ? '0' + minute : minute
+      }:${second < 10 ? '0' + second : second}`
+    },
+    updateTimeInfo() {
+      // 获取今天是星期几
+      const time = new Date()
+      const week = new Date().getDay()
+      const weekMap = ['日', '一', '二', '三', '四', '五', '六']
+      this.day = `星期${weekMap[week]}`
+      // 获取日期
+      const year = time.getFullYear()
+      const month = time.getMonth() + 1
+      const day = time.getDate()
+      this.date = `${year}/${month < 10 ? '0' + month : month}/${
+        day < 10 ? '0' + day : day
+      }`
+      // 获取农历日期
+      const lunar = getLunar(year, month, day)
+      this.lunarDate = lunar.dateStr
+    },
     onStartClicked() {
       const vm = this
       if (this.isShowStart) {
@@ -232,6 +281,7 @@ export default {
 @START_SIDE_COLOR: #cecece;
 @START_MAIN_COLOR: #e8e8e8;
 @START_SIDE_FONT_COLOR: #4f4f4f;
+@DATE_TIME_WIDTH: 100px;
 
 .start-trans {
   opacity: 0;
@@ -392,15 +442,46 @@ export default {
     }
   }
 
+  #datetime-area-wrapper {
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+
+    #date-area-wrapper {
+      height: 100%;
+      width: @DATE_TIME_WIDTH;
+      padding-top: 4px;
+      text-align: center;
+    }
+
+    #time-area-wrapper {
+      height: 100%;
+      width: @DATE_TIME_WIDTH;
+      text-align: center;
+      padding-top: 5px;
+    }
+  }
+
   #go-to-desktop {
     background-color: #bbbbbb;
     position: absolute;
     right: 0;
     bottom: 0;
     height: 50px;
-    width: 35px;
+    width: 20px;
     pointer-events: auto;
     cursor: pointer;
   }
+}
+
+.divider {
+  width: 1px;
+  height: 30px;
+  margin-top: 12px;
+  background-color: #888888;
 }
 </style>
