@@ -449,7 +449,7 @@ export default {
     height: 50px;
     display: flex;
     flex-direction: row;
-    font-size: 14px;
+    font-size: 13px;
 
     #date-area-wrapper {
       height: 100%;
