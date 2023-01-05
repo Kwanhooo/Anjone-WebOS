@@ -27,6 +27,17 @@ export default Vue.extend({
       this.hideOverflow()
     })
     window.addEventListener('click', (evt) => {
+      const dialogPath = evt.path || (evt.composedPath && evt.composedPath())
+      let isAnyDialogClicked = false
+      dialogPath.forEach((item) => {
+        if (item.classList && item.classList.contains('dialog-wrapper')) {
+          isAnyDialogClicked = true
+        }
+      })
+      if (isAnyDialogClicked === false) {
+        this.$store.commit('dock/SET_ACTIVE_APP_UID', -1)
+      }
+
       if (this.$store.state.sys.showDropDown) {
         const path = evt.path || (evt.composedPath && evt.composedPath())
         let hasSelf = false
@@ -52,8 +63,10 @@ export default Vue.extend({
         0,
         -4
       )
+
       let isClosableClicked = false
       let isStartClicked = false
+
       path.forEach((item) => {
         if (
           (item.id && item.id === 'top-bar-wrapper') ||

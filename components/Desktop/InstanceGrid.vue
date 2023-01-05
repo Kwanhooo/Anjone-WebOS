@@ -118,8 +118,8 @@ export default Vue.extend({
         $nuxt.$store.commit('dock/NEW_PENDING', pendingObj)
       })
       // 关闭所有可关闭的小组件(__closable__)
-      const closable = document.querySelector('.__closable__')
-      closable !== null && closable.remove()
+      // const closable = document.querySelector('.__closable__')
+      // closable !== null && closable.remove()
     },
   },
 })

@@ -2,7 +2,11 @@
 <template>
   <div
     id="monitor-widget-wrapper"
-    :class="{ 'desktop-widget': true, __closable__: !isPined }"
+    :class="{
+      'desktop-widget': true,
+      'glass-style': true,
+      __closable__: !isPined,
+    }"
   >
     <div class="op-bar">
       <div class="title-wrapper">设备监控信息</div>

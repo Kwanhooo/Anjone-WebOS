@@ -231,9 +231,11 @@ export default Vue.extend({
     this.$refs.dialogHeader.addEventListener('dblclick', () => {
       this.handleFullscreen()
     })
-    $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', this.uid)
-    $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
-    this.$refs.dialog.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+    setTimeout(() => {
+      $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', this.uid)
+      $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+      this.$refs.dialog.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+    }, 10)
   },
   created() {},
   methods: {

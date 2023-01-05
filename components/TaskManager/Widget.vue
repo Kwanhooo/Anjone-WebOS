@@ -1,5 +1,8 @@
 <template>
-  <div id="task-manager-widget-wrapper" class="desktop-widget __closable__">
+  <div
+    id="task-manager-widget-wrapper"
+    class="desktop-widget __closable__ glass-style"
+  >
     <div class="op-bar">
       <div class="title-wrapper">任务中心</div>
       <div class="op-wrapper">
