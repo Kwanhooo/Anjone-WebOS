@@ -1,7 +1,7 @@
 <template>
   <div class="audio-player">
     <!-- :src="require(`${list[index].url}`) closeIcon -->
-    <audio ref="audio-player" controls style="display: none"></audio>
+    <audio ref="audio-player" autoplay controls style="display: none"></audio>
     <div v-if="isShowAudioPlayer" class="audio-mock-player">
       <img :src="closeIcon" class="closeicon" @click="closeAudioPlay" />
       <!-- 上一首 -->
@@ -40,8 +40,6 @@
           <span class="current">{{ currentTime }}</span>
           <span class="duration">/{{ duration }}</span>
           <div class="vulumn" @click="changeVolumns">
-            <!-- <img :src="require('./asset/vulumn.png')" alt=""/> -->
-            <!-- 有时候我们在对于一些hover定位元素，当离开时候就没了，这个时候可以使用ctrl+shift+c的快捷键来获取。 -->
             <el-popover
               placement="top-start"
               trigger="hover"
@@ -62,7 +60,7 @@
                 slot="reference"
                 :src="sliderValVolumn ? vulumnIcon : mutedIcon"
                 alt=""
-                style="width: 18.5px; height: 15px"
+                style="width: 22px; height: 22px; margin-bottom: 4px"
               />
             </el-popover>
           </div>
@@ -76,8 +74,12 @@
 export default {
   props: {
     // 显示隐藏
-    // eslint-disable-next-line vue/require-prop-types
+    index: {
+      type: Number,
+      required: true,
+    },
     isShowAudioPlayer: {
+      type: Boolean,
       default: true,
     },
     // 播放列表
@@ -110,12 +112,12 @@ export default {
     return {
       playIcon: require('@/assets/svg/play.svg'),
       plozeIcon: require('@/assets/svg/player-pause.svg'),
-      vulumnIcon: require('@/assets/image/audio-preview.png'),
-      mutedIcon: require('@/assets/image/audio-preview.png'),
+      vulumnIcon: require('@/assets/svg/volume.svg'),
+      mutedIcon: require('@/assets/svg/mute.svg'),
       closeIcon: require('@/assets/svg/player-close.svg'),
       box: undefined,
-      index: 0, // 当前播放的音乐素质索引
-      play: false, // 播放状态，true为正在播放
+      // index: this.startFromIndex, // 当前播放的音乐素质索引
+      play: true, // 播放状态，true为正在播放
       sliderVal: 0, // 这个对接当前时长。
       sliderMin: 0,
       sliderMax: 0, // 这个对接总时长。
@@ -179,9 +181,11 @@ export default {
         case 'pre':
           if (this.list[this.index - 1]) {
             this.box.src = this.list[this.index - 1].url
+            // eslint-disable-next-line vue/no-mutating-props
             this.index -= 1
           } else {
             this.box.src = this.list[this.list.length - 1].url
+            // eslint-disable-next-line vue/no-mutating-props
             this.index = this.list.length - 1
           }
           this.init()
@@ -202,9 +206,11 @@ export default {
         case 'next':
           if (this.list[this.index + 1]) {
             this.box.src = this.list[this.index + 1].url
+            // eslint-disable-next-line vue/no-mutating-props
             this.index += 1
           } else {
             this.box.src = this.list[0].url
+            // eslint-disable-next-line vue/no-mutating-props
             this.index = 0
           }
           this.init()
@@ -253,7 +259,8 @@ export default {
     },
     closeAudioPlay() {
       // eslint-disable-next-line vue/no-mutating-props
-      this.isShowAudioPlayer = false
+      // this.isShowAudioPlayer = false
+      this.$emit('close')
     },
     spliderSelect() {
       // 滑块松动后触发。更新当前时长，
@@ -264,7 +271,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .poppervulumn-class {
   min-width: 20px !important;
   padding: 12px 5px !important;
@@ -274,7 +281,7 @@ export default {
   .audio-mock-player {
     position: relative;
     width: 100%;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
     background: rgba(34, 34, 34, 0.8);
     border: 1px solid rgba(34, 34, 34, 1);
     border-radius: 8px;
@@ -285,11 +292,13 @@ export default {
       margin: 0 16px;
       width: 52px;
       height: 52px;
+      cursor: pointer;
     }
 
     .preicon {
       width: 32px;
       height: 32px;
+      cursor: pointer;
     }
 
     .closeicon {
@@ -311,6 +320,7 @@ export default {
 
         .progress {
           flex: 1;
+          margin-bottom: ;
         }
 
         .current {
@@ -336,6 +346,7 @@ export default {
           position: relative;
 
           img {
+            cursor: pointer;
             width: 18.5px;
             height: 15px;
           }
@@ -344,6 +355,7 @@ export default {
             position: absolute;
             top: -73px;
             left: -12px;
+            width: 50px;
           }
         }
       }
@@ -356,6 +368,7 @@ export default {
         text-align: left;
         font-weight: 400;
         margin-bottom: 15px;
+        padding-top: 5px;
       }
     }
   }

@@ -92,6 +92,22 @@ export default {
             'https://demo.jellyfin.org/stable/Items/5e6e8380563c5211106652362c5c6843/Images/Backdrop?fillHeight=216&fillWidth=384&quality=96&tag=eabf7d2d855a27dd529bb34a028fe758',
           url: 'https://vjs.zencdn.net/v/oceans.mp4',
         },
+        {
+          id: 1,
+          name: 'Night of the Living Dead',
+          desc: 1968,
+          cover:
+            'https://demo.jellyfin.org/stable/Items/5e6e8380563c5211106652362c5c6843/Images/Backdrop?fillHeight=216&fillWidth=384&quality=96&tag=eabf7d2d855a27dd529bb34a028fe758',
+          url: 'https://vjs.zencdn.net/v/oceans.mp4',
+        },
+        {
+          id: 1,
+          name: 'Night of the Living Dead',
+          desc: 1968,
+          cover:
+            'https://demo.jellyfin.org/stable/Items/5e6e8380563c5211106652362c5c6843/Images/Backdrop?fillHeight=216&fillWidth=384&quality=96&tag=eabf7d2d855a27dd529bb34a028fe758',
+          url: 'https://vjs.zencdn.net/v/oceans.mp4',
+        },
       ],
     }
   },

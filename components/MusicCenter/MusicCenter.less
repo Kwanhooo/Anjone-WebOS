@@ -83,9 +83,9 @@
         }
 
         .icon {
-          width: 25px;
-          height: 25px;
-          margin: 0 1rem 0 0;
+          width: 22px;
+          height: 22px;
+          margin: 2px 1rem 0 0;
         }
 
         .text {
@@ -110,6 +110,40 @@
       }
 
       .albums-all-page {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 10px 15px;
+
+        .album-item {
+          width: 200px;
+          height: 250px;
+          background-color: #434c5e;
+          margin: 0 20px 20px 0;
+          border-radius: 5px;
+
+          .inner {
+            background-color: green;
+            margin-left: 15px;
+            width: 170px;
+            margin-top: 15px;
+            height: 220px;
+            margin-bottom: 15px;
+
+            .cover {
+            }
+
+            .infos {
+              .name {
+              }
+
+              .artist {
+              }
+            }
+          }
+        }
       }
 
       .songs-page {
@@ -139,4 +173,14 @@
   height: 100px;
   position: absolute;
   bottom: 0;
+  transition: transform cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+  transform: translateX(-100%);
+
+  &.show {
+    transform: translateX(0);
+  }
+
+  &.gone {
+    transform: translateX(100%);
+  }
 }
