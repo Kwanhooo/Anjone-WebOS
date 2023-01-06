@@ -85,3 +85,34 @@ tr {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
+
+.table-wrapper {
+  * {
+    color: #d8dee9 !important;
+  }
+
+  th {
+    height: 50px;
+    background-color: #4c566a !important;
+    font-weight: bold !important;
+    border: none !important;
+  }
+
+  td {
+    height: 50px;
+    background-color: #3b4252 !important;
+    border: none !important;
+  }
+
+  tr:hover > td {
+    background-color: #434c5e !important;
+    cursor: pointer;
+  }
+
+  .ant-table-pagination {
+    * {
+      background-color: #4c566a !important;
+      border: none;
+    }
+  }
+}

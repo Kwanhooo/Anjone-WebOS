@@ -12,13 +12,13 @@ export const state = () => ({
     {
       icon: require('@/assets/app/video-center.png'),
       name: '影音中心',
-      component: null,
+      component: require('@/components/MoviesCenter/MoviesCenter.vue'),
       singleton: false,
     },
     {
       icon: require('@/assets/app/music-player.png'),
       name: '音乐播放',
-      component: null,
+      component: require('@/components/MusicCenter/MusicCenter.vue'),
       singleton: false,
     },
     {

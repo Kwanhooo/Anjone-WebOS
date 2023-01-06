@@ -1,0 +1,142 @@
+@import '@/assets/style/global.less';
+
+@SIDE_BAR_WIDTH: 200px;
+
+.music-center-body {
+  width: 100%;
+  height: 100%;
+  //background-color: #2e3440;
+
+  .header {
+    background: #3b4252;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    //justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid #2e3440;
+
+    .side-bar-switch {
+      margin: 0 1rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 60%;
+        height: 60%;
+      }
+
+      border: 50%;
+
+      &:hover {
+        background: #4a5160;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      // 点击后，背景色变化
+      &.active {
+        background: blue;
+        border-radius: 50%;
+      }
+    }
+
+    .title {
+      font-size: 1rem;
+    }
+  }
+
+  .main {
+    height: calc(100% - 50px);
+
+    .side-bar {
+      background: #2e3440;
+      width: @SIDE_BAR_WIDTH;
+      height: 100%;
+      float: left;
+      padding: 0.5rem 0.5rem;
+
+      .side-bar-item {
+        display: flex;
+        flex-direction: row;
+        align-items: first;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        border-radius: 7px;
+        padding: 0.4rem 1rem;
+        cursor: pointer;
+        transition: background-color 0.15s ease-in-out;
+        margin-bottom: 0.7rem;
+
+        &:first-child {
+          margin-top: 0.5rem;
+        }
+
+        &.active {
+          background: #4a5160;
+        }
+
+        .icon {
+          width: 25px;
+          height: 25px;
+          margin: 0 1rem 0 0;
+        }
+
+        .text {
+        }
+
+        &:hover {
+          background: #4a5160;
+        }
+      }
+    }
+
+    .display-area {
+      background: #3b4252;
+      width: calc(100% - @SIDE_BAR_WIDTH);
+      height: 100%;
+      max-height: 100%;
+      overflow: auto;
+      float: left;
+
+      &.expand {
+        width: 100% !important;
+      }
+
+      .albums-all-page {
+      }
+
+      .songs-page {
+        width: 100%;
+        height: 100%;
+
+        .table-wrapper {
+          * {
+            background-color: black;
+          }
+        }
+      }
+
+      .placeholder {
+        background-color: #3b4252;
+        height: 100px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.player-wrapper {
+  border-top: 1px solid #3b4252;
+  background-color: #2e3440;
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+}
