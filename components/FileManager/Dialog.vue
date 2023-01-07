@@ -286,6 +286,16 @@
                 autofocus
               />
             </a-modal>
+            <a-modal
+              v-model="isShowDeleteModal"
+              title="确认删除文件"
+              ok-text="确认"
+              cancel-text="取消"
+              :z-index="9999999"
+              @ok="handleFileDelete"
+            >
+              <p>删除文件后将无法恢复，是否继续？</p>
+            </a-modal>
             <div
               v-show="$nuxt.$store.state.sys.showDropDown"
               id="__fileDropdown__"
@@ -517,6 +527,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isShowDeleteModal: false,
       isAllowUpload: false,
       fileInfoModalVisible: false,
       fileInfoToShow: {

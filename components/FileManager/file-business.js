@@ -118,38 +118,34 @@ const FileBusiness = {
         vm.$message.error(err)
       })
   },
+  handleFileDelete() {
+    this.isShowDeleteModal = false
+    const vm = this
+    let files = ''
+    this.selectedRowKeys.forEach((item) => {
+      files += this.displayData[item].filename + ','
+    })
+    // 删除最后一个逗号
+    files = files.substring(0, files.length - 1)
+    deleteFile({ filename: files })
+      .then((res) => {
+        if (res.data.code === Status.OK) {
+          vm.displayData = res.data.data
+          vm.$message.success('删除成功')
+          vm.selectedRowKeys = []
+        } else {
+          vm.$message.error('删除失败')
+        }
+      })
+      .catch(() => {
+        vm.$message.error('删除失败，请检查网络连接')
+      })
+  },
   deleteFiles() {
     this.setShowDropDown(false)
     const vm = this
     if (this.hasSelected) {
-      this.$confirm({
-        title: '确认删除文件',
-        content: '删除文件后将无法恢复，是否继续？',
-        okText: '确认',
-        cancelText: '取消',
-        zIndex: 9999999,
-        onOk: () => {
-          let files = ''
-          this.selectedRowKeys.forEach((item) => {
-            files += this.displayData[item].filename + ','
-          })
-          // 删除最后一个逗号
-          files = files.substring(0, files.length - 1)
-          deleteFile({ filename: files })
-            .then((res) => {
-              if (res.data.code === Status.OK) {
-                vm.displayData = res.data.data
-                vm.$message.success('删除成功')
-                vm.selectedRowKeys = []
-              } else {
-                vm.$message.error('删除失败')
-              }
-            })
-            .catch(() => {
-              vm.$message.error('删除失败，请检查网络连接')
-            })
-        },
-      })
+      this.isShowDeleteModal = true
     } else {
       this.$message.info('无选中文件')
     }
@@ -196,6 +192,9 @@ const FileBusiness = {
         this.$message.error(
           '文件 ' + filename + ' 上传失败，请检查网络后再试！'
         )
+      })
+      .finally(() => {
+        vm.fileList = []
       })
   },
   gotoRootDir() {
