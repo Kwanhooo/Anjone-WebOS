@@ -15,9 +15,9 @@
 // export const monitorWSHost = 'wss://ws.anjone.0xcafebabe.cn'
 
 // 阿里云 测试服务器
-// export const xhrHost = 'http://120.78.235.195:5000'
-// export const monitorWSHost = 'ws://120.78.235.195:8081'
+export const xhrHost = 'http://120.78.235.195:5000'
+export const monitorWSHost = 'ws://120.78.235.195:8081'
 
 // 阿里云 测试服务器 SSL
-export const xhrHost = 'https://api.anjone.0xffff.我爱你'
-export const monitorWSHost = 'wss://ws.anjone.0xffff.我爱你'
+// export const xhrHost = 'https://api.anjone.0xffff.我爱你'
+// export const monitorWSHost = 'wss://ws.anjone.0xffff.我爱你'

@@ -327,7 +327,9 @@
                   accept="*/*"
                   :multiple="true"
                   :show-upload-list="false"
-                  @change="handleUpload()"
+                  action="http://120.78.235.195:5000/samb/upload"
+                  :headers="setUploadHeaders()"
+                  @change="handleUpload"
                 >
                   <button
                     class="upload-select-btn"
@@ -619,6 +621,7 @@ export default Vue.extend({
     },
     onActiveChange(active) {
       const vm = this
+      this.selectedRowKeys = []
       enterAbs({ filepath: '/' + this.rootDir[active].filename }).then(
         (res) => {
           vm.displayData = res.data.data

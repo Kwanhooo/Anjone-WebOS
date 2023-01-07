@@ -13,6 +13,7 @@ import {
 } from '~/api/samb'
 import { xhrHost } from '~/config/api-host.config'
 import { Status } from '~/utils/magic-numbers'
+import { getPrettyTimeStrOfNow } from '~/utils/pretty'
 
 const FileBusiness = {
   handleNotAllowUpload() {
@@ -162,41 +163,45 @@ const FileBusiness = {
       $nuxt.$store.commit('sys/SET_IS_UPLOAD_TIPS_SHOW', false)
     }
     this.fileList = [...this.fileList, file]
-    return false
+    // return false
   },
-  handleUpload() {
-    this.setShowDropDown(false)
-    const vm = this
-    const { fileList } = this
-    const fileFormData = new FormData()
-    let filename
-    fileList.forEach((file) => {
-      fileFormData.append('file', file)
-      filename = file.name
-    })
-    this.uploading = true
-    uploadFile(fileFormData)
-      .then((res) => {
-        if (res.data.code === Status.OK) {
-          vm.fileList = []
-          vm.uploading = false
-          this.$message.success('文件 ' + filename + ' 上传成功！')
-          vm.displayData = res.data.data
-        } else {
-          this.uploading = false
-          this.$message.error('文件 ' + filename + ' 上传失败！')
-        }
-      })
-      .catch(() => {
-        this.uploading = false
-        this.$message.error(
-          '文件 ' + filename + ' 上传失败，请检查网络后再试！'
-        )
-      })
-      .finally(() => {
-        vm.fileList = []
-      })
+  setUploadHeaders() {
+    return {
+      Authorization: sessionStorage.getItem('TOKEN'),
+    }
   },
+  handleUpload(e) {
+    // console.log('file', e.file)
+    // console.log('event', e.event)
+
+    if (e.file.status !== null && e.file.status === 'uploading') {
+      // 现在开始上传
+      const newTask = {
+        uid: e.file.uid,
+        status: 'info',
+        title: '文件正在上传',
+        timeOrOperation: '开始于 ' + getPrettyTimeStrOfNow(),
+        description: e.file.name,
+        loaded: 0,
+        total: e.file.size,
+      }
+      // 新增任务
+      $nuxt.$store.commit('task/APPEND_TASK', newTask)
+    } else if (e.file.status !== null && e.file.status === 'done') {
+      // 任务完结
+      $nuxt.$store.commit('task/FINISH_TASK', e.file.uid)
+      this.displayData = e.file.response.data
+    } else if (e.file.percentage !== null) {
+      // console.log('更新')
+      // 更新进度
+      $nuxt.$store.commit('task/UPDATE_TASK', {
+        uid: e.file.uid,
+        total: e.event.total,
+        loaded: e.event.loaded,
+      })
+    }
+  },
+
   gotoRootDir() {
     const vm = this
     enterAbs({ filepath: '/' + this.rootDir[0].filename }).then(() => {
@@ -221,6 +226,7 @@ const FileBusiness = {
     // const isDir = record.is_dir
     const vm = this
     // 在enter之前发送检查请求
+    this.selectedRowKeys = []
     checkFile(filename).then((res) => {
       if (res.data.code !== Status.NoFile) {
         const type = res.data.data

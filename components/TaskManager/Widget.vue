@@ -24,11 +24,11 @@
       </div>
     </div>
     <div class="main">
-      <div v-if="tasks.length === 0" class="hint">
+      <div v-if="$nuxt.$store.state.task.taskList.length === 0" class="hint">
         <span>暂无任务！</span>
       </div>
       <div
-        v-for="(task, index) in tasks"
+        v-for="(task, index) in $nuxt.$store.state.task.taskList"
         :key="index"
         class="task-item-wrapper"
       >
@@ -36,21 +36,47 @@
           <span
             :class="{
               type: true,
-              success: task.type === 'Success',
-              warn: task.type === 'Warn',
-              error: task.type === 'Error',
+              success: task.status === 'success',
+              warn: task.status === 'warning',
+              error: task.status === 'exception',
+              info: task.status === 'info',
             }"
           >
             {{ task.title }}
           </span>
-          <span class="time">
-            {{ task.create_time }}
+          <span
+            :class="{
+              timeOrOperation: true,
+              success: task.status === 'success',
+              warn: task.status === 'warning',
+              error: task.status === 'exception',
+              info: task.status === 'info',
+            }"
+          >
+            {{ task.timeOrOperation }}
           </span>
         </div>
-        <hr style="height: 2px; background-color: #cecece; border: none" />
+        <hr
+          v-if="task.status === 'success' || task.status === 'error'"
+          style="height: 2px; background-color: #cecece; border: none"
+        />
         <div class="content">
+          <div
+            v-if="task.status === 'info' || task.status === 'warning'"
+            style="margin: 10px 0 5px"
+          >
+            <el-progress
+              :percentage="formatProgress(task.loaded, task.total)"
+              :status="task.status === 'info' ? null : task.status"
+              :stroke-width="8"
+              :show-text="false"
+            />
+          </div>
           <span>
-            {{ task.content }}
+            {{ task.description }}
+          </span>
+          <span style="float: right">
+            {{ pretty(task.loaded) }}
           </span>
         </div>
       </div>
@@ -59,21 +85,26 @@
 </template>
 
 <script>
+import { prettyBytes } from '@/utils/pretty.ts'
+
 export default {
   name: 'TaskManagerWidget',
   data() {
-    return {
-      tasks: [],
-    }
+    return {}
   },
+  computed: {},
   mounted() {
     setTimeout(() => {
       document.getElementById('task-manager-widget-wrapper').style.opacity = '1'
     }, 150)
   },
   methods: {
+    pretty(bytes) {
+      return prettyBytes(bytes)
+    },
     onClearClicked() {
       // TODO: clear tasks
+      $nuxt.$store.commit('task/CLEAR_ALL_TASK')
     },
     onCloseClicked() {
       $nuxt.$store.commit('sys/SET_IS_TODOLIST_ACTIVE', false)
@@ -83,6 +114,9 @@ export default {
         vm.opacityGoing = false
         document.getElementById('task-manager-widget-wrapper').remove()
       }, 150)
+    },
+    formatProgress(loaded, total) {
+      return Math.round((loaded / total) * 100)
     },
   },
 }

@@ -445,6 +445,7 @@ export default Vue.extend({
 
       &:hover {
         background: @HOVER_COLOR;
+        cursor: pointer;
       }
     }
   }
