@@ -32,19 +32,27 @@
           </div>
           <div :class="{ 'display-area': true, expand: !showSideBar }">
             <div v-if="page === '全部专辑'" class="albums-all-page">
-              <div v-for="i in 80" :key="i" class="album-item">
+              <div
+                v-for="(album, index) in albums"
+                :key="index"
+                class="album-item"
+              >
                 <div class="inner">
-                  <div
-                    class="cover"
-                    :style="
-                      setBackground(
-                        'https://demo.navidrome.org/rest/getCoverArt?u=demo&t=90a5b1f0ab00ca11662e5e7391c4a9e4&s=ef3ef0&f=json&v=1.8.0&c=NavidromeUI&id=86901a7c08c15334c9c66889b20cb57b&_=2021-01-19T18%3A20%3A50.207936133Z&size=300'
-                      )
-                    "
-                  ></div>
+                  <div class="cover" :style="setBackground(album.cover)">
+                    <div
+                      class="play-btn"
+                      @click="handlePlayAlbum(album, index)"
+                    >
+                      <img
+                        src="@/assets/svg/play.svg"
+                        alt="play"
+                        draggable="false"
+                      />
+                    </div>
+                  </div>
                   <div class="infos">
-                    <div class="name">Chicken So Beautiful</div>
-                    <div class="artist">Richard Billyham</div>
+                    <div class="name">{{ album.name }}</div>
+                    <div class="artist">{{ album.artist }}</div>
                   </div>
                 </div>
               </div>
@@ -100,18 +108,46 @@ const columns = [
     ellipsis: true,
   },
 ]
-const data = []
-for (let i = 0; i < 66; i++) {
-  data.push({
-    key: i,
-    title: `I Got Smoke - ${i}`,
-    album: '1376届格莱美精选',
-    artist: 'TenZin',
-    time: '03:56',
-    url: 'https://music.163.com/song/media/outer/url?id=1400789159.mp3',
-    cover: 'https://cloud.0xcafebabe.cn/code.png',
-  })
-}
+const data = [
+  {
+    key: 1,
+    title: `Arhbo (feat. GIMS & RedOne)`,
+    album: 'FIFA World Cup 2022™ Official Soundtrack',
+    artist: 'Ozuna',
+    time: '03:46',
+    url: 'https://cloud.0xcafebabe.cn/Arhbo.mp3',
+    cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+  },
+  {
+    key: 2,
+    title: `十年`,
+    album: 'The First Eleven Years',
+    artist: '陈奕迅',
+    time: '03:25',
+    url: 'https://cloud.0xcafebabe.cn/十年.mp3',
+    cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+  },
+  {
+    key: 3,
+    title: `白玫瑰`,
+    album: "What's Going On...? (Remastered 2019)",
+    artist: '陈奕迅',
+    time: '04:00',
+    url: 'https://cloud.0xcafebabe.cn/白玫瑰.mp3',
+    cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+  },
+]
+// for (let i = 0; i < 66; i++) {
+//   data.push({
+//     key: i,
+//     title: `Arhbo (feat. GIMS & RedOne) - ${i}`,
+//     album: 'FIFA World Cup 2022™ Official Soundtrack',
+//     artist: 'Ozuna',
+//     time: '03:56',
+//     url: 'https://cloud.0xcafebabe.cn/Arhbo.mp3',
+//     cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+//   })
+// }
 
 export default {
   name: 'MusicCenter',
@@ -131,6 +167,43 @@ export default {
       selectedRowKeys: [],
       playing: null,
       playFromIndex: 0,
+      playerLoaded: false,
+      albums: [
+        {
+          name: `TOP50 of Shanghai`,
+          artist: 'Apple Music',
+          cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+          songs: [
+            {
+              key: 1,
+              title: `Arhbo (feat. GIMS & RedOne)`,
+              album: 'FIFA World Cup 2022™ Official Soundtrack',
+              artist: 'Ozuna',
+              time: '03:46',
+              url: 'https://cloud.0xcafebabe.cn/Arhbo.mp3',
+              cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+            },
+            {
+              key: 2,
+              title: `十年`,
+              album: 'The First Eleven Years',
+              artist: '陈奕迅',
+              time: '03:25',
+              url: 'https://cloud.0xcafebabe.cn/十年.mp3',
+              cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+            },
+            {
+              key: 3,
+              title: `白玫瑰`,
+              album: "What's Going On...? (Remastered 2019)",
+              artist: '陈奕迅',
+              time: '04:00',
+              url: 'https://cloud.0xcafebabe.cn/白玫瑰.mp3',
+              cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+            },
+          ],
+        },
+      ],
     }
   },
   methods: {
@@ -169,8 +242,12 @@ export default {
       }
     },
     handlePlayMusic(record, index) {
+      if (this.playerLoaded) {
+        this.playFromIndex = index
+        return
+      }
       // console.log(record, index)
-      // this.playing = null
+      this.playing = null
       setTimeout(() => {
         this.playFromIndex = index
         this.playing = []
@@ -188,8 +265,29 @@ export default {
           document.querySelector('.player-wrapper').classList.add('show')
         }, 100)
       }, 1)
+      if (!this.playerLoaded) this.playerLoaded = true
+    },
+    handlePlayAlbum(album) {
+      setTimeout(() => {
+        this.playFromIndex = 0
+        this.playing = []
+        album.songs.forEach((item, index) => {
+          this.playing.push({
+            id: index,
+            url: item.url,
+            // cover: record.cover,
+            name: item.title,
+            singer: item.artist,
+            cover: item.album,
+          })
+        })
+        setTimeout(() => {
+          document.querySelector('.player-wrapper').classList.add('show')
+        }, 100)
+      }, 1)
     },
     handlePlayerClose() {
+      this.playerLoaded = false
       document.querySelector('.player-wrapper').classList.add('gone')
       setTimeout(() => {
         this.playing = null

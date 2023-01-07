@@ -267,9 +267,11 @@ export default Vue.extend({
       const vm = this
       this.getIsShow().then((res) => {
         if (vm.isShow !== res && res === true) {
-          $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', vm.uid)
-          $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
-          vm.$refs.dialog.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+          setTimeout(() => {
+            $nuxt.$store.commit('dock/SET_ACTIVE_APP_UID', vm.uid)
+            $nuxt.$store.commit('sys/SET_DIALOG_Z_INDEX')
+            vm.$refs.dialog.style.zIndex = $nuxt.$store.state.sys.dialogZIndex
+          }, 10)
         }
         vm.isShow = res
       })

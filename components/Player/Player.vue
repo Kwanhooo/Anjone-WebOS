@@ -26,6 +26,8 @@
 
       <div class="right-menu">
         <div class="song-name">{{ list[index].name }}</div>
+        <div class="album">{{ list[index].cover }}</div>
+        <div class="artist">{{ list[index].singer }}</div>
         <div class="bottom">
           <!--  播放进度条 -->
           <el-slider
@@ -126,6 +128,11 @@ export default {
       duration: undefined, // 音乐总时长
       currentTime: undefined, // 当前播放时长
     }
+  },
+  watch: {
+    index() {
+      this.init()
+    },
   },
   mounted() {
     this.init()
@@ -281,7 +288,7 @@ export default {
   .audio-mock-player {
     position: relative;
     width: 100%;
-    padding: 10px 20px 20px 20px;
+    padding: 0 20px 20px 20px;
     background: rgba(34, 34, 34, 0.8);
     border: 1px solid rgba(34, 34, 34, 1);
     border-radius: 8px;
@@ -317,10 +324,10 @@ export default {
       .bottom {
         display: flex;
         align-items: center;
-
+        margin-top: -5px;
         .progress {
           flex: 1;
-          margin-bottom: ;
+          margin-bottom: 0;
         }
 
         .current {
@@ -362,13 +369,27 @@ export default {
 
       .song-name {
         height: 25px;
-        font-family: PingFangSC-Regular;
+        font-family: 'Times New Roman';
         font-size: 18px;
         color: #ffffff;
         text-align: left;
         font-weight: 400;
-        margin-bottom: 15px;
+        margin-top: 4px;
         padding-top: 5px;
+      }
+
+      .album {
+        height: 15px;
+        font-size: 12px;
+        color: white;
+        margin-top: 5px;
+        opacity: 0.8;
+      }
+
+      .artist {
+        font-size: 12px;
+        color: white;
+        opacity: 9;
       }
     }
   }

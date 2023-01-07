@@ -19,7 +19,7 @@ export const state = () => ({
       icon: require('@/assets/app/music-player.png'),
       name: '音乐播放',
       component: require('@/components/MusicCenter/MusicCenter.vue'),
-      singleton: false,
+      singleton: true,
     },
     {
       icon: require('@/assets/app/smart-gallery.png'),
