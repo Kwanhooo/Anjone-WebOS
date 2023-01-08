@@ -33,7 +33,7 @@
           <div :class="{ 'display-area': true, expand: !showSideBar }">
             <div v-if="page === '全部专辑'" class="albums-all-page">
               <div
-                v-for="(album, index) in albums"
+                v-for="(album, index) in musics"
                 :key="index"
                 class="album-item"
               >
@@ -51,7 +51,7 @@
                     </div>
                   </div>
                   <div class="infos">
-                    <div class="name">{{ album.name }}</div>
+                    <div class="name">{{ album.title }}</div>
                     <div class="artist">{{ album.artist }}</div>
                   </div>
                 </div>
@@ -65,9 +65,19 @@
                     onChange: handleSelectChange,
                   }"
                   :columns="columns"
-                  :data-source="data"
+                  :data-source="musics"
                   :custom-row="handleRowClicked"
-                />
+                >
+                  <div slot="rating" slot-scope="text, record">
+                    <el-rate
+                      v-model="record.rating"
+                      disabled
+                      :show-score="false"
+                      score-template="{value}"
+                    >
+                    </el-rate>
+                  </div>
+                </a-table>
               </div>
             </div>
             <div v-if="playing !== null" class="placeholder"></div>
@@ -86,7 +96,15 @@
 </template>
 
 <script>
+import { getAllMusic } from '~/api/media'
+
 const columns = [
+  {
+    title: '序号',
+    dataIndex: 'key',
+    key: 'key',
+    ellipsis: true,
+  },
   {
     title: '标题',
     dataIndex: 'title',
@@ -107,47 +125,15 @@ const columns = [
     dataIndex: 'time',
     ellipsis: true,
   },
-]
-const data = [
   {
-    key: 1,
-    title: `Arhbo (feat. GIMS & RedOne)`,
-    album: 'FIFA World Cup 2022™ Official Soundtrack',
-    artist: 'Ozuna',
-    time: '03:46',
-    url: 'https://cloud.0xcafebabe.cn/Arhbo.mp3',
-    cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
-  },
-  {
-    key: 2,
-    title: `十年`,
-    album: 'The First Eleven Years',
-    artist: '陈奕迅',
-    time: '03:25',
-    url: 'https://cloud.0xcafebabe.cn/十年.mp3',
-    cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
-  },
-  {
-    key: 3,
-    title: `白玫瑰`,
-    album: "What's Going On...? (Remastered 2019)",
-    artist: '陈奕迅',
-    time: '04:00',
-    url: 'https://cloud.0xcafebabe.cn/白玫瑰.mp3',
-    cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
+    title: '评分',
+    dataIndex: 'rating',
+    key: 'rating',
+    ellipsis: true,
+    scopedSlots: { customRender: 'rating' },
   },
 ]
-// for (let i = 0; i < 66; i++) {
-//   data.push({
-//     key: i,
-//     title: `Arhbo (feat. GIMS & RedOne) - ${i}`,
-//     album: 'FIFA World Cup 2022™ Official Soundtrack',
-//     artist: 'Ozuna',
-//     time: '03:56',
-//     url: 'https://cloud.0xcafebabe.cn/Arhbo.mp3',
-//     cover: 'https://cloud.0xcafebabe.cn/shanghai.webp',
-//   })
-// }
+const musics = []
 
 export default {
   name: 'MusicCenter',
@@ -162,7 +148,7 @@ export default {
       // page:'全部专辑',
       page: '歌曲',
       columns,
-      data,
+      musics,
       showSideBar: true,
       selectedRowKeys: [],
       playing: null,
@@ -206,7 +192,29 @@ export default {
       ],
     }
   },
+  created() {
+    this.fetchMusicList()
+  },
   methods: {
+    fetchMusicList() {
+      const vm = this
+      getAllMusic().then((res) => {
+        const musicList = res.data.data
+        vm.musics = []
+        musicList.forEach((m) => {
+          vm.musics.push({
+            key: m.id,
+            title: m.music_name,
+            album: m.album,
+            artist: m.artist,
+            rating: m.rating,
+            time: m.time,
+            url: m.resource,
+            cover: m.preview_image,
+          })
+        })
+      })
+    },
     setBackground(url) {
       return (
         'background: url(' +
@@ -251,10 +259,10 @@ export default {
       setTimeout(() => {
         this.playFromIndex = index
         this.playing = []
-        this.data.forEach((item) => {
+        this.musics.forEach((item) => {
           this.playing.push({
             id: index,
-            url: item.url,
+            url: item.url + 'token=' + sessionStorage.getItem('TOKEN'),
             // cover: record.cover,
             name: item.title,
             singer: item.artist,
@@ -267,14 +275,14 @@ export default {
       }, 1)
       if (!this.playerLoaded) this.playerLoaded = true
     },
-    handlePlayAlbum(album) {
+    handlePlayAlbum(album, i) {
       setTimeout(() => {
-        this.playFromIndex = 0
+        this.playFromIndex = i
         this.playing = []
-        album.songs.forEach((item, index) => {
+        this.musics.forEach((item, index) => {
           this.playing.push({
             id: index,
-            url: item.url,
+            url: item.url + 'token=' + sessionStorage.getItem('TOKEN'),
             // cover: record.cover,
             name: item.title,
             singer: item.artist,

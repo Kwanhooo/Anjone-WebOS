@@ -1,5 +1,3 @@
-import axios from 'axios'
-import { xhrHost } from '~/config/api-host.config'
 import { fmtToForm } from '@/utils/api'
 
 import { axiosInstance } from '~/plugins/axios'

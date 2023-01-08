@@ -335,6 +335,7 @@
                     class="upload-select-btn"
                     @click="
                       $nuxt.$store.commit('sys/SET_IS_UPLOAD_TIPS_SHOW', true)
+                      setShowDropDown(false)
                     "
                   >
                     上传文件

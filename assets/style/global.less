@@ -87,8 +87,17 @@ tr {
 }
 
 .table-wrapper {
-  * {
+  div {
     color: #d8dee9 !important;
+  }
+
+  .el-rate {
+    background: #3b4252 !important;
+    transition: background-color 0.15s ease-in-out;
+  }
+
+  .el-rate__item {
+    width: 18px !important;
   }
 
   th {
@@ -107,12 +116,16 @@ tr {
   tr:hover > td {
     background-color: #434c5e !important;
     cursor: pointer;
+    .el-rate {
+      background: #434c5e !important;
+    }
   }
 
   .ant-table-pagination {
     * {
       background-color: #4c566a !important;
       border: none;
+      color: #d8dee9 !important;
     }
   }
 }
