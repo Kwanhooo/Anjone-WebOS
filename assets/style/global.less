@@ -87,6 +87,11 @@ tr {
 }
 
 .table-wrapper {
+  .ant-table-pagination.ant-pagination {
+    float: none !important;
+    margin: 0 0 0 calc(100% - 25rem) !important; // TODO:Dev环境下可能会偏移
+  }
+
   div {
     color: #d8dee9 !important;
   }
@@ -116,6 +121,7 @@ tr {
   tr:hover > td {
     background-color: #434c5e !important;
     cursor: pointer;
+
     .el-rate {
       background: #434c5e !important;
     }
